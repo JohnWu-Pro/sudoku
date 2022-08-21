@@ -9,7 +9,7 @@
   <meta name="description" content="Online sudoku pencil marker">
   <meta name="keywords" content="online sudoku pencil marker ">
 
-  <link rel=stylesheet href="app.css?20220820" data-cacheable type="text/css">
+  <link rel=stylesheet href="app.css?20220821" data-cacheable type="text/css">
 
   <script>const APP_ID = 'sudoku'</script>
   <script src="scripts/global-shared.js?20220820" data-cacheable type="text/javascript"></script>
@@ -18,7 +18,7 @@
   <script src="scripts/config.js?20220820" data-cacheable type="text/javascript"></script>
 
   <script src="scripts/seed.js?20220820" data-cacheable type="text/javascript"></script>
-  <script src="scripts/sudoku.js?20220820" data-cacheable type="text/javascript"></script>
+  <script src="scripts/sudoku.js?20220821" data-cacheable type="text/javascript"></script>
   <script src="scripts/app.js?20220820" data-cacheable type="text/javascript"></script>
 
   <script src="scripts/debug.js?20220820" data-cacheable type="text/javascript"></script>
@@ -33,17 +33,25 @@
 
 <body>
 
-<div class="grid">
-  Loading ...
+<div class="content">
+  <div class="grid">
+    Loading ...
+  </div>
+  <div class="prompt">
+    Tap or click the cell to see more available actions.
+  </div>
+  <div class="cmd-panel hide">
+    <button class="cmd" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
+  </div>
 </div>
-<div class="cmd">
-</div>
+
 <div class="copyright">
   <a href="https://mozilla.org/MPL/2.0/" target="_blank">版权所有</a>
   &copy; 2022
   <a href="mailto: johnwu.pro@gmail.com" target="_blank">吴菊华</a>。
   适用版权许可 <a href="javascript:openDoc('LICENSE.txt', '版权许可')" title="License Detail">MPL-2.0</a>。
 </div>
+
 </body>
 
 </html>

@@ -14,7 +14,7 @@ http-server
 ```
 
 # Package
-```
+```bash
 ./package.sh
 ```
 

@@ -5,7 +5,7 @@
 }
 
 body {
-  margin-top: 12px;
+  margin-top: 3%;
 }
 
 a, a:hover, a:visited {
@@ -13,13 +13,18 @@ a, a:hover, a:visited {
   text-decoration: none;
 }
 
-.grid {
+.content {
   width: 96%;
   min-width: 336px;
   max-width: 420px;
   margin: 0 auto 0 4%;
-  text-align: center;
   z-index: 0; position: static; /* default z-index and position */
+}
+
+.grid {
+  width: 100%;
+  margin: 0 0 4% 0;
+  text-align: center;
 }
 
 .grid .row {
@@ -32,6 +37,11 @@ a, a:hover, a:visited {
   border-width: 1px 0 0 1px;
   width: 10%;
   min-width: 32px;
+}
+
+.grid .cell.focused {
+  z-index: 1;
+  outline: #6666ff auto 3px;
 }
 
 .grid .row-1 .cell,
@@ -106,6 +116,11 @@ a, a:hover, a:visited {
   color: black;
 }
 
+.grid .cell .value.pending {
+  font: 12px 'New Times Roman';
+  color: grey;
+}
+
 .grid .cell .value.settled {
   color: blue;
 }
@@ -135,6 +150,25 @@ a, a:hover, a:visited {
   transform: translateY(-50%);
 }
 
+.prompt {
+  color: navy;
+  font: bold 16px 'New Times Roman';
+}
+
+.prompt.hide {
+  display: none;
+}
+
+.cmd-panel.hide {
+  display: none;
+}
+
+.cmd-panel {
+  display: flex;
+  width: 96%;
+  text-align: center;
+}
+
 .copyright {
   position: absolute;
   width: 100%;
@@ -142,5 +176,5 @@ a, a:hover, a:visited {
   text-align: center;
   font: 12px 'New Times Roman';
   color: #d0d0d0;
-  top: 667px;
+  top: 96%;
 }

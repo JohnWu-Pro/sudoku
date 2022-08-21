@@ -30,10 +30,10 @@ class App {
 
   static #resolveDynamicScripts(definedQualifiers, version) {
     const locale = App.locale()
-    const offset = timezoneOffset()
+    const lang = locale.substring(0, 2)
 
     const qualifiers = []
-    for(const qualifier of [locale, 'UTC'+offset, `${locale}.UTC${offset}`]) {
+    for(const qualifier of [lang, locale]) {
       if(definedQualifiers.includes(qualifier)) qualifiers.push(qualifier)
     }
     // console.debug("[DEBUG] Resolved qualifiers: %o", qualifiers);
