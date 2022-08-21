@@ -1,0 +1,146 @@
+* {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin-top: 12px;
+}
+
+a, a:hover, a:visited {
+  color: #d0d0d0;
+  text-decoration: none;
+}
+
+.grid {
+  width: 96%;
+  min-width: 336px;
+  max-width: 420px;
+  margin: 0 auto 0 4%;
+  text-align: center;
+  z-index: 0; position: static; /* default z-index and position */
+}
+
+.grid .row {
+  display: flex;
+}
+
+.grid .cell {
+  aspect-ratio: 1 / 1;
+  border: solid lightgrey;
+  border-width: 1px 0 0 1px;
+  width: 10%;
+  min-width: 32px;
+}
+
+.grid .row-1 .cell,
+.grid .row-1 .y-axis {
+  border-top-width: 2px !important;
+}
+
+.grid .row-3 .cell, .grid .row-6 .cell {
+  border-bottom-width: 1px !important;
+}
+
+.grid .row-9 .cell {
+  border-bottom-width: 2px !important;
+}
+
+.grid .col-A {
+  border-left-width: 2px !important;
+}
+
+.grid .col-C, .grid .col-F {
+  border-right-width: 1px !important;
+}
+
+.grid .col-I {
+  border-right-width: 2px !important;
+}
+
+.cell-A1, .cell-B1, .cell-C1,
+.cell-A2, .cell-B2, .cell-C2,
+.cell-A3, .cell-B3, .cell-C3,
+.cell-D4, .cell-E4, .cell-F4,
+.cell-D5, .cell-E5, .cell-F5,
+.cell-D6, .cell-E6, .cell-F6,
+.cell-G7, .cell-H7, .cell-I7,
+.cell-G8, .cell-H8, .cell-I8,
+.cell-G9, .cell-H9, .cell-I9 {
+  background-color: #efffef;
+}
+
+.cell-D1, .cell-E1, .cell-F1,
+.cell-D2, .cell-E2, .cell-F2,
+.cell-D3, .cell-E3, .cell-F3,
+.cell-G4, .cell-H4, .cell-I4,
+.cell-G5, .cell-H5, .cell-I5,
+.cell-G6, .cell-H6, .cell-I6,
+.cell-A7, .cell-B7, .cell-C7,
+.cell-A8, .cell-B8, .cell-C8,
+.cell-A9, .cell-B9, .cell-C9 {
+  background-color: #ffefff;
+}
+
+.cell-G1, .cell-H1, .cell-I1,
+.cell-G2, .cell-H2, .cell-I2,
+.cell-G3, .cell-H3, .cell-I3,
+.cell-A4, .cell-B4, .cell-C4,
+.cell-A5, .cell-B5, .cell-C5,
+.cell-A6, .cell-B6, .cell-C6,
+.cell-D7, .cell-E7, .cell-F7,
+.cell-D8, .cell-E8, .cell-F8,
+.cell-D9, .cell-E9, .cell-F9 {
+  background-color: #efefff;
+}
+
+.grid .cell .value {
+  font: bold 24px 'New Times Roman';
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.grid .cell .value.seed {
+  color: black;
+}
+
+.grid .cell .value.settled {
+  color: blue;
+}
+
+.grid .coord {
+  border: solid white;
+  border-width: 1px 0 0 1px;
+
+  color: lightgrey;
+  font: bold 12px 'New Times Roman';
+}
+
+.grid .x-axis .coord {
+  width: 10%;
+  min-width: 32px;
+}
+
+.grid .y-axis {
+  aspect-ratio: 1 / 4;
+  width: 2.5%;
+  text-align: right;
+}
+
+.grid .y-axis .value {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.copyright {
+  position: absolute;
+  width: 100%;
+  margin: 2px auto;
+  text-align: center;
+  font: 12px 'New Times Roman';
+  color: #d0d0d0;
+  top: 667px;
+}
