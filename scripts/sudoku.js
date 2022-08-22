@@ -1,65 +1,5 @@
 'use strict';
 
-class Cell {
-  #value // single value (0, or 1..max), or values array
-  #status
-  #assumptions
-
-  constructor(val, status) {
-    this.#status = status
-    this.value = val
-    this.#assumptions = []
-  }
-
-  get candidates() {
-    const array = Array.isArray(this.#value) ? this.#value : (this.#value ? [this.#value] : [])
-    return new Set(array)
-  }
-
-  get value() {
-    return this.#value
-  }
-  set value(val) {
-    if(! val) {
-      this.#value = 0
-    } else if(Array.isArray(val)) {
-      this.#value = val.length === 0 ? 0 : (val.length === 1 ? Cell.#normalize(val[0]) : val.sort())
-    } else {
-      this.#value = Cell.#normalize(val)
-    }
-    this.#status = this.settled ? (this.#status === 'seed' ? 'seed' : 'settled') : 'pending'
-  }
-
-  get status() {
-    return this.#status
-  }
-
-  get assumption() {
-    for(const val of this.#assumptions) {
-      if(val.status === 'Pending') return val
-    }
-    return null
-  }
-  set assumption(val) {
-    this.#assumptions.push(val)
-  }
-
-  get settled() { // single value in 1..max
-    return Array.isArray(this.#value) ? false : this.#value !== 0
-  }
-
-  get html() {
-    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
-    if(text.length > 5) text = '...'
-    return `<div class="value ${this.status}">${text}</div>`
-  }
-
-  static #normalize(val) {
-    val = Number(val)
-    return (0 < val && val <= CONFIG.scale) ? val : 0
-  }
-}
-
 class Assumption {
   static ALL_IDS = ['if-1st', 'if-2nd', 'if-3rd']
   static availableIds = [...Assumption.ALL_IDS]
@@ -104,6 +44,66 @@ class Assumption {
   reject() {
     Assumption.availableIds.push(this.#id)
     this.#status = 'Rejected'
+  }
+}
+
+class Cell {
+  #value // single value (0, or 1..max), or values array
+  #status
+  #assumptions
+
+  constructor(val, status) {
+    this.#status = status
+    this.value = val
+    this.#assumptions = []
+  }
+
+  get candidates() {
+    const array = Array.isArray(this.#value) ? this.#value : (this.#value ? [this.#value] : [])
+    return new Set(array)
+  }
+
+  get value() {
+    return this.#value
+  }
+  set value(val) {
+    if(! val) {
+      this.#value = 0
+    } else if(Array.isArray(val)) {
+      this.#value = val.length === 0 ? 0 : (val.length === 1 ? Cell.#normalize(val[0]) : val.sort())
+    } else {
+      this.#value = Cell.#normalize(val)
+    }
+    this.#status = this.settled ? (this.#status === 'seed' ? 'seed' : 'settled') : 'pending'
+  }
+
+  get status() {
+    return this.#status
+  }
+
+  get assumption() {
+    for(const val of this.#assumptions) {
+      if(val.status === 'Pending') return val
+    }
+    return null
+  }
+  set assumption(val) {
+    if(val && this.#assumptions[0]?.id !== val.id) this.#assumptions.push(val)
+  }
+
+  get settled() { // single value in 1..max
+    return Array.isArray(this.#value) ? false : this.#value !== 0
+  }
+
+  get html() {
+    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
+    if(text.length > 5) text = '...'
+    return `<div class="value ${this.status}">${text}</div>`
+  }
+
+  static #normalize(val) {
+    val = Number(val)
+    return (0 < val && val <= CONFIG.scale) ? val : 0
   }
 }
 
@@ -194,7 +194,6 @@ window.Sudoku = window.Sudoku ?? (() => {
     $eliminateByRules.classList.toggle('hide', cell.settled)
 
     toggleHighlightedKeys(cell)
-    renderPendingAssumptions()
     renderTentativeAssumption(key, cell)
   }
 
@@ -221,7 +220,7 @@ window.Sudoku = window.Sudoku ?? (() => {
       `, '')
 
     // attach event handler
-    $A('div.pending button', $commands).forEach((button) => {
+    $A('div.pending .assumption button', $commands).forEach((button) => {
       button.addEventListener('click', onEndAssumption)
     })
   }
@@ -260,9 +259,8 @@ window.Sudoku = window.Sudoku ?? (() => {
     const candidates = cell.candidates
     if(!candidates.delete(number)) candidates.add(number)
     cell.value = [...candidates]
-    toggleHighlightedKeys(cell)
-    renderTentativeAssumption(key, cell)
-    renderCell(key, cell)
+    cell.assumption = assumptions[0]
+    onCellValueChanged(key, cell)
   }
 
   function onCleanFocused() {
@@ -272,6 +270,10 @@ window.Sudoku = window.Sudoku ?? (() => {
     const key = keyOf(rowId, colId)
     const cell = cells.get(key)
     cell.value = 0
+    onCellValueChanged(key, cell)
+  }
+
+  function onCellValueChanged(key, cell) {
     toggleHighlightedKeys(cell)
     renderTentativeAssumption(key, cell)
     renderCell(key, cell)
@@ -305,10 +307,8 @@ window.Sudoku = window.Sudoku ?? (() => {
     const key = keyOf(rowId, colId)
     const cell = cells.get(key)
     cell.value = [...candidates]
-
-    toggleHighlightedKeys(cell)
-    renderTentativeAssumption(key, cell)
-    renderCell(key, cell)
+    cell.assumption = assumptions[0]
+    onCellValueChanged(key, cell)
   }
 
   function onStartAssumption(event) {
@@ -327,10 +327,8 @@ window.Sudoku = window.Sudoku ?? (() => {
     cell.value = number
     assumptions.push(cell.assumption = new Assumption(key, number, option.text))
 
-    toggleHighlightedKeys(cell)
     renderPendingAssumptions()
-    renderTentativeAssumption(key, cell)
-    renderCell(key, cell)
+    onCellValueChanged(key, cell)
   }
 
   function onEndAssumption(event) {
@@ -338,7 +336,17 @@ window.Sudoku = window.Sudoku ?? (() => {
     const id = dataset.id
     const action = dataset.action
 
-    console.debug("[DEBUG] Going to %s assumption(id: %s) ...", action, id)
+    // console.debug("[DEBUG] Going to %s assumption(id: %s) ...", action, id)
+
+    // accept or reject
+
+    // render grid
+
+    if(focusedCell) {
+      const {rowId, colId} = focusedCell
+      onFocus(rowId, colId)
+    }
+    renderPendingAssumptions()
   }
 
   function onAcceptAssumption(assumption) {
