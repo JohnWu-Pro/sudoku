@@ -4,8 +4,19 @@ function $ID(id, container) {
   return (container || document).getElementById(id)
 }
 
+function $A(cssSelector, container) {
+  return (container || document).querySelectorAll(cssSelector)
+}
+
 function $E(cssSelector, container) {
   return (container || document).querySelector(cssSelector)
+}
+
+function firstOf(arrayLike) {
+  for(const value of (arrayLike ?? [])) {
+    return value
+  }
+  return null
 }
 
 function $on(element, init) {

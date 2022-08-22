@@ -9,7 +9,7 @@
   <meta name="description" content="Online sudoku pencil marker">
   <meta name="keywords" content="online sudoku pencil marker ">
 
-  <link rel=stylesheet href="app.css?20220821" data-cacheable type="text/css">
+  <link rel=stylesheet href="sudoku.css?20220821" data-cacheable type="text/css">
 
   <script>const APP_ID = 'sudoku'</script>
   <script src="scripts/global-shared.js?20220820" data-cacheable type="text/javascript"></script>
@@ -37,11 +37,26 @@
   <div class="grid">
     Loading ...
   </div>
-  <div class="prompt">
-    Tap or click the cell to see more available actions.
+  <div class="keys">
   </div>
-  <div class="cmd-panel hide">
-    <button class="cmd" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
+  <div class="commands hide">
+    <button id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
+    <!-- <button id="cross-hatching">Cross Hatching on ▼</button> -->
+    <!-- ⍉ -->
+    <div class="assumptions">
+      <div class="pending"></div>
+      <div class="tentative"></div>
+    </div>
+  </div>
+  <div class="message">
+    Tap or click the cell for more supportive actions.
+  </div>
+  <div class="references hide">
+    <span class="label">References ...</span>
+    <div class="options">
+      <a class="option" href="">Basic Rules</a>
+      <a class="option" href="">Cross Hatching</a>
+    </div>
   </div>
 </div>
 
