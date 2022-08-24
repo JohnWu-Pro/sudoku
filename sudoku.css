@@ -47,17 +47,17 @@ a, a:hover, a:visited {
   outline: #6666ff auto 1vmin;
 }
 
-.grid .cell.if-1st,
-.assumption .if-1st {
-  background-color: #ff99ff;
+.grid .cell .value.if-1st,
+.assumption.if-1st {
+  background-color: #ffc0ff;
 }
-.grid .cell.if-2nd,
-.assumption .if-2nd {
-  background-color: #9999ff;
+.grid .cell .value.if-2nd,
+.assumption.if-2nd {
+  background-color: #c0c0ff;
 }
-.grid .cell.if-3rd,
-.assumption .if-3rd {
-  background-color: #99ff99;
+.grid .cell .value.if-3rd,
+.assumption.if-3rd {
+  background-color: #c0ffc0;
 }
 
 .grid .row-1 .cell,
