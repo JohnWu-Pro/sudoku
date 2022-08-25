@@ -49,15 +49,15 @@ a, a:hover, a:visited {
 
 .grid .cell .value.if-1st,
 .assumption.if-1st {
-  background-color: #ffc0ff;
+  background-color: #ffc0c0;
 }
 .grid .cell .value.if-2nd,
 .assumption.if-2nd {
-  background-color: #c0c0ff;
+  background-color: #c0ffc0;
 }
 .grid .cell .value.if-3rd,
 .assumption.if-3rd {
-  background-color: #c0ffc0;
+  background-color: #c0c0ff;
 }
 
 .grid .row-1 .cell,

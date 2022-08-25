@@ -49,8 +49,8 @@ class Assumption {
 
   static {
     Assumption.ACCEPTED = new Assumption('ACCEPTED')
-    Assumption.ACCEPTED.accept()
     Assumption.ACCEPTED.#cssClass = ''
+    Assumption.#availableCssClasses = [...Assumption.#CSS_CLASSES]
   }
 }
 
@@ -83,7 +83,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   }
 
   function accept(id) { // accept the assumption and its predecessor(s)
-    // console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
+    console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
 
     const keys = new Set()
 
