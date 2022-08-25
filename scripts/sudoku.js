@@ -1,12 +1,12 @@
 'use strict';
 
 window.Sudoku = window.Sudoku ?? (() => {
-  const COL_BASE_CP = 'A'.codePointAt(0)
-  const COLUMNS = Array(CONFIG.scale).fill(0).map((_, i) => String.fromCodePoint(COL_BASE_CP+i))
+  const LETTERS = 'ABCDEFGHIJKLMOPQ'
+  const COLUMNS = Array(CONFIG.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
   const ROWS = Array(CONFIG.scale).fill(0).map((_, i) => 1+i)
 
   const cells = new Map()
-  var focusedCell = null
+  var focused = null
 
   var $numbers = [undefined], $commands, $eliminateByRules
 
@@ -24,7 +24,8 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     ROWS.forEach((rowId) => {
       COLUMNS.forEach((colId) => {
-        $E('div.cell-'+keyOf(rowId, colId), $grid).addEventListener('click', () => onFocus(rowId, colId))
+        const key = keyOf(rowId, colId)
+        $E('div.cell-' + key, $grid).addEventListener('click', () => onFocus(key))
       })
     })
 
@@ -44,8 +45,8 @@ window.Sudoku = window.Sudoku ?? (() => {
     $eliminateByRules.addEventListener('click', onEliminateByRules)
 
     window.addEventListener("assumption-started", onAssumptionStarted)
-    window.addEventListener("assumption-accepted", onAssumptionEnded)
-    window.addEventListener("assumption-rejected", onAssumptionEnded)
+    window.addEventListener("assumption-accepted", onAssumptionAccepted)
+    window.addEventListener("assumption-rejected", onAssumptionRejected)
   }
 
   /**
@@ -70,23 +71,18 @@ window.Sudoku = window.Sudoku ?? (() => {
     cells.forEach(cell => cell.render(cssClass))
   }
 
-  function onFocus(rowId, colId) {
-    if(focusedCell) {
-      const {rowId, colId} = focusedCell
-      const key = keyOf(rowId, colId)
-      const cell = cells.get(key)
-      cell.focus(false)
+  function onFocus(key) {
+    if(focused) {
+      cells.get(focused).focus(false)
     }
+    focused = key
 
     $commands.classList.remove('hide')
 
-    focusedCell = {rowId, colId}
-    const key = keyOf(rowId, colId)
     const cell = cells.get(key)
-
     cell.focus(true)
-    $eliminateByRules.classList.toggle('hide', cell.settled)
     highlightCandidates(cell)
+    $eliminateByRules.classList.toggle('hide', cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -98,11 +94,9 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onKeyPress(number) {
-    if(!focusedCell) return
+    if(!focused) return
 
-    const {rowId, colId} = focusedCell
-    const key = keyOf(rowId, colId)
-    const cell = cells.get(key)
+    const cell = cells.get(focused)
     const candidates = cell.candidates
     if(!candidates.delete(number)) candidates.add(number)
     cell.value = [...candidates]
@@ -110,11 +104,9 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onCleanFocused() {
-    if(!focusedCell) return
+    if(!focused) return
 
-    const {rowId, colId} = focusedCell
-    const key = keyOf(rowId, colId)
-    const cell = cells.get(key)
+    const cell = cells.get(focused)
     cell.value = 0
     onCellValueChanged(cell)
   }
@@ -122,13 +114,17 @@ window.Sudoku = window.Sudoku ?? (() => {
   function onCellValueChanged(cell) {
     cell.render(Assumptions.peek().cssClass)
     highlightCandidates(cell)
+    $eliminateByRules.classList.toggle('hide', cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
   function onEliminateByRules() {
-    if(!focusedCell) return
+    if(!focused) return
 
-    const {rowId, colId} = focusedCell
+    let [matched, colId, rowId] = focused.match(/^([A-Z])(\d+)$/) ?? []
+    if(!matched) return
+
+    rowId = Number(rowId)
 
     const keys = new Set()
     COLUMNS.forEach((colId) => {
@@ -138,12 +134,12 @@ window.Sudoku = window.Sudoku ?? (() => {
       keys.add(keyOf(rowId, colId))
     })
 
-    const leftCol = Math.floor((colId.codePointAt(0) - COL_BASE_CP) / 3) * 3 + COL_BASE_CP
-    const topRowId = Math.floor((rowId - 1) / 3) * 3 + 1
-    Array(topRowId, topRowId+1, topRowId+2).forEach((rowId) => {
-      [String.fromCodePoint(leftCol), String.fromCodePoint(leftCol+1), String.fromCodePoint(leftCol+2)].forEach((colId) => {
+    const leftCol = Math.floor(LETTERS.indexOf(colId) / CONFIG.box) * CONFIG.box
+    const topRowId = Math.floor((rowId - 1) / CONFIG.box) * CONFIG.box + 1
+    Array(CONFIG.box).fill(0).map((_, i) => topRowId+i).forEach((rowId) => {
+      for(const colId of LETTERS.substring(leftCol, leftCol + CONFIG.box)) {
         keys.add(keyOf(rowId, colId))
-      })
+      }
     })
 
     const candidates = new Set(Cell.CANDIDATES)
@@ -152,34 +148,44 @@ window.Sudoku = window.Sudoku ?? (() => {
       if(cell.settled) candidates.delete(cell.value)
     })
 
-    const key = keyOf(rowId, colId)
-    const cell = cells.get(key)
+    const cell = cells.get(focused)
     cell.value = [...candidates]
     onCellValueChanged(cell)
   }
 
   function onAssumptionStarted(event) {
+    // console.debug("[DEBUG] Calling onAssumptionStarted(%o) ...", event)
+
     const {key, value} = event.detail
     const cell = cells.get(key)
     cell.value = value
     onCellValueChanged(cell)
   }
 
-  function onAssumptionEnded(event) {
-    console.debug("[DEBUG] Calling onAssumptionEnded(%o) ...", event)
+  function onAssumptionAccepted(event) {
+    event.detail.affected.forEach((keys, cssClass) => {
+      keys.forEach(key => {
+        cells.get(key).render(cssClass)
+      })
+    })
+  }
 
-    // TODO: track if focused cell is impacted
-    event.detail.decorations.forEach((decoration, cells) => {
-      cells.forEach((cell) => cell.render(decoration))
+  function onAssumptionRejected(event) {
+    let focusedAffected = false
+    event.detail.affected.forEach((affected, cssClass) => {
+      affected.forEach(cell => {
+        cells.set(cell.key, cell)
+        cell.render(cssClass)
+        if(cell.key === focused) focusedAffected = true
+      })
     })
 
-    // if(focusedCell) {
-    //   const {rowId, colId} = focusedCell
-    //   const key = keyOf(rowId, colId)
-    //   const cell = cells.get(key)
-    //   cell.focus(false)
-    //   focusedCell = null
-    // }
+    if(focusedAffected) {
+      const cell = cells.get(focused)
+      $eliminateByRules.classList.toggle('hide', cell.settled)
+      highlightCandidates(cell)
+      Assumptions.renderOptionsFor(cell)
+    }
   }
 
   function keyOf(rowId, colId) {

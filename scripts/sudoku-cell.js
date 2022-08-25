@@ -42,10 +42,6 @@ class Cell {
     return Array.isArray(this.#value) ? false : this.#value !== 0
   }
 
-  // get status() {
-  //   return this.#status
-  // }
-
   focus(on) {
     this.#div().classList.toggle('focused', on)
   }
@@ -82,7 +78,7 @@ class Cell {
     if(Array.isArray(val1) && Array.isArray(val2)) {
       if(val1.length !== val2.length) return false
 
-      for(const i=0; i<val1.length; i++) {
+      for(let i=0; i<val1.length; i++) {
         if(val1[i] !== val2[i]) return false
       }
       return true

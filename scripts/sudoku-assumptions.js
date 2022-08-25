@@ -2,15 +2,15 @@
 
 class Assumption {
 
-  static CSS_CLASSES = ['if-1st', 'if-2nd', 'if-3rd']
-  static VOID = null
+  static #CSS_CLASSES = ['if-1st', 'if-2nd', 'if-3rd']
+  static ACCEPTED = null
 
-  static #availableCssClasses = [...Assumption.CSS_CLASSES]
+  static #availableCssClasses = [...Assumption.#CSS_CLASSES]
   static #nextCssClass() {
     return Assumption.#availableCssClasses.shift()
   }
   static #releaseCssClass(cssClass) {
-    return Assumption.#availableCssClasses.unshift(cssClass)
+    return Assumption.#availableCssClasses.push(cssClass)
   }
   static allowMore() {
     return Assumption.#availableCssClasses.length > 0
@@ -19,46 +19,38 @@ class Assumption {
   #id
   #name
   #cssClass
-  // #status // Pending | Accepted | Rejected
   #snapshots // array of {key: string, value: number | number[]}
 
   constructor(name) {
-    this.#id = Date.now()
+    this.#id = Date.now().toString()
     this.#name = name
     this.#cssClass = Assumption.#nextCssClass()
-    // this.#status = 'Pending'
     this.#snapshots = []
   }
 
   get id() { return this.#id }
   get name() { return this.#name }
   get cssClass() { return this.#cssClass }
-  // get status() { return this.#status }
+  get snapshots() { return [...this.#snapshots] }
 
   push(cell) {
     const {key, value} = cell
+    // console.debug("[DEBUG] Push snapshot %o into assumption(%o) ...", {key, value}, {id: this.#id, name: this.#name})
     this.#snapshots.push({key, value})
-  }
-
-  pop() {
-    const {key, value} = (this.#snapshots.pop() ?? {})
-    return key ? new Cell(key, value) : null
   }
 
   accept() {
     Assumption.#releaseCssClass(this.#cssClass)
-    // this.#status = 'Accepted'
   }
 
   reject() {
     Assumption.#releaseCssClass(this.#cssClass)
-    // this.#status = 'Rejected'
   }
 
   static {
-    Assumption.VOID = new Assumption('void')
-    Assumption.VOID.accept()
-    Assumption.VOID.#cssClass = ''
+    Assumption.ACCEPTED = new Assumption('ACCEPTED')
+    Assumption.ACCEPTED.accept()
+    Assumption.ACCEPTED.#cssClass = ''
   }
 }
 
@@ -68,13 +60,6 @@ window.Assumptions = window.Assumptions ?? (() => {
   function setCellTracer() {
     Cell.tracer = peek()
   }
-
-  // function findById(id) {
-  //   for(const assumption of assumptions) {
-  //     if(assumption.id === id) return assumption
-  //   }
-  //   return null
-  // }
 
   function push(assumption) {
     assumptions.push(assumption)
@@ -87,16 +72,64 @@ window.Assumptions = window.Assumptions ?? (() => {
     return result
   }
 
+  function shift() {
+    const result = assumptions.shift()
+    setCellTracer()
+    return result
+  }
+
   function peek() {
-    return assumptions.length === 0 ? Assumption.VOID : assumptions[assumptions.length-1]
+    return assumptions.length === 0 ? Assumption.ACCEPTED : assumptions[assumptions.length-1]
   }
 
-  function accept(assumptionId) { // accept the assumption and its predecessor(s)
-    // returns cells which need to be re-rendered
+  function accept(id) { // accept the assumption and its predecessor(s)
+    // console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
+
+    const keys = new Set()
+
+    let assumption = null
+    do {
+      assumption = shift()
+      if(!assumption) throw Error(`Invalid assumption id: '${id}'.`)
+
+      for(const cell of assumption.snapshots) {
+        Assumption.ACCEPTED.push(cell)
+        keys.add(cell.key)
+      }
+      assumption.accept()
+    } while(assumption.id !== id)
+
+    for(assumption of assumptions) {
+      for(const {key} of assumption.snapshots) {
+        keys.delete(key)
+      }
+    }
+
+    // [cssClass: cell-keys-that-need-to-be-re-rendered]
+    return new Map([
+      ['', keys]
+    ])
   }
 
-  function reject(assumptionId) { // reject the assumption and its successor(s)
-    // returns cells which need to be re-rendered
+  function reject(id) { // reject the assumption and its successor(s)
+    // console.debug("[DEBUG] Calling reject(%s), assumptions: %o ...", id, [...assumptions])
+
+    const affected = new Map() // [cssClass: cells-that-need-to-be-re-rendered]
+
+    let assumption = null
+    do {
+      assumption = pop()
+      if(!assumption) throw Error(`Invalid assumption id: '${id}'.`)
+
+      const cells = []
+      for(const {key, value} of assumption.snapshots.reverse()) {
+        cells.push(new Cell(key, value))
+      }
+      affected.set(peek().cssClass, cells)
+      assumption.reject()
+    } while(assumption.id !== id)
+
+    return affected
   }
 
   function renderOptionsFor(cell) {
@@ -126,14 +159,15 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function onStart(event) {
     const option = firstOf(event.target.selectedOptions)
-    const [_, key, value] = option?.value?.match(/^assume ([A-Z]\d) is (\d)$/) ?? []
-    if(!key) return
+    const [matched, key, value] = option?.value?.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
+    if(!matched) return
 
     push(new Assumption(option.text))
+    // console.debug("Started %o, assumptions: %o", peek(), [...assumptions])
 
     // trigger synthetic event to update the grid
     window.dispatchEvent(new CustomEvent('assumption-started', {
-      detail: {key, value}
+      detail: {key, value: Number(value)}
     }))
 
     render()
@@ -141,10 +175,6 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function render() {
     const div = $E('div.assumptions > div.pending')
-    if(assumptions.length === 0) {
-      div.innerHTML = ''
-      return
-    }
 
     div.innerHTML = assumptions.reduce((html, assumption) => html + `
       <div class="assumption ${assumption.cssClass}">
@@ -165,29 +195,15 @@ window.Assumptions = window.Assumptions ?? (() => {
     const id = dataset.id
     const action = dataset.action
 
-    console.debug("[DEBUG] Going to %s assumption(id: %s) ...", action, id)
-
     // accept or reject
-    const decorations = action === 'accept' ? accept(id) : reject(id)
+    const affected = action === 'accept' ? accept(id) : reject(id)
 
     // trigger synthetic event to update the grid
     window.dispatchEvent(new CustomEvent(`assumption-${action}ed`, {
-      detail: {decorations}
+      detail: {affected}
     }))
 
     render()
-  }
-
-  function accept(id) { // returns [decoration: cells]
-    const decorations = new Map()
-
-    return decorations
-  }
-
-  function reject(id) { // returns [decoration: cells]
-    const decorations = new Map()
-
-    return decorations
   }
 
   //
