@@ -2,8 +2,8 @@
 
 class Assumption {
 
+  static ACCEPTED = new Assumption('ACCEPTED', '')
   static #CSS_CLASSES = ['if-1st', 'if-2nd', 'if-3rd']
-  static ACCEPTED = null
 
   static #availableCssClasses = [...Assumption.#CSS_CLASSES]
   static #nextCssClass() {
@@ -21,10 +21,10 @@ class Assumption {
   #cssClass
   #snapshots // array of {key: string, value: number | number[]}
 
-  constructor(name) {
+  constructor(name, cssClass) {
     this.#id = Date.now().toString()
     this.#name = name
-    this.#cssClass = Assumption.#nextCssClass()
+    this.#cssClass = cssClass ?? Assumption.#nextCssClass()
     this.#snapshots = []
   }
 
@@ -45,12 +45,6 @@ class Assumption {
 
   reject() {
     Assumption.#releaseCssClass(this.#cssClass)
-  }
-
-  static {
-    Assumption.ACCEPTED = new Assumption('ACCEPTED')
-    Assumption.ACCEPTED.#cssClass = ''
-    Assumption.#availableCssClasses = [...Assumption.#CSS_CLASSES]
   }
 }
 
@@ -178,9 +172,8 @@ window.Assumptions = window.Assumptions ?? (() => {
 
     div.innerHTML = assumptions.reduce((html, assumption) => html + `
       <div class="assumption ${assumption.cssClass}">
-        <span>${assumption.name}:</span>
-        <button data-id="${assumption.id}" data-action="accept">Accept</button>
-        <button data-id="${assumption.id}" data-action="reject">Reject</button>
+        <button data-id="${assumption.id}" data-action="accept">Accept '${assumption.name.substring(7)}' & above</button>
+        <button data-id="${assumption.id}" data-action="reject">Reject '${assumption.name.substring(7)}' & below</button>
       </div>
       `, '')
 

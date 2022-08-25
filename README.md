@@ -1,5 +1,18 @@
 # Overview
 
+# TODO
+v Display ans styling the grid
+v Eliminate by rules
+v Assumptions
++ Prompt
++ Undo
++ Input seed
++ Fetch seed
++ Cross Hatching
++ Styling keys and commands
++ References
++ i18n
+
 # Setup
 The [http-server](https://github.com/http-party/http-server) is used for local development and manual testing.
 
