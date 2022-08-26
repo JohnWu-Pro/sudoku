@@ -27,3 +27,7 @@ function versionOf(script) {
 function resolveNavigatorLocale() {
   return navigator.language.replace(/^([a-z]{2})(?:-[a-z]+)??-([A-Z]{2})$/, '$1-$2')
 }
+
+function singleBlockCommentIn(fun) {
+  return fun.toString().replace(/^[^\/]+\/\*/, '').replace(/\*\/[^\/]+$/, '')
+}

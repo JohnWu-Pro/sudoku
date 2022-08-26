@@ -1,10 +1,10 @@
 # Overview
 
 # TODO
-v Display ans styling the grid
+v Display and styling the grid
 v Eliminate by rules
 v Assumptions
-+ Prompt
+v Prompt
 + Undo
 + Input seed
 + Fetch seed

@@ -69,6 +69,8 @@ window.Sudoku = window.Sudoku ?? (() => {
   function show() {
     const cssClass = Assumptions.peek().cssClass
     cells.forEach(cell => cell.render(cssClass))
+
+    Prompt.info('Tap or click the cell for more supportive actions.')
   }
 
   function onFocus(key) {
