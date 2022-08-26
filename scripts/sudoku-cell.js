@@ -47,7 +47,7 @@ class Cell {
   }
 
   render(decoration) {
-    const text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
+    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
     if(text.length > 5) text = '...'
 
     if(this.#value === 0) decoration = ''

@@ -77,7 +77,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   }
 
   function accept(id) { // accept the assumption and its predecessor(s)
-    console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
+    // console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
 
     const keys = new Set()
 
@@ -100,9 +100,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     }
 
     // [cssClass: cell-keys-that-need-to-be-re-rendered]
-    return new Map([
-      ['', keys]
-    ])
+    return keys
   }
 
   function reject(id) { // reject the assumption and its successor(s)
@@ -170,10 +168,12 @@ window.Assumptions = window.Assumptions ?? (() => {
   function render() {
     const div = $E('div.assumptions > div.pending')
 
-    div.innerHTML = assumptions.reduce((html, assumption) => html + `
+    const max = assumptions.length - 1
+    div.innerHTML = assumptions.reduce((html, assumption, index) => html + `
       <div class="assumption ${assumption.cssClass}">
-        <button data-id="${assumption.id}" data-action="accept">Accept '${assumption.name.substring(7)}' & above</button>
-        <button data-id="${assumption.id}" data-action="reject">Reject '${assumption.name.substring(7)}' & below</button>
+        <span>${assumption.name}:</span>
+        <button data-id="${assumption.id}" data-action="accept">${index===0 ? 'Accept &nbsp;' : 'Accept ⭳'}</button>
+        <button data-id="${assumption.id}" data-action="reject">${index===max ? 'Reject &nbsp;' : 'Reject ↧'}</button>
       </div>
       `, '')
 

@@ -121,10 +121,8 @@ window.Sudoku = window.Sudoku ?? (() => {
   function onEliminateByRules() {
     if(!focused) return
 
-    let [matched, colId, rowId] = focused.match(/^([A-Z])(\d+)$/) ?? []
-    if(!matched) return
-
-    rowId = Number(rowId)
+    const {rowId, colId} = idsFrom(focused)
+    if(!rowId) return
 
     const keys = new Set()
     COLUMNS.forEach((colId) => {
@@ -163,33 +161,31 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onAssumptionAccepted(event) {
-    event.detail.affected.forEach((keys, cssClass) => {
-      keys.forEach(key => {
-        cells.get(key).render(cssClass)
-      })
+    event.detail.affected.forEach(key => {
+      cells.get(key).render()
     })
   }
 
   function onAssumptionRejected(event) {
-    let focusedAffected = false
+    let started = null
     event.detail.affected.forEach((affected, cssClass) => {
       affected.forEach(cell => {
         cells.set(cell.key, cell)
         cell.render(cssClass)
-        if(cell.key === focused) focusedAffected = true
+        started = cell.key
       })
     })
 
-    if(focusedAffected) {
-      const cell = cells.get(focused)
-      $eliminateByRules.classList.toggle('hide', cell.settled)
-      highlightCandidates(cell)
-      Assumptions.renderOptionsFor(cell)
-    }
+    onFocus(started)
   }
 
   function keyOf(rowId, colId) {
     return colId + rowId
+  }
+
+  function idsFrom(key) {
+    const [matched, colId, rowId] = key?.match(/^([A-Z])(\d+)$/) ?? []
+    return matched ? {rowId: Number(rowId), colId} : {}
   }
 
   return {
