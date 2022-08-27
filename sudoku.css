@@ -4,10 +4,6 @@
   padding: 0;
 }
 
-body {
-  margin-top: 2vmax;
-}
-
 a, a:hover, a:visited {
   color: #d0d0d0;
   text-decoration: none;
@@ -20,11 +16,12 @@ a, a:hover, a:visited {
 .main-content {
   width: clamp(352px, 98vmin, 420px);
   margin: 0 auto;
-  padding-left: clamp(7px, 2vmin, 8.4px);
   z-index: 0;
 }
 
 .grid {
+  margin-top: 2vmax;
+  padding-left: clamp(6px, 1.6vmin, 8px);
   width: 100%;
   text-align: center;
 }
@@ -156,7 +153,6 @@ a, a:hover, a:visited {
 
 .grid .y-axis {
   aspect-ratio: 1 / 4;
-  width: 2.5%;
   text-align: left;
 }
 
@@ -169,8 +165,9 @@ a, a:hover, a:visited {
 .keys {
   display: flex;
   justify-content: space-evenly;
-  width: 93.6%;
-  margin: clamp(10.8px, 3vmin, 12.6px) 0 0 0;
+  margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
+  padding-right: 2%;
+  width: 92%;
   text-align: center;
 }
 
@@ -198,8 +195,9 @@ a, a:hover, a:visited {
 }
 
 .commands {
-  width: 93.6%;
-  margin: clamp(10.8px, 3vmin, 12.6px) 0 0 0;
+  margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
+  padding-right: 2%;
+  width: 92%;
   text-align: center;
   font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
 }
