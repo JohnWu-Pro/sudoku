@@ -5,11 +5,16 @@ v Display and styling the grid
 v Eliminate by rules
 v Assumptions
 v Prompt
-+ Undo
++ Menu
 + Input seed
 + Fetch seed
++ icon
++ Undo
+? Highlight row, column, and box?
 + Cross Hatching
 + Styling keys and commands
++ Timer
++ Stats
 + References
 + i18n
 

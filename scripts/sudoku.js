@@ -30,17 +30,18 @@ window.Sudoku = window.Sudoku ?? (() => {
     })
 
     const $keys = $E('div.keys')
-    $keys.innerHTML = ROWS.reduce((rows, rowId) => rows + `
-      <div class="key key-${rowId}">${rowId}</div>`, '') + `
-      <div class="key key-clean">⌫</div>`
-    ROWS.forEach((number) => {
+    const numbers = Array(...Cell.CANDIDATES)
+    $keys.innerHTML = numbers.reduce((html, number) => html + `
+      <div class="key key-${number}"><div class="value">${number}</div></div>`, '')
+    numbers.forEach((number) => {
       const $number = $E('div.key-'+number, $keys)
       $numbers.push($number)
       $number.addEventListener('click', () => onKeyPress(number))
     })
-    $E('div.key-clean', $keys).addEventListener('click', onCleanFocused)
 
     $commands = $E('div.commands')
+    $E('button#undo', $commands).addEventListener('click', onUndo)
+    $E('button#clean', $commands).addEventListener('click', onCleanFocused)
     $eliminateByRules = $E('#eliminate-by-rules', $commands)
     $eliminateByRules.addEventListener('click', onEliminateByRules)
 
@@ -70,7 +71,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     const cssClass = Assumptions.peek().cssClass
     cells.forEach(cell => cell.render(cssClass))
 
-    Prompt.info('Tap or click the cell for more supportive actions.')
+    Prompt.info('Tap or click the square for more supportive actions.')
   }
 
   function onFocus(key) {
@@ -85,6 +86,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     cell.focus(true)
     highlightCandidates(cell)
     $eliminateByRules.classList.toggle('hide', cell.settled)
+    // $crossHatching.classList.toggle('hide', !cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -103,6 +105,10 @@ window.Sudoku = window.Sudoku ?? (() => {
     if(!candidates.delete(number)) candidates.add(number)
     cell.value = [...candidates]
     onCellValueChanged(cell)
+  }
+
+  function onUndo() {
+    // TODO
   }
 
   function onCleanFocused() {

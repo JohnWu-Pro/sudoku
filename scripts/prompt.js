@@ -21,7 +21,7 @@ window.Prompt = window.Prompt ?? (() => {
     .perform('slide-in')
     .then((div) => (div.style.top = '', div))
     .then((div) => delay(8000).then(() => div))
-    .then((div) => $on(div).perform('slide-out'))
+    .then((div) => $on(div).perform('fade-out'))
     .then((div) => div.remove())
   }
 
@@ -30,27 +30,27 @@ window.Prompt = window.Prompt ?? (() => {
       display: block;
       position: absolute; z-index: 999;
       top: 90%;
-      width: 96%;
-      margin: 0 2%;
+      width: 100%;
       overflow: hidden;
     }
 
     .app-prompt-panel > .message {
       position: relative;
-      margin: 0;
+      width: 96%;
+      margin: 0 auto;
       padding: 0 0 0 1.5vmin;
       text-align: center;
 
       background: rgba(255,255,255,0.6);
-      font-weight: bold;
+      font: bold clamp(14.4px, 4vmin, 18px) 'New Times Roman';
     }
 
     .app-prompt-panel > .message.slide-in {
       transform: translateY(-100%);
-      transition: transform 1s ease 1s;
+      transition: transform 0.6s ease 0.6s;
     }
 
-    .app-prompt-panel > .message.slide-out {
+    .app-prompt-panel > .message.fade-out {
       opacity: 0;
       transition: opacity 2s ease 2s;
     }

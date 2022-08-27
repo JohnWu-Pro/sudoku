@@ -36,16 +36,20 @@
 
 <body>
 
-<div class="content">
+<div class="main-content">
   <div class="grid">
     Loading ...
   </div>
   <div class="keys">
   </div>
   <div class="commands hide">
-    <button id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
-    <!-- <button id="cross-hatching">Cross Hatching on ▼</button> -->
-    <!-- ⍉ -->
+    <div class="buttons">
+      <button class="block border first" id="undo">⎌</button>
+      <button class="block border" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
+      <!-- <button class="block border" id="cross-hatching">Cross Hatching on ▼</button> -->
+      <!-- ⍉ -->
+      <button class="block border last" id="clean">⌫</button>
+    </div>
     <div class="assumptions">
       <div class="pending"></div>
       <div class="tentative"></div>

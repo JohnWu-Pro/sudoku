@@ -2,7 +2,7 @@
 
 class Assumption {
 
-  static ACCEPTED = new Assumption('ACCEPTED', '')
+  static ACCEPTED = new Assumption('Xn', undefined, '')
   static #CSS_CLASSES = ['if-1st', 'if-2nd', 'if-3rd']
 
   static #availableCssClasses = [...Assumption.#CSS_CLASSES]
@@ -17,25 +17,27 @@ class Assumption {
   }
 
   #id
-  #name
+  #key
+  #value
   #cssClass
   #snapshots // array of {key: string, value: number | number[]}
 
-  constructor(name, cssClass) {
+  constructor(key, value, cssClass) {
     this.#id = Date.now().toString()
-    this.#name = name
-    this.#cssClass = cssClass ?? Assumption.#nextCssClass()
+    this.#key = key
+    this.#value = value
+    this.#cssClass = cssClass === '' ? '' : Assumption.#nextCssClass()
     this.#snapshots = []
   }
 
   get id() { return this.#id }
-  get name() { return this.#name }
+  get key() { return this.#key }
+  get value() { return this.#value }
   get cssClass() { return this.#cssClass }
   get snapshots() { return [...this.#snapshots] }
 
   push(cell) {
     const {key, value} = cell
-    // console.debug("[DEBUG] Push snapshot %o into assumption(%o) ...", {key, value}, {id: this.#id, name: this.#name})
     this.#snapshots.push({key, value})
   }
 
@@ -126,13 +128,8 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function renderOptionsFor(cell) {
     const div = $E('div.assumptions > div.tentative')
-    if(!cell || cell.settled) {
+    if(!cell || cell.settled || !Assumption.allowMore()) {
       div.innerHTML = ''
-      return
-    }
-    if(!Assumption.allowMore()) {
-      div.innerHTML = ''
-      $E('div.message').innerHTML = 'Too many assumptions!' // TODO
       return
     }
 
@@ -140,7 +137,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     if(candidates.length === 0) candidates.push(...Cell.CANDIDATES)
 
     div.innerHTML = `
-      <select>${candidates.reduce((html, candidate) => html +
+      <select class="block border">${candidates.reduce((html, candidate) => html +
         `<option value="assume ${cell.key} is ${candidate}">Assume ${cell.key} is ${candidate}</option>`,
         `<option value="">Assume ${cell.key} is ...</option>`)}
       </select>
@@ -151,18 +148,22 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function onStart(event) {
     const option = firstOf(event.target.selectedOptions)
-    const [matched, key, value] = option?.value?.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
+    let [matched, key, value] = option?.value?.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
     if(!matched) return
 
-    push(new Assumption(option.text))
+    value = Number(value)
+
+    push(new Assumption(key, value))
     // console.debug("Started %o, assumptions: %o", peek(), [...assumptions])
 
     // trigger synthetic event to update the grid
     window.dispatchEvent(new CustomEvent('assumption-started', {
-      detail: {key, value: Number(value)}
+      detail: {key, value}
     }))
 
     render()
+
+    if(!Assumption.allowMore()) warnNoMoreAssumption()
   }
 
   function render() {
@@ -170,10 +171,10 @@ window.Assumptions = window.Assumptions ?? (() => {
 
     const max = assumptions.length - 1
     div.innerHTML = assumptions.reduce((html, assumption, index) => html + `
-      <div class="assumption ${assumption.cssClass}">
-        <span>${assumption.name}:</span>
-        <button data-id="${assumption.id}" data-action="accept">${index===0 ? 'Accept &nbsp;' : 'Accept ⭳'}</button>
-        <button data-id="${assumption.id}" data-action="reject">${index===max ? 'Reject &nbsp;' : 'Reject ↧'}</button>
+      <div class="assumption ${assumption.cssClass} border">
+        <span class="block">Assume ${assumption.key} is ${assumption.value}:</span>
+        <button class="block border" data-id="${assumption.id}" data-action="accept">${index===0 ? 'Accept &nbsp;' : 'Accept ⭳'}</button>
+        <button class="block border" data-id="${assumption.id}" data-action="reject">${index===max ? 'Reject &nbsp;' : 'Reject ↧'}</button>
       </div>
       `, '')
 
@@ -188,6 +189,11 @@ window.Assumptions = window.Assumptions ?? (() => {
     const id = dataset.id
     const action = dataset.action
 
+    const index = assumptions.findIndex(it => it.id === id)
+    const assumption = assumptions[index]
+    const hasPredecessor = index > 0
+    const hasSuccessor = index < assumptions.length - 1
+
     // accept or reject
     const affected = action === 'accept' ? accept(id) : reject(id)
 
@@ -197,6 +203,22 @@ window.Assumptions = window.Assumptions ?? (() => {
     }))
 
     render()
+
+    if(action === 'accept') {
+      Prompt.success(`Accepted '${assumption.key} is ${assumption.value}'`
+        + (hasPredecessor ? ' and its predecessor(s).' : '.'))
+    } else {
+      Prompt.success(`Rejected '${assumption.key} is ${assumption.value}'`
+        + (hasSuccessor ? ' and its successor(s).' : '.'))
+    }
+  }
+
+  let warned = false
+  function warnNoMoreAssumption() {
+    if(warned) return
+
+    Prompt.warn('No more assumption until any existing one is accepted or rejected!')
+    warned = true
   }
 
   //

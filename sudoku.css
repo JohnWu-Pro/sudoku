@@ -13,15 +13,13 @@ a, a:hover, a:visited {
   text-decoration: none;
 }
 
-.content {
-  width: 96vmin;
-  min-width: 352px;
-  max-width: 420px;
-  margin: 0 auto 0 3vmin;
-  z-index: 0; position: static; /* default z-index and position */
+.main-content {
+  width: clamp(352px, 98vmin, 420px);
+  margin: 0 auto;
+  z-index: 0;
 }
 
-.content .hide {
+.main-content .hide {
   display: none !important;
 }
 
@@ -38,8 +36,7 @@ a, a:hover, a:visited {
   aspect-ratio: 1 / 1;
   border: solid lightgrey;
   border-width: 1px 0 0 1px;
-  width: 10%;
-  min-width: 9vmin;
+  width: clamp(35px, 10vmin, 42px);
 }
 
 .grid .cell.focused {
@@ -122,9 +119,11 @@ a, a:hover, a:visited {
 }
 
 .grid .cell .value {
-  font: bold 6.4vmin 'New Times Roman';
+  font: bold clamp(22px, 6.4vmin, 28px) 'New Times Roman';
   position: relative;
   top: 50%;
+  margin: auto;
+  width: 88%;
   transform: translateY(-50%);
 }
 
@@ -133,8 +132,9 @@ a, a:hover, a:visited {
 }
 
 .grid .cell .value.pending {
-  font: 4vmin 'New Times Roman';
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
   color: grey;
+  top: 32%;
 }
 
 .grid .cell .value.settled {
@@ -146,45 +146,50 @@ a, a:hover, a:visited {
   border-width: 1px 0 0 1px;
 
   color: lightgrey;
-  font: bold 3.2vmin 'New Times Roman';
+  font: bold clamp(11px, 3.2vmin, 14px) 'New Times Roman';
 }
 
 .grid .x-axis .coord {
-  width: 10%;
-  min-width: 9vmin;
+  width: clamp(35px, 10vmin, 42px);
 }
 
 .grid .y-axis {
   aspect-ratio: 1 / 4;
   width: 2.5%;
-  text-align: right;
+  text-align: left;
 }
 
 .grid .y-axis .value {
   position: relative;
-  top: 50%;
+  top: 50%; left: 25%;
   transform: translateY(-50%);
 }
 
 .keys {
   display: flex;
-  width: 92%;
-  margin: 4vmin 0 0 1vmin;
+  justify-content: space-evenly;
+  width: 93%;
+  margin: clamp(10.8px, 3vmin, 12.6px) 0 0 0;
   text-align: center;
 }
 
 .keys .key {
   aspect-ratio: 1 / 1;
-  width: 9%;
-  margin: 0.4vmin;
-  padding: 1.5vmin 1.2vmin 0.9vmin 1.2vmin;
+  width: clamp(35px, 10vmin, 42px);
+  margin: 0.6vmin;
 
   border: 1px outset #eaeaea;
-  border-radius: 1vmin;
+  border-radius: clamp(3.5px, 1vmin, 4.2px);
 
   color: grey;
-  font: bold 4vmin 'Arial';
+  font: normal clamp(22px, 6.4vmin, 28px) 'Arial';
   cursor: pointer;
+}
+
+.keys .key .value {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .keys .key.candidate {
@@ -192,20 +197,36 @@ a, a:hover, a:visited {
 }
 
 .commands {
-  width: 96%;
-  margin: 4vmin 0 0 0;
+  width: 93%;
+  margin: clamp(10.8px, 3vmin, 12.6px) 0 0 0;
   text-align: center;
-  font: normal 4vmin 'New Times Roman';
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+}
+
+.commands .buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.commands .buttons .first {
+  margin-right: auto;
+}
+.commands .buttons .last {
+  margin-left: auto;
+}
+
+.commands .block {
+  display: block;
+  margin: clamp(3.5px, 1vmin, 4.2px);
+  padding: clamp(3.5px, 1vmin, 4.2px) clamp(7px, 2vmin, 8.4px);
+}
+
+.commands .border {
+  border: 1px outset #eaeaea;
+  border-radius: clamp(3.5px, 1vmin, 4.2px);
 }
 
 .commands button {
-  display: block;
-  margin: 1vmin;
-  padding: 1vmin 2vmin;
-
-  border: 1px outset #eaeaea;
-  border-radius: 1vmin;
-
   cursor: pointer;
 }
 
@@ -213,33 +234,15 @@ a, a:hover, a:visited {
   display: flex;
   text-align: left;
 
-  border: 1px solid #eaeaea;
-  border-radius: 1vmin;
   width: auto;
 }
 
-.commands .pending .assumption span {
-  display: block;
-  margin: 1vmin;
-  padding: 1vmin 2vmin;
+.commands .pending .assumption .block {
+  margin: 1px 2px;
 }
 
 .commands .tentative select {
-  display: block;
-  margin: 1vmin;
-  padding: 1vmin 2vmin;
-
-  border: 1px outset #eaeaea;
-  border-radius: 1vmin;
-
   background: #f2f2f2;
-}
-
-.message {
-  width: 96%;
-  margin: 4vmin 0 0 0;
-  color: navy;
-  font: bold 4.2vmin 'New Times Roman';
 }
 
 .copyright {
@@ -247,7 +250,7 @@ a, a:hover, a:visited {
   width: 100vmin;
   margin: 0.6vmin auto;
   text-align: center;
-  font: 3vmin 'New Times Roman';
+  font: clamp(10.8px, 3vmin, 12.6px) 'New Times Roman';
   color: #d0d0d0;
   top: 96vmax;
 }
