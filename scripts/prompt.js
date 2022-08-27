@@ -38,7 +38,7 @@ window.Prompt = window.Prompt ?? (() => {
       position: relative;
       width: 96%;
       margin: 0 auto;
-      padding: 0 0 0 1.5vmin;
+      padding: 0 1.5vmin;
       text-align: center;
 
       background: rgba(255,255,255,0.6);

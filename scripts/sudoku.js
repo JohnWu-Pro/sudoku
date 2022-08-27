@@ -80,13 +80,13 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
     focused = key
 
-    $commands.classList.remove('hide')
+    $commands.classList.remove('hidden')
 
     const cell = cells.get(key)
     cell.focus(true)
     highlightCandidates(cell)
-    $eliminateByRules.classList.toggle('hide', cell.settled)
-    // $crossHatching.classList.toggle('hide', !cell.settled)
+    $eliminateByRules.classList.toggle('hidden', cell.settled)
+    // $crossHatching.classList.toggle('hidden', !cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -122,7 +122,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   function onCellValueChanged(cell) {
     cell.render(Assumptions.peek().cssClass)
     highlightCandidates(cell)
-    $eliminateByRules.classList.toggle('hide', cell.settled)
+    $eliminateByRules.classList.toggle('hidden', cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
