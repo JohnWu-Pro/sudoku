@@ -6,7 +6,7 @@ v Eliminate by rules
 v Assumptions
 v Prompt
 v Manual seed
-+ Fetch seed
+v Fetch seed
 + icon
 + Undo
 + Menu
@@ -14,6 +14,7 @@ x Highlight row, column, and box?
 + Cross Hatching
 + Styling keys and commands
 + Timer
++ Save state, pause, resume
 + Stats
 + References
 + i18n
@@ -22,11 +23,13 @@ x Highlight row, column, and box?
 + https://github.com/tshrestha/js-sudoku
 + http://norvig.com/sudoku.html
 
++ https://www.geeksforgeeks.org/program-sudoku-generator/
+
 + https://github.com/huaminghuangtw/Web-Sudoku-Puzzle-Game
 + https://github.com/robatron/sudoku.js
 + https://qqwing.com/generate.html
-+ https://www.geeksforgeeks.org/program-sudoku-generator/
 
++ http://sudopedia.enjoysudoku.com/Diagrams_and_Notations.html - Notations
 + https://sudoku.game/ - Help text
 + https://www.websudoku.com/ - seed
 

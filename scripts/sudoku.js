@@ -61,21 +61,28 @@ window.Sudoku = window.Sudoku ?? (() => {
    */
   function seed(data) {
     seeding = data === undefined
-    if(seeding) return
+    if(seeding) return Promise.resolve(data)
 
-    if(data === Seed.READY) {
+    if(data === Seed.EMPTY) {
+      ROWS.forEach((rowId) => {
+        COLUMNS.forEach((colId) => {
+          const key = keyOf(rowId, colId)
+          cells.set(key, new Cell(key, 0))
+        })
+      })
+    } else if(data === Seed.FILLED) {
       cells.forEach(cell => {
         if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, 'seed'))
       })
     } else {
-      ROWS.forEach((rowId, rowIndex) => {
-        const row = data[rowIndex]
-        COLUMNS.forEach((colId, colIndex) => {
+      ROWS.forEach((rowId) => {
+        COLUMNS.forEach((colId) => {
           const key = keyOf(rowId, colId)
-          cells.set(key, new Cell(key, row[colIndex], 'seed'))
+          cells.set(key, new Cell(key, data.get(key), 'seed'))
         })
       })
     }
+    return Promise.resolve(data)
   }
 
   function show(empty) {
@@ -85,7 +92,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     $E('div.commands div.buttons').classList.toggle('hidden', empty)
 
     if(!empty) {
-      Prompt.info('Tap or click the square for more supportive actions.')
+      Prompt.info('Tap or click the cell for more supportive actions.')
     }
   }
 

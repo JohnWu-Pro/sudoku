@@ -2,6 +2,8 @@
 
 window.App = window.App ?? (() => {
 
+  const DONE_BUTTON_LABEL = 'Done on Filling in Givens'
+
   const currentScript = document.currentScript
 
   var $seeding = null
@@ -10,18 +12,19 @@ window.App = window.App ?? (() => {
     // console.debug("[DEBUG] Calling App.init() ...")
 
     Sudoku.init()
-    Sudoku.seed(Seed.EMPTY)
-    Sudoku.show(true)
+    Promise.resolve(Seed.EMPTY)
+    .then((data) => Sudoku.seed(data))
+    .then(() => Sudoku.show(true))
 
     $seeding = $E('div.seeding')
     $seeding.innerHTML = `
       <select class="block border flex-center">
         <option value="">Start new Sudoku game ...</option>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-        <option value="Evil">Evil</option>
-        <option value="Manual">Manual Input ...</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="master">Master</option>
+        <option value="manual">Manual Fill in Givens ...</option>
       </select>
     `
 
@@ -33,26 +36,28 @@ window.App = window.App ?? (() => {
     if(! option?.value) return
 
     const selected = option.value
-    if(selected === 'Manual') {
+    if(selected === 'manual') {
       $seeding.innerHTML = `
-        <button class="block border flex-center">Done on Seeding</button>
+        <button class="block border flex-center">${DONE_BUTTON_LABEL}</button>
       `
-      $E('button', $seeding).addEventListener('click', onSeedReady)
+      $E('button', $seeding).addEventListener('click', onSeedFilled)
+      Prompt.info(`Fill in the givens, then click '${DONE_BUTTON_LABEL}'.`)
       Sudoku.seed()
-      Prompt.info(`Input the seed numbers, then click 'Done on Seeding'.`)
     } else {
       $seeding.classList.add('hidden')
       $seeding.innerHTML = ''
-      Sudoku.seed(await Seed.get(selected))
-      Sudoku.show()
+      Seed.get(selected)
+      .then((data) => Sudoku.seed(data))
+      .then(() => Sudoku.show())
     }
   }
 
-  function onSeedReady() {
+  async function onSeedFilled() {
     $seeding.classList.add('hidden')
     $seeding.innerHTML = ''
-    Sudoku.seed(Seed.READY)
-    Sudoku.show()
+    Promise.resolve(Seed.FILLED)
+    .then((data) => Sudoku.seed(data))
+    .then(() => Sudoku.show())
   }
 
   function locale() {
