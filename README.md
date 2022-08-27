@@ -5,18 +5,30 @@ v Display and styling the grid
 v Eliminate by rules
 v Assumptions
 v Prompt
-+ Menu
-+ Input seed
+v Manual seed
 + Fetch seed
 + icon
 + Undo
-? Highlight row, column, and box?
++ Menu
+x Highlight row, column, and box?
 + Cross Hatching
 + Styling keys and commands
 + Timer
 + Stats
 + References
 + i18n
+
+# References
++ https://github.com/tshrestha/js-sudoku
++ http://norvig.com/sudoku.html
+
++ https://github.com/huaminghuangtw/Web-Sudoku-Puzzle-Game
++ https://github.com/robatron/sudoku.js
++ https://qqwing.com/generate.html
++ https://www.geeksforgeeks.org/program-sudoku-generator/
+
++ https://sudoku.game/ - Help text
++ https://www.websudoku.com/ - seed
 
 # Setup
 The [http-server](https://github.com/http-party/http-server) is used for local development and manual testing.

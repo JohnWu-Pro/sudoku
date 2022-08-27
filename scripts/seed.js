@@ -1,6 +1,9 @@
 'use strict';
 
-class Seed {
+window.Seed = window.Seed ?? (() => {
+
+  const EMPTY = Array(CONFIG.scale).fill(Array(CONFIG.scale).fill(0))
+  const READY = 'READY'
 
   /**
    * Get a Sudoku's seed data by the level or id.
@@ -8,7 +11,7 @@ class Seed {
    * @param {enum} level Easy, Medium, Hard, Evil
    * @param {number} id the Sudoku's seed data id
    */
-  static get(level, id) {
+  function get(level, id) {
     return [
       [4,7,0,0,0,0,0,5,8],
       [5,8,0,7,0,4,0,9,1],
@@ -21,4 +24,10 @@ class Seed {
       [1,3,0,0,0,0,0,8,2]
     ]
   }
-}
+
+  return {
+    EMPTY,
+    READY,
+    get
+  }
+})()

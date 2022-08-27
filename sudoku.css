@@ -9,8 +9,23 @@ a, a:hover, a:visited {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 .hidden {
   display: none !important;
+}
+
+.flex-first {
+  margin-right: auto !important;
+}
+.flex-center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.flex-last {
+  margin-left: auto !important;
 }
 
 .main-content {
@@ -194,6 +209,21 @@ a, a:hover, a:visited {
   outline: #6666ff auto 1vmin;
 }
 
+.seeding {
+  display: flex;
+  margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
+  padding-right: 2%;
+  width: 92%;
+  text-align: center;
+}
+
+.seeding select,
+.seeding button {
+  background: #f2f2f2;
+  color: blue;
+  font: normal clamp(18px, 5vmin, 21px) 'New Times Roman';
+}
+
 .commands {
   margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
   padding-right: 2%;
@@ -207,26 +237,17 @@ a, a:hover, a:visited {
   justify-content: space-evenly;
 }
 
-.commands .buttons .first {
-  margin-right: auto;
-}
-.commands .buttons .last {
-  margin-left: auto;
-}
-
-.commands .block {
+.commands .block,
+.seeding .block {
   display: block;
   margin: clamp(3.5px, 1vmin, 4.2px);
   padding: clamp(3.5px, 1vmin, 4.2px) clamp(7px, 2vmin, 8.4px);
 }
 
-.commands .border {
+.commands .border,
+.seeding .border {
   border: 1px outset #eaeaea;
   border-radius: clamp(3.5px, 1vmin, 4.2px);
-}
-
-.commands button {
-  cursor: pointer;
 }
 
 .commands .pending .assumption {

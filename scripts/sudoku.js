@@ -5,10 +5,12 @@ window.Sudoku = window.Sudoku ?? (() => {
   const COLUMNS = Array(CONFIG.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
   const ROWS = Array(CONFIG.scale).fill(0).map((_, i) => 1+i)
 
+  var seeding = false
+
   const cells = new Map()
   var focused = null
 
-  var $numbers = [undefined], $commands, $eliminateByRules
+  var $numbers = [undefined], $eliminateByRules
 
   function init() {
     const $grid = $E('div.grid')
@@ -39,7 +41,7 @@ window.Sudoku = window.Sudoku ?? (() => {
       $number.addEventListener('click', () => onKeyPress(number))
     })
 
-    $commands = $E('div.commands')
+    const $commands = $E('div.commands')
     $E('button#undo', $commands).addEventListener('click', onUndo)
     $E('button#clean', $commands).addEventListener('click', onCleanFocused)
     $eliminateByRules = $E('#eliminate-by-rules', $commands)
@@ -58,20 +60,33 @@ window.Sudoku = window.Sudoku ?? (() => {
    * @param {array} data the Sudoku's seed data
    */
   function seed(data) {
-    ROWS.forEach((rowId, rowIndex) => {
-      const row = data[rowIndex]
-      COLUMNS.forEach((colId, colIndex) => {
-        const key = keyOf(rowId, colId)
-        cells.set(key, new Cell(key, row[colIndex], 'seed'))
+    seeding = data === undefined
+    if(seeding) return
+
+    if(data === Seed.READY) {
+      cells.forEach(cell => {
+        if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, 'seed'))
       })
-    })
+    } else {
+      ROWS.forEach((rowId, rowIndex) => {
+        const row = data[rowIndex]
+        COLUMNS.forEach((colId, colIndex) => {
+          const key = keyOf(rowId, colId)
+          cells.set(key, new Cell(key, row[colIndex], 'seed'))
+        })
+      })
+    }
   }
 
-  function show() {
+  function show(empty) {
     const cssClass = Assumptions.peek().cssClass
     cells.forEach(cell => cell.render(cssClass))
 
-    Prompt.info('Tap or click the square for more supportive actions.')
+    $E('div.commands div.buttons').classList.toggle('hidden', empty)
+
+    if(!empty) {
+      Prompt.info('Tap or click the square for more supportive actions.')
+    }
   }
 
   function onFocus(key) {
@@ -80,11 +95,12 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
     focused = key
 
-    $commands.classList.remove('hidden')
-
     const cell = cells.get(key)
     cell.focus(true)
     highlightCandidates(cell)
+
+    if(seeding) return
+
     $eliminateByRules.classList.toggle('hidden', cell.settled)
     // $crossHatching.classList.toggle('hidden', !cell.settled)
     Assumptions.renderOptionsFor(cell)
@@ -101,9 +117,15 @@ window.Sudoku = window.Sudoku ?? (() => {
     if(!focused) return
 
     const cell = cells.get(focused)
-    const candidates = cell.candidates
-    if(!candidates.delete(number)) candidates.add(number)
-    cell.value = [...candidates]
+
+    if(seeding) {
+      cell.value = cell.value === number ? 0 : number
+    } else {
+      const candidates = cell.candidates
+      if(!candidates.delete(number)) candidates.add(number)
+      cell.value = [...candidates]
+    }
+
     onCellValueChanged(cell)
   }
 
@@ -122,6 +144,9 @@ window.Sudoku = window.Sudoku ?? (() => {
   function onCellValueChanged(cell) {
     cell.render(Assumptions.peek().cssClass)
     highlightCandidates(cell)
+
+    if(seeding) return
+
     $eliminateByRules.classList.toggle('hidden', cell.settled)
     Assumptions.renderOptionsFor(cell)
   }

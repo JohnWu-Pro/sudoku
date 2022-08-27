@@ -137,7 +137,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     if(candidates.length === 0) candidates.push(...Cell.CANDIDATES)
 
     div.innerHTML = `
-      <select class="block border">${candidates.reduce((html, candidate) => html +
+      <select class="block border flex-center">${candidates.reduce((html, candidate) => html +
         `<option value="assume ${cell.key} is ${candidate}">Assume ${cell.key} is ${candidate}</option>`,
         `<option value="">Assume ${cell.key} is ...</option>`)}
       </select>
