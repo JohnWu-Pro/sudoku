@@ -12,6 +12,18 @@ function $E(cssSelector, container) {
   return (container || document).querySelector(cssSelector)
 }
 
+function $hide(element, cssClass = 'hidden') {
+  element.classList.add(cssClass)
+}
+
+function $show(element, cssClass = 'hidden') {
+  element.classList.remove(cssClass)
+}
+
+function $toggle(element, force, cssClass = 'hidden') {
+  element.classList.toggle(cssClass, force)
+}
+
 function firstOf(arrayLike) {
   for(const value of (arrayLike ?? [])) {
     return value

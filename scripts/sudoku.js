@@ -53,15 +53,15 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   /**
-   * Set the Sudoku's seed data. The data should be an array, each element represents a row.
+   * Show the Sudoku grid. The data should be an array, each element represents a row.
    * Each row itself is an array, each element represents a cell in that row.
    * The cell value can be 1, 2, 3, ..., max. And the zero (`0`) indicates no value yet.
    *
    * @param {array} data the Sudoku's seed data
+   * @param {boolean} startSeeding whether to start manual seeding
    */
-  function seed(data) {
-    seeding = data === undefined
-    if(seeding) return Promise.resolve(data)
+  function show(data, startSeeding = false) {
+    seeding = startSeeding
 
     if(data === Seed.EMPTY) {
       ROWS.forEach((rowId) => {
@@ -83,18 +83,12 @@ window.Sudoku = window.Sudoku ?? (() => {
         })
       })
     }
-    return Promise.resolve(data)
-  }
 
-  function show(empty) {
+    Assumptions.clear()
     const cssClass = Assumptions.peek().cssClass
     cells.forEach(cell => cell.render(cssClass))
 
-    $E('div.commands div.buttons').classList.toggle('hidden', empty)
-
-    if(!empty) {
-      Prompt.info('Tap or click the cell for more supportive actions.')
-    }
+    return Promise.resolve()
   }
 
   function onFocus(key) {
@@ -109,8 +103,8 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     if(seeding) return
 
-    $eliminateByRules.classList.toggle('hidden', cell.settled)
-    // $crossHatching.classList.toggle('hidden', !cell.settled)
+    $toggle($eliminateByRules, cell.settled)
+    // $toggle($crossHatching, !cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -155,7 +149,7 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     if(seeding) return
 
-    $eliminateByRules.classList.toggle('hidden', cell.settled)
+    $toggle($eliminateByRules, cell.settled)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -231,7 +225,6 @@ window.Sudoku = window.Sudoku ?? (() => {
 
   return {
     init,
-    seed,
     show
   }
 })()

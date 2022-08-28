@@ -28,14 +28,53 @@ button {
   margin-left: auto !important;
 }
 
+.header {
+  width: clamp(338px, 94vmin, 395px);
+  margin: clamp(4px, 1vmax, 6px) auto;
+  z-index: 0;
+}
+
+.header > div {
+  background: #f2f2f2;
+  display: flex;
+  position: relative;
+  width: 98.6%;
+}
+
+.header > div > div {
+  flex: 1 1 0;
+  bottom: 0;
+  margin-top: auto;
+}
+
+.header .flex-first {
+  text-align: left;
+}
+.header .flex-center {
+  text-align: center;
+}
+.header .flex-last {
+  text-align: right;
+}
+
+.header select {
+  background: #f2f2f2;
+  color: navy;
+  font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  width: clamp(111px, 31vmin, 130px);
+}
+
+.header .title {
+  font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+}
+
 .main-content {
-  width: clamp(352px, 98vmin, 420px);
+  width: clamp(352px, 98vmin, 412px);
   margin: 0 auto;
   z-index: 0;
 }
 
 .grid {
-  margin-top: 2vmax;
   padding-left: clamp(6px, 1.6vmin, 8px);
   width: 100%;
   text-align: center;
@@ -217,13 +256,6 @@ button {
   text-align: center;
 }
 
-.seeding select,
-.seeding button {
-  background: #f2f2f2;
-  color: blue;
-  font: normal clamp(18px, 5vmin, 21px) 'New Times Roman';
-}
-
 .commands {
   margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
   padding-right: 2%;
@@ -266,7 +298,7 @@ button {
   background: #f2f2f2;
 }
 
-.copyright {
+.footer {
   position: absolute;
   width: 100vmin;
   margin: 0.6vmin auto;

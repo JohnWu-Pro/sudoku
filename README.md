@@ -11,23 +11,24 @@ v Fetch seed
 + Undo
 + Menu
 x Highlight row, column, and box?
-+ Cross Hatching
++ Highlight Cross Hatching
 + Styling keys and commands
 + Timer
 + Save state, pause, resume
 + Stats
 + References
 + i18n
++ PWA
 
 # References
-+ https://qqwing.com/generate.html
++ https://qqwing.com/generate.html - generator
 + https://github.com/stephenostermiller/qqwing
 
-+ http://norvig.com/sudoku.html
++ http://norvig.com/sudoku.html - solving approach
 - https://github.com/einaregilsson/sudoku.js
 - https://github.com/tshrestha/js-sudoku
 
-+ https://www.geeksforgeeks.org/program-sudoku-generator/
++ https://www.geeksforgeeks.org/program-sudoku-generator/ - improved generation approach
 
 + https://github.com/huaminghuangtw/Web-Sudoku-Puzzle-Game
 + https://github.com/robatron/sudoku.js

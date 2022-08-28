@@ -15,6 +15,9 @@ class Assumption {
   static allowMore() {
     return Assumption.#availableCssClasses.length > 0
   }
+  static reset() {
+    Assumption.#availableCssClasses = [...Assumption.#CSS_CLASSES]
+  }
 
   #id
   #key
@@ -76,6 +79,11 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function peek() {
     return assumptions.length === 0 ? Assumption.ACCEPTED : assumptions[assumptions.length-1]
+  }
+
+  function clear() {
+    assumptions.length = 0
+    Assumption.reset()
   }
 
   function accept(id) { // accept the assumption and its predecessor(s)
@@ -227,6 +235,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   setCellTracer()
 
   return {
+    clear,
     peek,
     renderOptionsFor
   }

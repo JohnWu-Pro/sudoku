@@ -6,59 +6,88 @@ window.App = window.App ?? (() => {
 
   const currentScript = document.currentScript
 
-  var $seeding = null
+  var $seedFilled = null
 
   function init() {
-    // console.debug("[DEBUG] Calling App.init() ...")
+    const $header = $E('div.header')
+    $header.innerHTML = `
+      <div>
+        <div class="flex-first">
+          <select class="block border">
+            <option value="">New Game ...</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+            <option value="Expert">Expert</option>
+            <option value="Manual">Input Givens Manually</option>
+          </select>
+        </div>
+        <div class="flex-center">
+          <span class="title">Sudoku</span>
+        </div>
+        <div class="flex-last">
+          <span class="timer">00:00</span>
+          <span class="help">?</span>
+        </div>
+      </div>
+    `
+    $E('select', $header).addEventListener('change', onNewGame)
 
-    Sudoku.init()
-    Promise.resolve(Seed.EMPTY)
-    .then((data) => Sudoku.seed(data))
-    .then(() => Sudoku.show(true))
+    $E('.commands .buttons').innerHTML = `
+      <button class="block border flex-first" id="undo">⎌</button>
+      <button class="block border hidden" id="seed-filled">${DONE_BUTTON_LABEL}</button>
+      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
+      <!-- <button class="block border hidden" id="cross-hatching">Cross Hatching on ▼</button> -->
+      <!-- ⍉ -->
+      <button class="block border flex-last" id="clean">⌫</button>
+    `
+    $seedFilled = $E('button#seed-filled')
+    $seedFilled.addEventListener('click', onSeedFilled)
 
-    $seeding = $E('div.seeding')
-    $seeding.innerHTML = `
-      <select class="block border flex-center">
-        <option value="">Start new Sudoku game ...</option>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-        <option value="Expert">Expert</option>
-        <option value="Manual">Manually Fill in Givens ...</option>
-      </select>
+    $E('div.footer').innerHTML = `
+      <a href="https://mozilla.org/MPL/2.0/" target="_blank">版权所有</a>
+      &copy; 2022
+      <a href="mailto: johnwu.pro@gmail.com" target="_blank">吴菊华</a>。
+      适用版权许可 <a href="javascript:openDoc('LICENSE.txt', '版权许可')" title="License Detail">MPL-2.0</a>。
     `
 
-    $E('select', $seeding).addEventListener('change', onSelected)
+    Sudoku.init()
+    show('Easy')
   }
 
-  async function onSelected(event) {
-    const option = firstOf(event.target.selectedOptions)
-    if(! option?.value) return
+  function onNewGame(event) {
+    const selected = event.target.value
+    if(! selected) return
 
-    const selected = option.value
     if(selected === 'Manual') {
-      $seeding.innerHTML = `
-        <button class="block border flex-center">${DONE_BUTTON_LABEL}</button>
-      `
-      $E('button', $seeding).addEventListener('click', onSeedFilled)
+      $show($seedFilled)
+      Promise.resolve(Seed.EMPTY)
+      .then((data) => Sudoku.show(data, true)) // to start manual seeding
       Prompt.info(`Fill in the givens, then click '${DONE_BUTTON_LABEL}'.`)
-      Sudoku.seed()
     } else {
-      $seeding.classList.add('hidden')
-      $seeding.innerHTML = ''
-      Seed.get(selected)
-      .then((data) => Sudoku.seed(data))
-      .then(() => Sudoku.show())
-      .catch((error) => Prompt.error(error))
+      $hide($seedFilled)
+      show(selected)
     }
+    event.target.value = ''
   }
 
-  async function onSeedFilled() {
-    $seeding.classList.add('hidden')
-    $seeding.innerHTML = ''
+  function show(game) {
+    Seed.get(game)
+    .then((data) => Sudoku.show(data))
+    .then(promptUsage)
+    .catch((error) => Prompt.error(error))
+  }
+
+  function onSeedFilled() {
+    $hide($seedFilled)
     Promise.resolve(Seed.FILLED)
-    .then((data) => Sudoku.seed(data))
-    .then(() => Sudoku.show())
+    .then((data) => Sudoku.show(data))
+    .then(promptUsage)
+  }
+
+  let prompted = 0
+  function promptUsage() {
+    if(prompted++ < 3) Prompt.info('Tap or click the cell for more assistive actions.')
   }
 
   function locale() {
