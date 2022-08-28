@@ -24,7 +24,7 @@ x Highlight row, column, and box?
 + https://github.com/stephenostermiller/qqwing
 
 + http://norvig.com/sudoku.html
-+ https://github.com/einaregilsson/sudoku.js
+- https://github.com/einaregilsson/sudoku.js
 - https://github.com/tshrestha/js-sudoku
 
 + https://www.geeksforgeeks.org/program-sudoku-generator/

@@ -20,11 +20,11 @@ window.App = window.App ?? (() => {
     $seeding.innerHTML = `
       <select class="block border flex-center">
         <option value="">Start new Sudoku game ...</option>
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-        <option value="master">Master</option>
-        <option value="manual">Manual Fill in Givens ...</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+        <option value="Expert">Expert</option>
+        <option value="Manual">Manually Fill in Givens ...</option>
       </select>
     `
 
@@ -36,7 +36,7 @@ window.App = window.App ?? (() => {
     if(! option?.value) return
 
     const selected = option.value
-    if(selected === 'manual') {
+    if(selected === 'Manual') {
       $seeding.innerHTML = `
         <button class="block border flex-center">${DONE_BUTTON_LABEL}</button>
       `
@@ -49,6 +49,7 @@ window.App = window.App ?? (() => {
       Seed.get(selected)
       .then((data) => Sudoku.seed(data))
       .then(() => Sudoku.show())
+      .catch((error) => Prompt.error(error))
     }
   }
 

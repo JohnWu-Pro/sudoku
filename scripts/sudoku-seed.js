@@ -5,45 +5,77 @@ window.Seed = window.Seed ?? (() => {
   const EMPTY = ['EMPTY']
   const FILLED = ['FILLED']
 
-  /**
-   * Get a Sudoku's seed data by the level or id.
-   *
-   * @param {enum} level easy, medium, hard, master
-   * @param {number} id the Sudoku's seed data id
-   */
-  function get(level, id) {
-    return new Promise((resolve) => resolve(
-      toMatrix(Generator.generate(Generator.Levels[level]).puzzle)
-    ))
-    // console.debug("[DEBUG] Generated puzzle: %o", puzzle)
+  const Difficulty = {
+    Any: 0,
+    Easy: 1,
+    Medium: 2,
+    Hard: 3,
+    Expert: 4
+  };
 
-    // NOTE:
-    // The generator labels the columns 1-9, the rows A-I.
-    // While in this app, we label the columns A-I, the rows 1-9.
-    // The two different notations would interpret the same puzzle into
-    // two grids that are symmetrically equivalent by a simple diagonal flip.
-
-    // return [
-    //   [4,7,0,0,0,0,0,5,8],
-    //   [5,8,0,7,0,4,0,9,1],
-    //   [0,0,0,5,0,1,0,0,0],
-    //   [0,2,4,0,0,0,5,1,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,5,8,0,0,0,9,4,0],
-    //   [0,0,0,8,0,5,0,0,0],
-    //   [8,4,0,1,0,3,0,6,5],
-    //   [1,3,0,0,0,0,0,8,2]
-    // ]
+  const Symmetry = {
+    None: 0,
+    Rotate90: 1,
+    Rotate180: 2,
+    Mirror: 3,
+    Flip: 4,
+    Random: 5
   }
 
-  function toMatrix(array) {
+  const OutputFormat = {
+    OneLine: 0,
+    Compact: 1,
+    Readable: 2,
+    Csv: 3
+  }
+
+  const generator = new qqwing()
+
+  /**
+   * Get a Sudoku's seed data by the given difficulty level and symmetry.
+   *
+   * @param {enum} level Any, Easy, Medium, Hard, Expert
+   * @param {enum} symmetry None, Rotate90, Rotate180, Mirror, Flip, Random
+   */
+  function get(level, symmetry) {
+    return new Promise((resolve, reject) => {
+
+      const difficulty = Difficulty[level] ?? Difficulty.Easy
+      const mode = Symmetry[symmetry] ?? Symmetry.Random
+      let count = 0
+      do {
+        generator.setRecordHistory(difficulty !== Difficulty.Any)
+        generator.setPrintStyle(OutputFormat.OneLine)
+        generator.generatePuzzleSymmetry(mode)
+        if(difficulty !== Difficulty.Any) generator.solve()
+        count++
+        // console.debug("[DEBUG] Resolved puzzle, difficulty: %o <-> %o, count: %o",
+        //   difficulty, generator.getDifficulty(), count)
+
+        if(count >= 300) {
+          reject(`Could not generate puzzle at difficulty level ${difficulty} in ${count} tries!`)
+          break
+        }
+      } while (!(difficulty === Difficulty.Any || generator.getDifficulty() === difficulty))
+
+      resolve(toMatrix(generator.getPuzzleString()))
+    })
+  }
+
+  function toMatrix(puzzle) {
+    // console.debug("[DEBUG] Calling toMatrix(\n%s) ...", puzzle)
+
+    const letters = '.123456789'
     const result = Array(CONFIG.scale)
 
-    let index = 0
+    let index = 0, value, length = puzzle.length
     for(let rowIndex = 0; rowIndex < CONFIG.scale; rowIndex++) {
       const row = Array(CONFIG.scale)
       for(let colIndex = 0; colIndex < CONFIG.scale; colIndex++) {
-        row[colIndex] = Number(array[index++])
+        do {
+          value = letters.indexOf(puzzle.charAt(index++))
+        } while(value === -1 && index < length)
+        row[colIndex] = value < 0 ? 0 : value
       }
       result[rowIndex] = row
     }
@@ -54,6 +86,8 @@ window.Seed = window.Seed ?? (() => {
   return {
     EMPTY,
     FILLED,
+    Difficulty,
+    Symmetry,
     get
   }
 })()
