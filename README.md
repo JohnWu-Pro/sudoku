@@ -20,14 +20,17 @@ x Highlight row, column, and box?
 + i18n
 
 # References
-+ https://github.com/tshrestha/js-sudoku
++ https://qqwing.com/generate.html
++ https://github.com/stephenostermiller/qqwing
+
 + http://norvig.com/sudoku.html
++ https://github.com/einaregilsson/sudoku.js
+- https://github.com/tshrestha/js-sudoku
 
 + https://www.geeksforgeeks.org/program-sudoku-generator/
 
 + https://github.com/huaminghuangtw/Web-Sudoku-Puzzle-Game
 + https://github.com/robatron/sudoku.js
-+ https://qqwing.com/generate.html
 
 + http://sudopedia.enjoysudoku.com/Diagrams_and_Notations.html - Notations
 + https://sudoku.game/ - Help text

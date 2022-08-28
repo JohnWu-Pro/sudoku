@@ -13,7 +13,7 @@ window.Seed = window.Seed ?? (() => {
    */
   function get(level, id) {
     return new Promise((resolve) => resolve(
-      Generator.generate(Generator.Levels[level]).puzzle
+      toMatrix(Generator.generate(Generator.Levels[level]).puzzle)
     ))
     // console.debug("[DEBUG] Generated puzzle: %o", puzzle)
 
@@ -34,6 +34,21 @@ window.Seed = window.Seed ?? (() => {
     //   [8,4,0,1,0,3,0,6,5],
     //   [1,3,0,0,0,0,0,8,2]
     // ]
+  }
+
+  function toMatrix(array) {
+    const result = Array(CONFIG.scale)
+
+    let index = 0
+    for(let rowIndex = 0; rowIndex < CONFIG.scale; rowIndex++) {
+      const row = Array(CONFIG.scale)
+      for(let colIndex = 0; colIndex < CONFIG.scale; colIndex++) {
+        row[colIndex] = Number(array[index++])
+      }
+      result[rowIndex] = row
+    }
+
+    return result
   }
 
   return {

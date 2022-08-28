@@ -15,10 +15,10 @@
 window.Generator = window.Generator ?? (() => {
 
   const Levels = {
-    easy: 17,
-    medium: 31,
-    hard: 43,
-    master: 61
+    easy: 35,
+    medium: 28,
+    hard: 21,
+    master: 18
   };
 
   //
@@ -257,11 +257,11 @@ window.Generator = window.Generator ?? (() => {
   }
 
   /**
-   * Make a random puzzle with N or more assignments. Restart on contradictions.
+   * Make a random puzzle with minFills or more assignments. Restart on contradictions.
    * Note the resulting puzzle is not guaranteed to be solvable, but empirically
    * about 99.8% of them are solvable. Some have multiple solutions
    */
-  function randomPuzzle(n = 17) {
+  function randomPuzzle(minFills = 17) {
     let values = new Map();
     squares.forEach(s => values.set(s, digits));
 
@@ -274,13 +274,13 @@ window.Generator = window.Generator ?? (() => {
           .filter(s => values.get(s).size === 1)
           .map(s => values.get(s));
 
-      if (ds.length >= n && new Set(ds).size >= 8) {
+      if (ds.length >= minFills && new Set(ds).size >= 8) {
         return [...squares]
             .map(s => values.get(s).size === 1 ? [...values.get(s)][0] : '0');
       }
     }
 
-    return randomPuzzle(n);
+    return randomPuzzle(minFills);
   }
 
   function randomValue(values) {
@@ -295,54 +295,17 @@ window.Generator = window.Generator ?? (() => {
     return true;
   }
 
-  /**
-   * Iterate through the randomly shuffled squares.
-   * After removing each square from the solution
-   * solve it and test if it is the same as the original.
-   * If the solution doesn't match undo the removal and
-   * try another square.
-   */
-  function createPuzzle(solution) {
-    let puzzle = [];
-    let indices = {};
-    let shuffled = shuffle(squares);
-
-    [...squares].forEach((s, i) => {
-      puzzle.push([...solution.get(s)][0]);
-      indices[s] = i;
-    });
-
-    let result = new Map();
-
-    for (let i = 0; i < shuffled.length; i++) {
-      let j = indices[shuffled[i]];
-      let v = puzzle[j];
-      puzzle[j] = '0';
-
-      if (!isUnique(solution, solve(puzzle))) {
-        puzzle[j] = v;
-        result.set(shuffled[i], Number(v));
-      } else {
-        result.set(shuffled[i], 0);
-      }
-    }
-
-    return result;
-  }
-
   function generate(difficulty = Levels.easy) {
-    console.debug("[DEBUG] difficulty: %o", difficulty)
-    let solution = solve(randomPuzzle(81 - difficulty));
+    let puzzle, solution
+    do {
+      puzzle = randomPuzzle(difficulty)
+      solution = solve(puzzle)
+    } while(!solved(solution))
 
-    while (!solved(solution)) {
-      solution = solve(randomPuzzle(81 - difficulty));
-    }
-
-    console.debug("[DEBUG] solution: %o", solution)
     return {
-      puzzle: createPuzzle(solution),
-      solution: solution
-    };
+      puzzle,
+      solution
+    }
   }
 
   //

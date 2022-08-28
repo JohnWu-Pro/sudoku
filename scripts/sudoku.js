@@ -75,10 +75,11 @@ window.Sudoku = window.Sudoku ?? (() => {
         if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, 'seed'))
       })
     } else {
-      ROWS.forEach((rowId) => {
-        COLUMNS.forEach((colId) => {
+      ROWS.forEach((rowId, rowIndex) => {
+        const row = data[rowIndex]
+        COLUMNS.forEach((colId, colIndex) => {
           const key = keyOf(rowId, colId)
-          cells.set(key, new Cell(key, data.get(key), 'seed'))
+          cells.set(key, new Cell(key, row[colIndex], 'seed'))
         })
       })
     }
