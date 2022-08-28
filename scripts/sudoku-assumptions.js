@@ -155,8 +155,8 @@ window.Assumptions = window.Assumptions ?? (() => {
   }
 
   function onStart(event) {
-    const option = firstOf(event.target.selectedOptions)
-    let [matched, key, value] = option?.value?.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
+    // const option = firstOf(event.target.selectedOptions)
+    let [matched, key, value] = event.target.value.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
     if(!matched) return
 
     value = Number(value)

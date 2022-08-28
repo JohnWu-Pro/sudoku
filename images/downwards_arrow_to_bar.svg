@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.0//EN' 'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg fill-opacity="1" xmlns:xlink="http://www.w3.org/1999/xlink" color-rendering="auto" color-interpolation="auto" text-rendering="auto" stroke="black" stroke-linecap="square" stroke-miterlimit="10" shape-rendering="auto" stroke-opacity="1" fill="black" stroke-dasharray="none" font-weight="normal" stroke-width="1" xmlns="http://www.w3.org/2000/svg" font-family="&apos;Dialog&apos;" font-style="normal" stroke-linejoin="miter" font-size="12" stroke-dashoffset="0" image-rendering="auto">
+  <!--Unicode Character 'DOWNWARDS TRIANGLE-HEADED ARROW TO BAR' (U+2B73)-->
+  <defs id="genericDefs" />
+  <g>
+    <g>
+      <path d="M125.1562 274.9219 L73.125 326.9531 L21.0938 274.9219 L62.7188 274.9219 L62.7188 156.9375 L83.5312 156.9375 L83.5312 274.9219 L125.1562 274.9219 ZM125.1562 365.0625 L21.0938 365.0625 L21.0938 344.25 L125.1562 344.25 L125.1562 365.0625 Z" stroke="none" />
+    </g>
+  </g>
+</svg>

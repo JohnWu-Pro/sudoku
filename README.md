@@ -7,9 +7,10 @@ v Assumptions
 v Prompt
 v Manual seed
 v Fetch seed
-+ icon
+v Menu
+. Fix Assumptions Reject
 + Undo
-+ Menu
++ icon
 x Highlight row, column, and box?
 + Highlight Cross Hatching
 + Styling keys and commands

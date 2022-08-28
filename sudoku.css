@@ -17,17 +17,6 @@ button {
   display: none !important;
 }
 
-.flex-first {
-  margin-right: auto !important;
-}
-.flex-center {
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-.flex-last {
-  margin-left: auto !important;
-}
-
 .header {
   width: clamp(338px, 94vmin, 395px);
   margin: clamp(4px, 1vmax, 6px) auto;
@@ -37,23 +26,48 @@ button {
 .header > div {
   background: #f2f2f2;
   display: flex;
-  position: relative;
   width: 98.6%;
 }
 
 .header > div > div {
-  flex: 1 1 0;
-  bottom: 0;
+  position: relative;
   margin-top: auto;
+  bottom: 0;
+  flex: 1 1 0;
 }
-
-.header .flex-first {
+.header > div > :first-child {
   text-align: left;
 }
-.header .flex-center {
+.header > div > :not(:first-child):not(:last-child) {
   text-align: center;
 }
-.header .flex-last {
+.header > div > :last-child {
+  text-align: right;
+}
+
+.header .buttons {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: right;
+}
+.header .buttons > button {
+  display: block;
+  margin: auto;
+  padding: clamp(1.8px, 0.5vmin, 2.1px) clamp(7.2px, 2vmin, 8.4px);
+
+  border: 1px outset #eaeaea;
+  border-radius: clamp(3.5px, 1vmin, 4.2px);
+}
+.header .buttons > :first-child {
+  margin: 0 auto 0 0 !important;
+  text-align: left;
+}
+.header .buttons > :not(:first-child):not(:last-child) {
+  margin: 0 !important;
+  text-align: center;
+}
+.header .buttons > :last-child {
+  margin: 0 0 0 auto !important;
   text-align: right;
 }
 
@@ -66,6 +80,13 @@ button {
 
 .header .title {
   font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+}
+
+.header .timer::after {
+  content: '⏸'
+}
+.header .timer.paused::after {
+  content: ' ▶'
 }
 
 .main-content {
@@ -248,14 +269,6 @@ button {
   outline: #6666ff auto 1vmin;
 }
 
-.seeding {
-  display: flex;
-  margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
-  padding-right: 2%;
-  width: 92%;
-  text-align: center;
-}
-
 .commands {
   margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
   padding-right: 2%;
@@ -268,16 +281,27 @@ button {
   display: flex;
   justify-content: space-evenly;
 }
-
-.commands .block,
-.seeding .block {
-  display: block;
-  margin: clamp(3.5px, 1vmin, 4.2px);
-  padding: clamp(3.5px, 1vmin, 4.2px) clamp(7px, 2vmin, 8.4px);
+.commands .buttons > :first-child {
+  margin-right: auto;
+  text-align: left;
+}
+.commands .buttons > :not(:first-child):not(:last-child) {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.commands .buttons > :last-child {
+  margin-left: auto;
+  text-align: right;
 }
 
-.commands .border,
-.seeding .border {
+.commands .block {
+  display: block;
+  margin: clamp(3.5px, 1vmin, 4.2px);
+  padding: clamp(3.5px, 1vmin, 4.2px) clamp(7.2px, 2vmin, 8.4px);
+}
+
+.commands .border {
   border: 1px outset #eaeaea;
   border-radius: clamp(3.5px, 1vmin, 4.2px);
 }

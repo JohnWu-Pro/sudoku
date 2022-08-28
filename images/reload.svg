@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.0//EN' 'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg fill-opacity="1" xmlns:xlink="http://www.w3.org/1999/xlink" color-rendering="auto" color-interpolation="auto" text-rendering="auto" stroke="black" stroke-linecap="square" stroke-miterlimit="10" shape-rendering="auto" stroke-opacity="1" fill="black" stroke-dasharray="none" font-weight="normal" stroke-width="1" xmlns="http://www.w3.org/2000/svg" font-family="&apos;Dialog&apos;" font-style="normal" stroke-linejoin="miter" font-size="12" stroke-dashoffset="0" image-rendering="auto">
+  <!--Unicode Character 'CLOCKWISE TRIANGLE-HEADED OPEN CIRCLE ARROW' (U+2B6E)-->
+  <defs id="genericDefs" />
+  <g>
+    <g>
+      <path d="M229.2188 261.1406 Q229.2188 304.5938 198.9062 334.8281 Q168.6094 365.0625 125.1562 365.0625 Q81.8438 365.0625 51.4688 334.7656 Q21.0938 304.4531 21.0938 261.1406 Q21.0938 217.9688 53.2969 186.3281 L23.7656 156.9375 L97.4531 156.9375 L97.4531 230.4844 L68.0625 201.0938 Q41.9062 226.6875 41.9062 261.1406 Q41.9062 295.5938 66.2969 319.9219 Q90.7031 344.25 125.1562 344.25 Q159.8906 344.25 184.1406 320.0625 Q208.4062 295.875 208.4062 261.1406 Q208.4062 227.9531 184.0781 202.0781 L198.8438 187.4531 Q229.2188 219.7969 229.2188 261.1406 Z" stroke="none" />
+    </g>
+  </g>
+</svg>

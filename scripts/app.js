@@ -12,7 +12,7 @@ window.App = window.App ?? (() => {
     const $header = $E('div.header')
     $header.innerHTML = `
       <div>
-        <div class="flex-first">
+        <div>
           <select class="block border">
             <option value="">New Game ...</option>
             <option value="Easy">Easy</option>
@@ -22,24 +22,22 @@ window.App = window.App ?? (() => {
             <option value="Manual">Input Givens Manually</option>
           </select>
         </div>
-        <div class="flex-center">
+        <div>
           <span class="title">Sudoku</span>
         </div>
-        <div class="flex-last">
-          <span class="timer">00:00</span>
-          <span class="help">?</span>
+        <div class="buttons">
+          <button class="timer">0:00:00</button>
+          <button class="reload">⭮</button>
         </div>
       </div>
     `
     $E('select', $header).addEventListener('change', onNewGame)
 
     $E('.commands .buttons').innerHTML = `
-      <button class="block border flex-first" id="undo">⎌</button>
+      <button class="block border" id="undo">⎌</button>
       <button class="block border hidden" id="seed-filled">${DONE_BUTTON_LABEL}</button>
       <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
-      <!-- <button class="block border hidden" id="cross-hatching">Cross Hatching on ▼</button> -->
-      <!-- ⍉ -->
-      <button class="block border flex-last" id="clean">⌫</button>
+      <button class="block border" id="clean">⌫</button>
     `
     $seedFilled = $E('button#seed-filled')
     $seedFilled.addEventListener('click', onSeedFilled)
