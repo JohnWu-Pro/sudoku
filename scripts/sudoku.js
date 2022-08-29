@@ -84,9 +84,17 @@ window.Sudoku = window.Sudoku ?? (() => {
       })
     }
 
+    cells.forEach(cell => cell.render())
+
+    if(focused) {
+      cells.get(focused).focus(false)
+    }
+    focused = null
+
+    $hide($eliminateByRules)
     Assumptions.clear()
-    const cssClass = Assumptions.peek().cssClass
-    cells.forEach(cell => cell.render(cssClass))
+    Assumptions.render()
+    Assumptions.renderOptionsFor(null)
 
     return Promise.resolve()
   }

@@ -237,6 +237,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   return {
     clear,
     peek,
+    render,
     renderOptionsFor
   }
 })()
