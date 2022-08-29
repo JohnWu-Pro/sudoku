@@ -311,6 +311,10 @@ button {
 .commands #undo::before {
   content: '⎌'
 }
+.commands #seed-filled {
+  color: navy;
+  font-weight: bold;
+}
 .commands #clean::after {
   content: '⌫'
 }

@@ -2,7 +2,7 @@
 
 window.App = window.App ?? (() => {
 
-  const DONE_BUTTON_LABEL = 'Done on Filling in Givens'
+  const DONE_BUTTON_LABEL = 'Givens are Ready'
 
   const currentScript = document.currentScript
 
@@ -19,7 +19,7 @@ window.App = window.App ?? (() => {
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
             <option value="Expert">Expert</option>
-            <option value="Manual">Input Givens Manually</option>
+            <option value="Manual">Manually Input Givens</option>
           </select>
         </div>
         <div>
@@ -34,10 +34,10 @@ window.App = window.App ?? (() => {
     $E('select', $header).addEventListener('change', onNewGame)
 
     $E('.commands .buttons').innerHTML = `
-      <button class="block border" id="undo"> Undo</button>
+      <button class="block border" id="undo"><span> Undo</span></button>
       <button class="block border hidden" id="seed-filled">${DONE_BUTTON_LABEL}</button>
-      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, Box</button>
-      <button class="block border" id="clean">Erase </button>
+      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
+      <button class="block border" id="clean"><span>Erase </span></button>
     `
     $seedFilled = $E('button#seed-filled')
     $seedFilled.addEventListener('click', onSeedFilled)
@@ -61,7 +61,7 @@ window.App = window.App ?? (() => {
       $show($seedFilled)
       Promise.resolve(Seed.EMPTY)
       .then((seed) => Sudoku.start(seed, true)) // to start manual seeding
-      Prompt.info(`Fill in the givens, then click '${DONE_BUTTON_LABEL}'.`)
+      Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
     } else {
       $hide($seedFilled)
       play(selected)

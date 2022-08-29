@@ -91,7 +91,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
     focused = null
 
-    $hide($eliminateByRules)
+    updateCommands(true)
     Assumptions.clear()
     Assumptions.render()
     Assumptions.renderOptionsFor(null)
@@ -123,7 +123,7 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     if(seeding) return
 
-    $toggle($eliminateByRules, cell.settled)
+    updateCommands(cell.settled)
     markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
@@ -199,9 +199,14 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     if(seeding) return
 
-    $toggle($eliminateByRules, cell.settled)
+    updateCommands(cell.settled)
     markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
+  }
+
+  function updateCommands(settled) {
+    $toggle($eliminateByRules, settled)
+    $A('.commands .buttons button span').forEach(span => $toggle(span, !settled))
   }
 
   function onEliminateByRules() {
