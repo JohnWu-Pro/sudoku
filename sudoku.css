@@ -213,7 +213,7 @@ button {
 .grid .cell .cross-hatching {
   font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
   color: lightgrey;
-  text-decoration: line-through double;
+  text-decoration: line-through;
   position: relative;
   top: 10%;
 }
@@ -327,6 +327,7 @@ button {
 }
 
 .commands .tentative select {
+  margin: auto;
   background: #f2f2f2;
 }
 

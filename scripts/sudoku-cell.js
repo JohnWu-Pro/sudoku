@@ -47,10 +47,10 @@ class Cell {
   }
 
   render(decoration) {
-    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '&nbsp;')
-    if(this.#value && text.length > 4) text = '...'
+    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
+    if(text.length > 4) text = '...'
 
-    if(this.#value === 0) decoration = ''
+    if(this.#value === 0) decoration = '', text = '&nbsp;'
 
     this.div().innerHTML =
       `<div class="value ${this.#status} ${decoration ?? ''}">${text}</div>`
