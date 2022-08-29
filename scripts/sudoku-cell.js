@@ -7,6 +7,7 @@ class Cell {
   #key
   #value // single value (0, or 1..max), or values array
   #status // pending | seed | settled
+  #changed = false // whether value is changed in the latest value assignment
 
   constructor(key, val, status) {
     this.#key = key
@@ -25,12 +26,16 @@ class Cell {
     if(this.#status === 'seed') return
 
     val = Cell.#normalize(val)
-    if(Cell.#isEqual(val, this.#value)) return
+    this.#changed = !Cell.#isEqual(val, this.#value)
+    if(!this.#changed) return
 
     Cell.tracer.push(this)
 
     this.#value = val
     this.#status = this.settled ? 'settled' : 'pending'
+  }
+  get changed() {
+    return this.#changed
   }
 
   get candidates() {

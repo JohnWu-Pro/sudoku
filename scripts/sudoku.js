@@ -148,7 +148,7 @@ window.Sudoku = window.Sudoku ?? (() => {
       cell.value = [...candidates]
     }
 
-    onCellValueChanged(cell)
+    if(cell.changed) onCellValueChanged(cell)
   }
 
   function onUndo() {
@@ -159,15 +159,15 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
 
     const {key, value} = assumption.pop()
-    const cell = new Cell(key, value)
-    cells.set(key, cell)
-    onCellValueChanged(cell)
-
     if(assumption.isEmpty()) { // check empty after pop()
       assumption.reject()
       Assumptions.pop()
       Assumptions.render()
     }
+
+    const cell = new Cell(key, value)
+    cells.set(key, cell)
+    onCellValueChanged(cell)
 
     if(focused) {
       cells.get(focused).focus(false)
@@ -256,7 +256,7 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     const cell = cells.get(focused)
     cell.value = [...candidates]
-    onCellValueChanged(cell)
+    if(cell.changed) onCellValueChanged(cell)
   }
 
   function onAssumptionStarted(event) {
