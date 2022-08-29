@@ -63,6 +63,7 @@ window.Sudoku = window.Sudoku ?? (() => {
    * @param {boolean} seeding whether to start manual seeding
    */
   function start(seed, seeding = false) {
+    state.seed = seed
     state.seeding = seeding
 
     if(seed === Seed.EMPTY) {
@@ -76,6 +77,8 @@ window.Sudoku = window.Sudoku ?? (() => {
       state.cells.forEach(cell => {
         if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'seed'))
       })
+      state.seed = seedFrom(state.cells)
+      console.debug("[DEBUG] Filled seed: %o", state.seed)
     } else {
       ROWS.forEach((rowId, rowIndex) => {
         const row = seed[rowIndex]
@@ -101,6 +104,20 @@ window.Sudoku = window.Sudoku ?? (() => {
     return Promise.resolve()
   }
 
+  function seedFrom(cells) {
+    const result = Array(CONFIG.scale)
+
+    ROWS.forEach((rowId, rowIndex) => {
+      const row = Array(CONFIG.scale)
+      COLUMNS.forEach((colId, colIndex) => {
+        row[colIndex] = cells.get(keyOf(rowId, colId)).value
+      })
+      result[rowIndex] = row
+    })
+
+    return result
+  }
+
   function pause() {
 
   }
@@ -109,8 +126,8 @@ window.Sudoku = window.Sudoku ?? (() => {
 
   }
 
-  function reload() {
-
+  function restart() {
+    start(state.seed, state.seeding)
   }
 
   function onFocus(key) {
@@ -301,7 +318,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     pause,
     resume,
     // save & restore,
-    reload,
+    restart,
     start
   }
 })()

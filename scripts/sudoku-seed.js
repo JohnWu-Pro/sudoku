@@ -2,8 +2,8 @@
 
 window.Seed = window.Seed ?? (() => {
 
-  const EMPTY = ['EMPTY']
-  const FILLED = ['FILLED']
+  const EMPTY = 'EMPTY'
+  const FILLED = 'FILLED'
 
   const Difficulty = {
     Any: 0,
@@ -58,14 +58,55 @@ window.Seed = window.Seed ?? (() => {
         }
       } while (!(difficulty === Difficulty.Any || generator.getDifficulty() === difficulty))
 
-      resolve(toMatrix(generator.getPuzzleString()))
+      resolve(parse(generator.getPuzzleString()))
     })
   }
 
-  function toMatrix(puzzle) {
-    // console.debug("[DEBUG] Calling toMatrix(\n%s) ...", puzzle)
+  /**
+   * Parse the string puzzle into a 2-demention number matrix (0 indicates empty cell).
+   *
+   * Digit 1-9 indicates a valid value for a cell,
+   * '.' or '0' indicates an empty cell,
+   * all other characters will be siliently ignored.
+   *
+   * Acceptable puzzle examples:
+   *
+   * A) One Line:
+   *  ...4..5.........2.....71.84..91...4...678....8...2...6.8.6.....4.....75......2.91
+   *
+   * B) Compact:
+   *  ......746
+   *  ...4...3.
+   *  ..32641..
+   *  9.....3..
+   *  .41..7.2.
+   *  ...92....
+   *  3...7.4..
+   *  .9.8.16..
+   *
+   * C) Readable:
+   *  . . . | . . . | . 8 .
+   *  . . . | . 6 . | . 4 .
+   *  8 1 4 | 3 . 9 | . . .
+   * -------|-------|-------
+   *  . 5 . | . . 8 | . 3 .
+   *  7 . 1 | . . 6 | . . 8
+   *  . . . | 4 . . | 9 . .
+   * -------|-------|-------
+   *  . . . | . . 4 | . . 7
+   *  . 9 . | 1 5 . | . . .
+   *  . . 8 | . . . | 1 . .
+   *
+   * @param {string} puzzle the Sudoku given numbers in string
+   * @return {array} a 2-demention number matrix
+   */
+  function parse(puzzle) {
+    // console.debug("[DEBUG] Calling parse(\n%s) ...", puzzle)
 
-    const letters = '.123456789'
+    const dot = '.'.codePointAt(0)
+    const zero = '0'.codePointAt(0)
+    const nine = '9'.codePointAt(0)
+
     const result = Array(CONFIG.scale)
 
     let index = 0, value, length = puzzle.length
@@ -73,9 +114,12 @@ window.Seed = window.Seed ?? (() => {
       const row = Array(CONFIG.scale)
       for(let colIndex = 0; colIndex < CONFIG.scale; colIndex++) {
         do {
-          value = letters.indexOf(puzzle.charAt(index++))
-        } while(value === -1 && index < length)
-        row[colIndex] = value < 0 ? 0 : value
+          if(index >= length) throw Error('Invalid puzzle input:\n' + puzzle)
+
+          const cp = puzzle.codePointAt(index++)
+          value = cp === dot ? 0 : (zero <= cp && cp <= nine) ? (cp - zero) : -1
+        } while(value === -1)
+        row[colIndex] = value
       }
       result[rowIndex] = row
     }
@@ -88,6 +132,7 @@ window.Seed = window.Seed ?? (() => {
     FILLED,
     Difficulty,
     Symmetry,
+    parse,
     get
   }
 })()

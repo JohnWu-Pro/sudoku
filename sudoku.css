@@ -89,7 +89,7 @@ button {
   content: ' ▶'
 }
 
-.header .replay::after {
+.header .restart::after {
   content: '⭮'
 }
 

@@ -8,10 +8,10 @@ v Prompt
 v Manual seed
 v Fetch seed
 v Menu
-. Fix Assumptions Reject
+v Fix Assumptions Reject
 v Highlight Cross Hatching
 v Undo
-+ Reload
+v Restart
 . icon
 x Highlight row, column, and box?
 + Timer, pause & resume

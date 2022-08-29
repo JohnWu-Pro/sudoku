@@ -27,11 +27,12 @@ window.App = window.App ?? (() => {
         </div>
         <div class="buttons">
           <button class="timer">0:00:00</button>
-          <button class="replay" title="Replay"></button>
+          <button class="restart" title="Restart"></button>
         </div>
       </div>
     `
     $E('select', $header).addEventListener('change', onNewGame)
+    $E('.restart', $header).addEventListener('click', Sudoku.restart)
 
     $E('.commands .buttons').innerHTML = `
       <button class="block border" id="undo"><span> Undo</span></button>
