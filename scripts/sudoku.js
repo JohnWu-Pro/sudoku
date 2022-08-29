@@ -5,10 +5,12 @@ window.Sudoku = window.Sudoku ?? (() => {
   const COLUMNS = Array(CONFIG.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
   const ROWS = Array(CONFIG.scale).fill(0).map((_, i) => 1+i)
 
-  var seeding = false
-
-  const cells = new Map()
-  var focused = null
+  const state = {
+    cells: new Map(),
+    seed: [],
+    focused: null,
+    seeding: false
+  }
 
   var $numbers = [undefined], $eliminateByRules
 
@@ -58,38 +60,38 @@ window.Sudoku = window.Sudoku ?? (() => {
    * The cell value can be 1, 2, 3, ..., max. And the zero (`0`) indicates no value yet.
    *
    * @param {array} seed the Sudoku given numbers
-   * @param {boolean} toSeed whether to start manual seeding
+   * @param {boolean} seeding whether to start manual seeding
    */
-  function start(seed, toSeed = false) {
-    seeding = toSeed
+  function start(seed, seeding = false) {
+    state.seeding = seeding
 
     if(seed === Seed.EMPTY) {
       ROWS.forEach((rowId) => {
         COLUMNS.forEach((colId) => {
           const key = keyOf(rowId, colId)
-          cells.set(key, new Cell(key, 0))
+          state.cells.set(key, new Cell(key, 0))
         })
       })
     } else if(seed === Seed.FILLED) {
-      cells.forEach(cell => {
-        if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'seed'))
+      state.cells.forEach(cell => {
+        if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'seed'))
       })
     } else {
       ROWS.forEach((rowId, rowIndex) => {
         const row = seed[rowIndex]
         COLUMNS.forEach((colId, colIndex) => {
           const key = keyOf(rowId, colId)
-          cells.set(key, new Cell(key, row[colIndex], undefined, 'seed'))
+          state.cells.set(key, new Cell(key, row[colIndex], undefined, 'seed'))
         })
       })
     }
 
-    cells.forEach(cell => cell.render())
+    state.cells.forEach(cell => cell.render())
 
-    if(focused) {
-      cells.get(focused).focus(false)
+    if(state.focused) {
+      state.cells.get(state.focused).focus(false)
     }
-    focused = null
+    state.focused = null
 
     updateCommands(true)
     Assumptions.clear()
@@ -112,16 +114,16 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onFocus(key) {
-    if(focused) {
-      cells.get(focused).focus(false)
+    if(state.focused) {
+      state.cells.get(state.focused).focus(false)
     }
-    focused = key
+    state.focused = key
 
-    const cell = cells.get(key)
+    const cell = state.cells.get(key)
     cell.focus(true)
     highlightCandidates(cell)
 
-    if(seeding) return
+    if(state.seeding) return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
@@ -136,11 +138,11 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onKeyPress(number) {
-    if(!focused) return
+    if(!state.focused) return
 
-    const cell = cells.get(focused)
+    const cell = state.cells.get(state.focused)
 
-    if(seeding) {
+    if(state.seeding) {
       cell.value = cell.value === number ? 0 : number
     } else {
       const candidates = cell.candidates
@@ -166,20 +168,20 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
 
     const cell = new Cell(key, value, cssClass)
-    cells.set(key, cell)
+    state.cells.set(key, cell)
     onCellValueChanged(cell)
 
-    if(focused) {
-      cells.get(focused).focus(false)
+    if(state.focused) {
+      state.cells.get(state.focused).focus(false)
     }
-    focused = key
+    state.focused = key
     cell.focus(true)
   }
 
   function onCleanFocused() {
-    if(!focused) return
+    if(!state.focused) return
 
-    const cell = cells.get(focused)
+    const cell = state.cells.get(state.focused)
     cell.value = 0
     onCellValueChanged(cell)
   }
@@ -192,7 +194,7 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     const value = cell.value
     const markedKeys = new Set()
-    cells.forEach(cell => {
+    state.cells.forEach(cell => {
       if(cell.value === value) crossHatchingRowAndColumn(markedKeys, cell)
     })
   }
@@ -206,7 +208,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     ROWS.forEach(rowId => keys.add(keyOf(rowId, colId)))
 
     keys.forEach(key => {
-      const cell = cells.get(key)
+      const cell = state.cells.get(key)
       if(!cell.settled && !markedKeys.has(key)) {
         appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = value
         markedKeys.add(key)
@@ -218,7 +220,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     cell.render()
     highlightCandidates(cell)
 
-    if(seeding) return
+    if(state.seeding) return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
@@ -231,9 +233,9 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onEliminateByRules() {
-    if(!focused) return
+    if(!state.focused) return
 
-    const {rowId, colId} = idsFrom(focused)
+    const {rowId, colId} = idsFrom(state.focused)
     if(!rowId) return
 
     const keys = new Set()
@@ -250,11 +252,11 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     const candidates = new Set(Cell.CANDIDATES)
     keys.forEach(key => {
-      const cell = cells.get(key)
+      const cell = state.cells.get(key)
       if(cell.settled) candidates.delete(cell.value)
     })
 
-    const cell = cells.get(focused)
+    const cell = state.cells.get(state.focused)
     cell.value = [...candidates]
     onCellValueChanged(cell)
   }
@@ -263,21 +265,21 @@ window.Sudoku = window.Sudoku ?? (() => {
     // console.debug("[DEBUG] Calling onAssumptionStarted(%o) ...", event)
 
     const {key, value} = event.detail
-    const cell = cells.get(key)
+    const cell = state.cells.get(key)
     cell.value = value
     onCellValueChanged(cell)
   }
 
   function onAssumptionAccepted(event) {
     event.detail.affected.forEach(cell => {
-      cells.set(cell.key, cell)
+      state.cells.set(cell.key, cell)
       cell.render()
     })
   }
 
   function onAssumptionRejected(event) {
     event.detail.affected.forEach(cell => {
-      cells.set(cell.key, cell)
+      state.cells.set(cell.key, cell)
       cell.render()
     })
 
