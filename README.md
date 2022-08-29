@@ -10,14 +10,14 @@ v Fetch seed
 v Menu
 . Fix Assumptions Reject
 v Highlight Cross Hatching
-+ Undo
+v Undo
 + Reload
 . icon
 x Highlight row, column, and box?
-+ Timer
-+ Pause & resume
++ Timer, pause & resume
 + Save & restore/resume when re-entering
-+ Polishing command buttons and symbols
+v Polishing command buttons
++ Polishing command symbols
 + Stats
 + References
 + i18n

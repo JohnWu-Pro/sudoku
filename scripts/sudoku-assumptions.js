@@ -44,6 +44,14 @@ class Assumption {
     this.#snapshots.push({key, value})
   }
 
+  pop() {
+    return this.#snapshots.pop()
+  }
+
+  isEmpty() {
+    return this.#snapshots.length === 0
+  }
+
   accept() {
     Assumption.#releaseCssClass(this.#cssClass)
   }
@@ -237,6 +245,8 @@ window.Assumptions = window.Assumptions ?? (() => {
   return {
     clear,
     peek,
+    pop,
+    push,
     render,
     renderOptionsFor
   }

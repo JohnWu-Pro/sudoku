@@ -58,10 +58,10 @@ window.Sudoku = window.Sudoku ?? (() => {
    * The cell value can be 1, 2, 3, ..., max. And the zero (`0`) indicates no value yet.
    *
    * @param {array} seed the Sudoku given numbers
-   * @param {boolean} startSeeding whether to start manual seeding
+   * @param {boolean} toSeed whether to start manual seeding
    */
-  function start(seed, startSeeding = false) {
-    seeding = startSeeding
+  function start(seed, toSeed = false) {
+    seeding = toSeed
 
     if(seed === Seed.EMPTY) {
       ROWS.forEach((rowId) => {
@@ -152,7 +152,28 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onUndo() {
-    // TODO
+    const assumption = Assumptions.peek()
+    if(assumption.isEmpty()) {
+      Prompt.info('No more step to undo!')
+      return
+    }
+
+    const {key, value} = assumption.pop()
+    const cell = new Cell(key, value)
+    cells.set(key, cell)
+    onCellValueChanged(cell)
+
+    if(assumption.isEmpty()) { // check empty after pop()
+      assumption.reject()
+      Assumptions.pop()
+      Assumptions.render()
+    }
+
+    if(focused) {
+      cells.get(focused).focus(false)
+    }
+    focused = key
+    cell.focus(true)
   }
 
   function onCleanFocused() {
