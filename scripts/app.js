@@ -27,17 +27,17 @@ window.App = window.App ?? (() => {
         </div>
         <div class="buttons">
           <button class="timer">0:00:00</button>
-          <button class="reload">⭮</button>
+          <button class="replay" title="Replay"></button>
         </div>
       </div>
     `
     $E('select', $header).addEventListener('change', onNewGame)
 
     $E('.commands .buttons').innerHTML = `
-      <button class="block border" id="undo">⎌</button>
+      <button class="block border" id="undo"> Undo</button>
       <button class="block border hidden" id="seed-filled">${DONE_BUTTON_LABEL}</button>
-      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
-      <button class="block border" id="clean">⌫</button>
+      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, Box</button>
+      <button class="block border" id="clean">Erase </button>
     `
     $seedFilled = $E('button#seed-filled')
     $seedFilled.addEventListener('click', onSeedFilled)
@@ -50,7 +50,7 @@ window.App = window.App ?? (() => {
     `
 
     Sudoku.init()
-    show('Easy')
+    play('Easy')
   }
 
   function onNewGame(event) {
@@ -60,18 +60,18 @@ window.App = window.App ?? (() => {
     if(selected === 'Manual') {
       $show($seedFilled)
       Promise.resolve(Seed.EMPTY)
-      .then((data) => Sudoku.show(data, true)) // to start manual seeding
+      .then((seed) => Sudoku.start(seed, true)) // to start manual seeding
       Prompt.info(`Fill in the givens, then click '${DONE_BUTTON_LABEL}'.`)
     } else {
       $hide($seedFilled)
-      show(selected)
+      play(selected)
     }
     event.target.value = ''
   }
 
-  function show(game) {
+  function play(game) {
     Seed.get(game)
-    .then((data) => Sudoku.show(data))
+    .then((seed) => Sudoku.start(seed))
     .then(promptUsage)
     .catch((error) => Prompt.error(error))
   }
@@ -79,7 +79,7 @@ window.App = window.App ?? (() => {
   function onSeedFilled() {
     $hide($seedFilled)
     Promise.resolve(Seed.FILLED)
-    .then((data) => Sudoku.show(data))
+    .then((seed) => Sudoku.start(seed))
     .then(promptUsage)
   }
 

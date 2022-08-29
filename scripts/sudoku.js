@@ -53,30 +53,30 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   /**
-   * Show the Sudoku grid. The data should be an array, each element represents a row.
+   * Show the Sudoku grid. The seed should be an array, each element represents a row.
    * Each row itself is an array, each element represents a cell in that row.
    * The cell value can be 1, 2, 3, ..., max. And the zero (`0`) indicates no value yet.
    *
-   * @param {array} data the Sudoku's seed data
+   * @param {array} seed the Sudoku given numbers
    * @param {boolean} startSeeding whether to start manual seeding
    */
-  function show(data, startSeeding = false) {
+  function start(seed, startSeeding = false) {
     seeding = startSeeding
 
-    if(data === Seed.EMPTY) {
+    if(seed === Seed.EMPTY) {
       ROWS.forEach((rowId) => {
         COLUMNS.forEach((colId) => {
           const key = keyOf(rowId, colId)
           cells.set(key, new Cell(key, 0))
         })
       })
-    } else if(data === Seed.FILLED) {
+    } else if(seed === Seed.FILLED) {
       cells.forEach(cell => {
         if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, 'seed'))
       })
     } else {
       ROWS.forEach((rowId, rowIndex) => {
-        const row = data[rowIndex]
+        const row = seed[rowIndex]
         COLUMNS.forEach((colId, colIndex) => {
           const key = keyOf(rowId, colId)
           cells.set(key, new Cell(key, row[colIndex], 'seed'))
@@ -97,6 +97,18 @@ window.Sudoku = window.Sudoku ?? (() => {
     Assumptions.renderOptionsFor(null)
 
     return Promise.resolve()
+  }
+
+  function pause() {
+
+  }
+
+  function resume() {
+
+  }
+
+  function reload() {
+
   }
 
   function onFocus(key) {
@@ -260,6 +272,10 @@ window.Sudoku = window.Sudoku ?? (() => {
 
   return {
     init,
-    show
+    pause,
+    resume,
+    // save & restore,
+    reload,
+    start
   }
 })()

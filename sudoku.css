@@ -89,6 +89,10 @@ button {
   content: ' ▶'
 }
 
+.header .replay::after {
+  content: '⭮'
+}
+
 .main-content {
   width: clamp(352px, 98vmin, 412px);
   margin: 0 auto;
@@ -288,6 +292,7 @@ button {
 .commands .buttons {
   display: flex;
   justify-content: space-evenly;
+  white-space: nowrap;
 }
 .commands .buttons > :first-child {
   margin-right: auto;
@@ -297,11 +302,17 @@ button {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  white-space: nowrap;
 }
 .commands .buttons > :last-child {
   margin-left: auto;
   text-align: right;
+}
+
+.commands #undo::before {
+  content: '⎌'
+}
+.commands #clean::after {
+  content: '⌫'
 }
 
 .commands .block {
@@ -323,8 +334,28 @@ button {
   width: auto;
 }
 
+.commands .pending .assumption.first button[data-action="accept"]::after {
+  content: ''
+}
+.commands .pending .assumption button[data-action="accept"]::after {
+  content: ' ⭳'
+}
+.commands .pending .assumption button[data-action="reject"]::after {
+  content: ' ↧'
+}
+.commands .pending .assumption.last button[data-action="reject"]::after {
+  content: ''
+}
+
 .commands .pending .assumption .block {
   margin: 1px 2px;
+  text-align: left;
+}
+.commands .pending .assumption > :first-child {
+  flex: 1.6;
+}
+.commands .pending .assumption > :not(:first-child) {
+  flex: 1;
 }
 
 .commands .tentative select {

@@ -11,11 +11,13 @@ v Menu
 . Fix Assumptions Reject
 v Highlight Cross Hatching
 + Undo
++ Reload
 . icon
 x Highlight row, column, and box?
-+ Styling keys and commands
 + Timer
-+ Save state, pause, resume
++ Pause & resume
++ Save & restore/resume when re-entering
++ Polishing command buttons and symbols
 + Stats
 + References
 + i18n
