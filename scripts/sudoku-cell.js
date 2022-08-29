@@ -43,20 +43,20 @@ class Cell {
   }
 
   focus(on) {
-    this.#div().classList.toggle('focused', on)
+    this.div().classList.toggle('focused', on)
   }
 
   render(decoration) {
-    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
-    if(text.length > 4) text = '...'
+    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '&nbsp;')
+    if(this.#value && text.length > 4) text = '...'
 
     if(this.#value === 0) decoration = ''
 
-    this.#div().innerHTML =
+    this.div().innerHTML =
       `<div class="value ${this.#status} ${decoration ?? ''}">${text}</div>`
   }
 
-  #div() {
+  div() {
     return $E('div.cell-' + this.#key)
   }
 

@@ -1,0 +1,6 @@
+# Build Directory
+/build/
+/target/
+
+# temporary
+/images/

@@ -2,6 +2,7 @@
   border: none;
   margin: 0;
   padding: 0;
+  z-index: 0;
 }
 
 a, a:hover, a:visited {
@@ -20,7 +21,6 @@ button {
 .header {
   width: clamp(338px, 94vmin, 395px);
   margin: clamp(4px, 1vmax, 6px) auto;
-  z-index: 0;
 }
 
 .header > div {
@@ -92,7 +92,6 @@ button {
 .main-content {
   width: clamp(352px, 98vmin, 412px);
   margin: 0 auto;
-  z-index: 0;
 }
 
 .grid {
@@ -109,7 +108,7 @@ button {
   aspect-ratio: 1 / 1;
   border: solid lightgrey;
   border-width: 1px 0 0 1px;
-  width: clamp(35px, 10vmin, 42px);
+  width: clamp(35.2px, 10vmin, 42px);
 }
 
 .grid .cell.focused {
@@ -207,7 +206,16 @@ button {
 .grid .cell .value.pending {
   font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
   color: grey;
-  top: 32%;
+  position: relative;
+  top: 28%;
+}
+
+.grid .cell .cross-hatching {
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  color: lightgrey;
+  text-decoration: line-through double;
+  position: relative;
+  top: 10%;
 }
 
 .grid .cell .value.settled {
@@ -223,7 +231,7 @@ button {
 }
 
 .grid .x-axis .coord {
-  width: clamp(35px, 10vmin, 42px);
+  width: clamp(35.2px, 10vmin, 42px);
 }
 
 .grid .y-axis {
@@ -248,7 +256,7 @@ button {
 
 .keys .key {
   aspect-ratio: 1 / 1;
-  width: clamp(35px, 10vmin, 42px);
+  width: clamp(35.2px, 10vmin, 42px);
   margin: 0.6vmin;
 
   border: 1px outset #eaeaea;

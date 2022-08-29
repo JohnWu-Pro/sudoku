@@ -104,7 +104,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     if(seeding) return
 
     $toggle($eliminateByRules, cell.settled)
-    // $toggle($crossHatching, !cell.settled)
+    markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -143,6 +143,36 @@ window.Sudoku = window.Sudoku ?? (() => {
     onCellValueChanged(cell)
   }
 
+  function markCrossHatching(cell) {
+    if(!cell.settled) return
+
+    // clear existing cross-hatching marks
+    $A('div.grid div.cell > div.cross-hatching').forEach(div => div.remove())
+
+    const value = cell.value
+    const markedKeys = new Set()
+    cells.forEach(cell => {
+      if(cell.value === value) crossHatchingRowAndColumn(markedKeys, cell)
+    })
+  }
+
+  function crossHatchingRowAndColumn(markedKeys, cell) {
+    const value = cell.value
+    const {rowId, colId} = idsFrom(cell.key)
+
+    const keys = new Set()
+    COLUMNS.forEach(colId => keys.add(keyOf(rowId, colId)))
+    ROWS.forEach(rowId => keys.add(keyOf(rowId, colId)))
+
+    keys.forEach(key => {
+      const cell = cells.get(key)
+      if(!cell.settled && !markedKeys.has(key)) {
+        appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = value
+        markedKeys.add(key)
+      }
+    })
+  }
+
   function onCellValueChanged(cell) {
     cell.render(Assumptions.peek().cssClass)
     highlightCandidates(cell)
@@ -150,6 +180,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     if(seeding) return
 
     $toggle($eliminateByRules, cell.settled)
+    markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -160,23 +191,19 @@ window.Sudoku = window.Sudoku ?? (() => {
     if(!rowId) return
 
     const keys = new Set()
-    COLUMNS.forEach((colId) => {
-      keys.add(keyOf(rowId, colId))
-    })
-    ROWS.forEach((rowId) => {
-      keys.add(keyOf(rowId, colId))
-    })
+    COLUMNS.forEach(colId => keys.add(keyOf(rowId, colId)))
+    ROWS.forEach(rowId => keys.add(keyOf(rowId, colId)))
 
     const leftCol = Math.floor(LETTERS.indexOf(colId) / CONFIG.box) * CONFIG.box
     const topRowId = Math.floor((rowId - 1) / CONFIG.box) * CONFIG.box + 1
-    Array(CONFIG.box).fill(0).map((_, i) => topRowId+i).forEach((rowId) => {
+    Array(CONFIG.box).fill(0).map((_, i) => topRowId+i).forEach(rowId => {
       for(const colId of LETTERS.substring(leftCol, leftCol + CONFIG.box)) {
         keys.add(keyOf(rowId, colId))
       }
     })
 
     const candidates = new Set(Cell.CANDIDATES)
-    keys.forEach((key) => {
+    keys.forEach(key => {
       const cell = cells.get(key)
       if(cell.settled) candidates.delete(cell.value)
     })

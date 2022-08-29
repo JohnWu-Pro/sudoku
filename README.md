@@ -9,10 +9,10 @@ v Manual seed
 v Fetch seed
 v Menu
 . Fix Assumptions Reject
+v Highlight Cross Hatching
 + Undo
-+ icon
+. icon
 x Highlight row, column, and box?
-+ Highlight Cross Hatching
 + Styling keys and commands
 + Timer
 + Save state, pause, resume
