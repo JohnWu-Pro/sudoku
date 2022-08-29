@@ -72,14 +72,14 @@ window.Sudoku = window.Sudoku ?? (() => {
       })
     } else if(seed === Seed.FILLED) {
       cells.forEach(cell => {
-        if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, 'seed'))
+        if(cell.settled) cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'seed'))
       })
     } else {
       ROWS.forEach((rowId, rowIndex) => {
         const row = seed[rowIndex]
         COLUMNS.forEach((colId, colIndex) => {
           const key = keyOf(rowId, colId)
-          cells.set(key, new Cell(key, row[colIndex], 'seed'))
+          cells.set(key, new Cell(key, row[colIndex], undefined, 'seed'))
         })
       })
     }
@@ -148,7 +148,7 @@ window.Sudoku = window.Sudoku ?? (() => {
       cell.value = [...candidates]
     }
 
-    if(cell.changed) onCellValueChanged(cell)
+    onCellValueChanged(cell)
   }
 
   function onUndo() {
@@ -158,14 +158,14 @@ window.Sudoku = window.Sudoku ?? (() => {
       return
     }
 
-    const {key, value} = assumption.pop()
+    const {key, value, cssClass} = assumption.pop()
     if(assumption.isEmpty()) { // check empty after pop()
       assumption.reject()
       Assumptions.pop()
       Assumptions.render()
     }
 
-    const cell = new Cell(key, value)
+    const cell = new Cell(key, value, cssClass)
     cells.set(key, cell)
     onCellValueChanged(cell)
 
@@ -215,7 +215,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onCellValueChanged(cell) {
-    cell.render(Assumptions.peek().cssClass)
+    cell.render()
     highlightCandidates(cell)
 
     if(seeding) return
@@ -256,7 +256,7 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     const cell = cells.get(focused)
     cell.value = [...candidates]
-    if(cell.changed) onCellValueChanged(cell)
+    onCellValueChanged(cell)
   }
 
   function onAssumptionStarted(event) {
@@ -269,22 +269,20 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onAssumptionAccepted(event) {
-    event.detail.affected.forEach(key => {
-      cells.get(key).render()
+    event.detail.affected.forEach(cell => {
+      cells.set(cell.key, cell)
+      cell.render()
     })
   }
 
   function onAssumptionRejected(event) {
-    let started = null
-    event.detail.affected.forEach((affected, cssClass) => {
-      affected.forEach(cell => {
-        cells.set(cell.key, cell)
-        cell.render(cssClass)
-        started = cell.key
-      })
+    event.detail.affected.forEach(cell => {
+      cells.set(cell.key, cell)
+      cell.render()
     })
 
-    onFocus(started)
+    const affected = event.detail.affected
+    onFocus(affected[affected.length-1].key)
   }
 
   function keyOf(rowId, colId) {

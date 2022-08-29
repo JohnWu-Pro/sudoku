@@ -3,14 +3,14 @@
 class Assumption {
 
   static ACCEPTED = new Assumption('Xn', undefined, '')
-  static #CSS_CLASSES = ['if-1st', 'if-2nd', 'if-3rd']
+  static #CSS_CLASSES = ['if-3rd', 'if-2nd', 'if-1st']
 
   static #availableCssClasses = [...Assumption.#CSS_CLASSES]
   static #nextCssClass() {
-    return Assumption.#availableCssClasses.shift()
+    return Assumption.#availableCssClasses.pop()
   }
   static #releaseCssClass(cssClass) {
-    return Assumption.#availableCssClasses.push(cssClass)
+    if(cssClass) Assumption.#availableCssClasses.push(cssClass)
   }
   static allowMore() {
     return Assumption.#availableCssClasses.length > 0
@@ -40,8 +40,8 @@ class Assumption {
   get snapshots() { return [...this.#snapshots] }
 
   push(cell) {
-    const {key, value} = cell
-    this.#snapshots.push({key, value})
+    const {key, value, cssClass} = cell
+    this.#snapshots.push({key, value, cssClass})
   }
 
   pop() {
@@ -97,49 +97,48 @@ window.Assumptions = window.Assumptions ?? (() => {
   function accept(id) { // accept the assumption and its predecessor(s)
     // console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
 
-    const keys = new Set()
+    const cells = new Map() // {key: cell-that-need-to-be-re-rendered}
 
     let assumption = null
     do {
       assumption = shift()
       if(!assumption) throw Error(`Invalid assumption id: '${id}'.`)
 
-      for(const cell of assumption.snapshots) {
+      const cssClass = Assumption.ACCEPTED.cssClass
+      for(const {key, value} of assumption.snapshots) {
+        const cell = new Cell(key, value, cssClass)
+        cells.set(key, cell)
         Assumption.ACCEPTED.push(cell)
-        keys.add(cell.key)
       }
       assumption.accept()
     } while(assumption.id !== id)
 
     for(assumption of assumptions) {
       for(const {key} of assumption.snapshots) {
-        keys.delete(key)
+        cells.delete(key)
       }
     }
 
-    // [cssClass: cell-keys-that-need-to-be-re-rendered]
-    return keys
+    return cells.values()
   }
 
   function reject(id) { // reject the assumption and its successor(s)
     // console.debug("[DEBUG] Calling reject(%s), assumptions: %o ...", id, [...assumptions])
 
-    const affected = new Map() // [cssClass: cells-that-need-to-be-re-rendered]
+    const cells = [] // cells-that-need-to-be-re-rendered
 
     let assumption = null
     do {
       assumption = pop()
       if(!assumption) throw Error(`Invalid assumption id: '${id}'.`)
 
-      const cells = []
-      for(const {key, value} of assumption.snapshots.reverse()) {
-        cells.push(new Cell(key, value))
+      for(const {key, value, cssClass} of assumption.snapshots.reverse()) {
+        cells.push(new Cell(key, value, cssClass))
       }
-      affected.set(peek().cssClass, cells)
       assumption.reject()
     } while(assumption.id !== id)
 
-    return affected
+    return cells
   }
 
   function renderOptionsFor(cell) {

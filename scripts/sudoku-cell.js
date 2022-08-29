@@ -6,37 +6,33 @@ class Cell {
 
   #key
   #value // single value (0, or 1..max), or values array
+  #cssClass // CSS decoration class when rendering the value
   #status // pending | seed | settled
-  #changed = false // whether value is changed in the latest value assignment
 
-  constructor(key, val, status) {
+  constructor(key, val, cssClass, status) {
     this.#key = key
     this.#value = Cell.#normalize(val)
+    this.#cssClass = cssClass ?? Cell.tracer.cssClass
     this.#status = this.settled ? (status === 'seed' ? 'seed' : 'settled') : 'pending'
   }
 
-  get key() {
-    return this.#key
-  }
+  get key() { return this.#key }
 
-  get value() {
-    return this.#value
-  }
+  get value() { return this.#value }
   set value(val) {
     if(this.#status === 'seed') return
 
     val = Cell.#normalize(val)
-    this.#changed = !Cell.#isEqual(val, this.#value)
-    if(!this.#changed) return
+    if(Cell.#isEqual(val, this.#value)) return
 
     Cell.tracer.push(this)
 
     this.#value = val
+    this.#cssClass = Cell.tracer.cssClass
     this.#status = this.settled ? 'settled' : 'pending'
   }
-  get changed() {
-    return this.#changed
-  }
+
+  get cssClass() { return this.#cssClass }
 
   get candidates() {
     const array = Array.isArray(this.#value) ? this.#value : (this.#value ? [this.#value] : [])
@@ -51,14 +47,15 @@ class Cell {
     this.div().classList.toggle('focused', on)
   }
 
-  render(decoration) {
+  render() {
     let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
     if(text.length > 4) text = '...'
 
+    let decoration = this.#cssClass
     if(this.#value === 0) decoration = '', text = '&nbsp;'
 
     this.div().innerHTML =
-      `<div class="value ${this.#status} ${decoration ?? ''}">${text}</div>`
+      `<div class="value ${this.#status} ${decoration}">${text}</div>`
   }
 
   div() {
