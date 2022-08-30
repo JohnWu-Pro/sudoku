@@ -48,7 +48,6 @@ button {
 .header .buttons {
   display: flex;
   justify-content: space-evenly;
-  text-align: right;
 }
 .header .buttons > button {
   display: block;
@@ -88,18 +87,18 @@ button {
 }
 
 .header .timer {
-  font: normal 10pt 'Digital-7 Mono';
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'Digital-7 Mono';
 }
 
-.header .timer::after {
-  content: '⏸'
+.header .timer.running::after {
+  content: '⏸' /* U+23F8 */
 }
 .header .timer.paused::after {
-  content: ' ▶'
+  content: ' ▶' /* U+23F5⏵, U+25B6 ▶ */
 }
 
 .header .restart::after {
-  content: '⭮'
+  content: '⭮' /* U+2B6E */
 }
 
 .main-content {
