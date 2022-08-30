@@ -6,30 +6,31 @@ v Eliminate by rules
 v Assumptions
 v Prompt
 v Manual seed
-v Fetch seed
+v Generate seed
 v Menu
 v Fix Assumptions Reject
 v Highlight Cross Hatching
 v Undo
 v Restart
 . icon
+v Polishing command buttons
 x Highlight row, column, and box?
-+ Timer, pause & resume
-+ Timer font
+v Timer, pause & resume
+v Timer font
 + Enhance Highlight Cross Hatching (for cells in same box)
++ Rolling title and game level
++ Flash on timer paused
 ? When app/page deactivated/closed ???
 + Freeze/cover the game board when timer paused, and
   + touch to resume
 + On success
 + Flash on timer resume and on success
-+ Rolling title and game level
-+ Save & restore/resume when re-entering
-v Polishing command buttons
 + Polishing command symbols
-+ Stats
-+ References
-+ i18n
 + PWA
++ Save & restore/resume when re-entering
++ Stats
++ i18n
++ References
 
 # References
 + https://qqwing.com/generate.html - generator

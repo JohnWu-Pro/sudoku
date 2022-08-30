@@ -82,6 +82,15 @@ button {
   font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
 }
 
+@font-face {
+  font-family: 'Digital-7 Mono';
+  src: url('/fonts/digital-7.mono.ttf');
+}
+
+.header .timer {
+  font: normal 10pt 'Digital-7 Mono';
+}
+
 .header .timer::after {
   content: '⏸'
 }
