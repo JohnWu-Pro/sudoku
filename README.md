@@ -17,7 +17,8 @@ v Polishing command buttons
 x Highlight row, column, and box?
 v Timer, pause & resume
 v Timer font
-+ Enhance Highlight Cross Hatching (for cells in same box)
+v Enhance Highlight Cross Hatching (for cells in same box)
++ Highlight Cross Hatching on request only
 + Rolling title and game level
 + Flash on timer paused
 ? When app/page deactivated/closed ???

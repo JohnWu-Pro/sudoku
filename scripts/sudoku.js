@@ -1,10 +1,6 @@
 'use strict';
 
 window.Sudoku = window.Sudoku ?? (() => {
-  const LETTERS = 'ABCDEFGHIJKLMOPQ'
-  const COLUMNS = Array(CONFIG.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
-  const ROWS = Array(CONFIG.scale).fill(0).map((_, i) => 1+i)
-
   const state = {
     cells: new Map(),
     seed: [],
@@ -17,20 +13,17 @@ window.Sudoku = window.Sudoku ?? (() => {
   function init() {
     const $grid = $E('div.grid')
 
-    $grid.innerHTML = ROWS.reduce((rows, rowId) => rows + `
-      <div class="row row-${rowId}">${COLUMNS.reduce((cols, colId) => cols +
-        `<div class="col col-${colId} cell cell-${keyOf(rowId, colId)}"></div>`, '')}
+    $grid.innerHTML = Grid.ROWS.reduce((rows, rowId) => rows + `
+      <div class="row row-${rowId}">${Grid.COLUMNS.reduce((cols, colId) => cols +
+        `<div class="col col-${colId} cell cell-${Grid.keyOf(rowId, colId)}"></div>`, '')}
         <div class="col y-axis coord"><div class="value">${rowId}</div></div>
       </div>`, '') + `
-      <div class="row x-axis">${COLUMNS.reduce((cols, colId) => cols +
+      <div class="row x-axis">${Grid.COLUMNS.reduce((cols, colId) => cols +
         `<div class="col col-${colId} coord"><div class="value">${colId}</div></div>`, '')}
       </div>`
 
-    ROWS.forEach((rowId) => {
-      COLUMNS.forEach((colId) => {
-        const key = keyOf(rowId, colId)
-        $E('div.cell-' + key, $grid).addEventListener('click', () => onFocus(key))
-      })
+    Grid.keys().forEach(key => {
+      $E('div.cell-' + key, $grid).addEventListener('click', () => onFocus(key))
     })
 
     const $keys = $E('div.keys')
@@ -67,12 +60,9 @@ window.Sudoku = window.Sudoku ?? (() => {
     state.seeding = seeding
 
     if(seed === Seed.EMPTY) {
-      ROWS.forEach((rowId) => {
-        COLUMNS.forEach((colId) => {
-          const key = keyOf(rowId, colId)
-          state.cells.set(key, new Cell(key, 0))
-        })
-      })
+      Grid.keys().forEach(key =>
+        state.cells.set(key, new Cell(key, 0))
+      )
     } else if(seed === Seed.FILLED) {
       state.cells.forEach(cell => {
         if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'seed'))
@@ -80,10 +70,10 @@ window.Sudoku = window.Sudoku ?? (() => {
       state.seed = seedFrom(state.cells)
       console.debug("[DEBUG] Filled seed: %o", state.seed)
     } else {
-      ROWS.forEach((rowId, rowIndex) => {
+      Grid.ROWS.forEach((rowId, rowIndex) => {
         const row = seed[rowIndex]
-        COLUMNS.forEach((colId, colIndex) => {
-          const key = keyOf(rowId, colId)
+        Grid.COLUMNS.forEach((colId, colIndex) => {
+          const key = Grid.keyOf(rowId, colId)
           state.cells.set(key, new Cell(key, row[colIndex], undefined, 'seed'))
         })
       })
@@ -107,23 +97,15 @@ window.Sudoku = window.Sudoku ?? (() => {
   function seedFrom(cells) {
     const result = Array(CONFIG.scale)
 
-    ROWS.forEach((rowId, rowIndex) => {
+    Grid.ROWS.forEach((rowId, rowIndex) => {
       const row = Array(CONFIG.scale)
-      COLUMNS.forEach((colId, colIndex) => {
-        row[colIndex] = cells.get(keyOf(rowId, colId)).value
+      Grid.COLUMNS.forEach((colId, colIndex) => {
+        row[colIndex] = cells.get(Grid.keyOf(rowId, colId)).value
       })
       result[rowIndex] = row
     })
 
     return result
-  }
-
-  function pause() {
-
-  }
-
-  function resume() {
-
   }
 
   function restart() {
@@ -218,16 +200,10 @@ window.Sudoku = window.Sudoku ?? (() => {
 
   function crossHatchingRowAndColumn(markedKeys, cell) {
     const value = cell.value
-    const {rowId, colId} = idsFrom(cell.key)
-
-    const keys = new Set()
-    COLUMNS.forEach(colId => keys.add(keyOf(rowId, colId)))
-    ROWS.forEach(rowId => keys.add(keyOf(rowId, colId)))
-
-    keys.forEach(key => {
+    Grid.peers(cell.key).forEach(key => {
       const cell = state.cells.get(key)
       if(!cell.settled && !markedKeys.has(key)) {
-        appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = value
+        appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = `&nbsp;${value}&nbsp;`
         markedKeys.add(key)
       }
     })
@@ -252,23 +228,8 @@ window.Sudoku = window.Sudoku ?? (() => {
   function onEliminateByRules() {
     if(!state.focused) return
 
-    const {rowId, colId} = idsFrom(state.focused)
-    if(!rowId) return
-
-    const keys = new Set()
-    COLUMNS.forEach(colId => keys.add(keyOf(rowId, colId)))
-    ROWS.forEach(rowId => keys.add(keyOf(rowId, colId)))
-
-    const leftCol = Math.floor(LETTERS.indexOf(colId) / CONFIG.box) * CONFIG.box
-    const topRowId = Math.floor((rowId - 1) / CONFIG.box) * CONFIG.box + 1
-    Array(CONFIG.box).fill(0).map((_, i) => topRowId+i).forEach(rowId => {
-      for(const colId of LETTERS.substring(leftCol, leftCol + CONFIG.box)) {
-        keys.add(keyOf(rowId, colId))
-      }
-    })
-
     const candidates = new Set(Cell.CANDIDATES)
-    keys.forEach(key => {
+    Grid.peers(state.focused).forEach(key => {
       const cell = state.cells.get(key)
       if(cell.settled) candidates.delete(cell.value)
     })
@@ -304,19 +265,8 @@ window.Sudoku = window.Sudoku ?? (() => {
     onFocus(affected[affected.length-1].key)
   }
 
-  function keyOf(rowId, colId) {
-    return colId + rowId
-  }
-
-  function idsFrom(key) {
-    const [matched, colId, rowId] = key?.match(/^([A-Z])(\d+)$/) ?? []
-    return matched ? {rowId: Number(rowId), colId} : {}
-  }
-
   return {
     init,
-    pause,
-    resume,
     // save & restore,
     restart,
     start
