@@ -15,6 +15,14 @@ v Restart
 . icon
 x Highlight row, column, and box?
 + Timer, pause & resume
++ Timer font
++ Enhance Highlight Cross Hatching (for cells in same box)
+? When app/page deactivated/closed ???
++ Freeze/cover the game board when timer paused, and
+  + touch to resume
++ On success
++ Flash on timer resume and on success
++ Rolling title and game level
 + Save & restore/resume when re-entering
 v Polishing command buttons
 + Polishing command symbols

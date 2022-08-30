@@ -6,9 +6,10 @@ window.App = window.App ?? (() => {
 
   const currentScript = document.currentScript
 
+  var timer = null
   var $seedFilled = null
 
-  function init() {
+  function run() {
     const $header = $E('div.header')
     $header.innerHTML = `
       <div>
@@ -32,7 +33,7 @@ window.App = window.App ?? (() => {
       </div>
     `
     $E('select', $header).addEventListener('change', onNewGame)
-    $E('.restart', $header).addEventListener('click', Sudoku.restart)
+    $E('.restart', $header).addEventListener('click', onRestart)
 
     $E('.commands .buttons').innerHTML = `
       <button class="block border" id="undo"><span> Undo</span></button>
@@ -50,6 +51,7 @@ window.App = window.App ?? (() => {
       适用版权许可 <a href="javascript:openDoc('LICENSE.txt', '版权许可')" title="License Detail">MPL-2.0</a>。
     `
 
+    timer = new Timer('.header .buttons .timer')
     Sudoku.init()
     play('Easy')
   }
@@ -59,10 +61,10 @@ window.App = window.App ?? (() => {
     if(! selected) return
 
     if(selected === 'Manual') {
-      $show($seedFilled)
       Promise.resolve(Seed.EMPTY)
       .then((seed) => Sudoku.start(seed, true)) // to start manual seeding
       Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
+      $show($seedFilled)
     } else {
       $hide($seedFilled)
       play(selected)
@@ -73,14 +75,21 @@ window.App = window.App ?? (() => {
   function play(game) {
     Seed.get(game)
     .then((seed) => Sudoku.start(seed))
+    .then(() => timer.start())
     .then(promptUsage)
     .catch((error) => Prompt.error(error))
+  }
+
+  function onRestart() {
+    Sudoku.restart()
+    timer.reset()
   }
 
   function onSeedFilled() {
     $hide($seedFilled)
     Promise.resolve(Seed.FILLED)
     .then((seed) => Sudoku.start(seed))
+    .then(() => timer.start())
     .then(promptUsage)
   }
 
@@ -122,13 +131,10 @@ window.App = window.App ?? (() => {
     return scripts
   }
 
-  //
-  // Initialize
-  //
-  document.addEventListener("DOMContentLoaded", init)
-
-  // return {
-  //
-  // }
+  return {
+    run
+  }
 
 })()
+
+document.addEventListener("DOMContentLoaded", App.run)
