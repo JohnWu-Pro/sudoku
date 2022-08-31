@@ -189,13 +189,17 @@ window.Sudoku = window.Sudoku ?? (() => {
   function markCrossHatching(cell) {
     if(!cell.settled) return
 
-    // clear existing cross-hatching marks
+    // Clear existing cross-hatching marks
+    $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
     $A('div.grid div.cell > div.cross-hatching').forEach(div => div.remove())
 
     const value = cell.value
     const markedKeys = new Set()
     state.cells.forEach(cell => {
-      if(cell.value === value) crossHatchingRowAndColumn(markedKeys, cell)
+      if(cell.value === value) {
+        cell.div().classList.add('same')
+        crossHatchingRowAndColumn(markedKeys, cell)
+      }
     })
   }
 

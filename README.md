@@ -19,7 +19,7 @@ v Timer font
 v Enhance Highlight Cross Hatching (for cells in same box)
 v Polishing command symbols
 v Assume then restart, decoration incorrect
-+ Highlight same settled cells
+v Highlight same settled cells
 . icon
 + PWA
 + Rolling title and game level

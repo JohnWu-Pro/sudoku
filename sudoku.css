@@ -135,24 +135,23 @@ button {
 
 .grid .cell.focused {
   z-index: 1;
-  outline: 1vmin auto #6666ff;
+  outline: auto #6666ff;
 }
 .grid .cell.same {
-  z-index: 1;
-  outline: 1vmin dash #6666ff;
+  background-color: #ffccff;
 }
 
 .grid .cell .value.if-1st,
 .assumption.if-1st {
-  background-color: #ffc0c0;
+  background-color: #ffcccc;
 }
 .grid .cell .value.if-2nd,
 .assumption.if-2nd {
-  background-color: #c0ffc0;
+  background-color: #ccffcc;
 }
 .grid .cell .value.if-3rd,
 .assumption.if-3rd {
-  background-color: #c0c0ff;
+  background-color: #ccccff;
 }
 
 .grid .row-1 .cell,
