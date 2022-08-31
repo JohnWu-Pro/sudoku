@@ -20,7 +20,8 @@ v Enhance Highlight Cross Hatching (for cells in same box)
 v Polishing command symbols
 v Assume then restart, decoration incorrect
 v Highlight same settled cells
-? Timer after restart / start new
+v Duplicated timer after start new
++ Highlight prompt
 . icon
 + PWA
 + Rolling title and game level

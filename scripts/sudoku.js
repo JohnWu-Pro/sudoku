@@ -192,7 +192,7 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     // Clear existing cross-hatching marks
     $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
-    $A('div.grid div.cell > div.cross-hatching').forEach(div => div.remove())
+    $A('div.grid div.cell > div.excluded').forEach(div => div.remove())
 
     if(!cell) return
 
@@ -211,7 +211,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     Grid.peers(cell.key).forEach(key => {
       const cell = state.cells.get(key)
       if(!cell.settled && !markedKeys.has(key)) {
-        appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = value
+        appendElement('div', {className: 'excluded'}, cell.div()).innerHTML = value
         markedKeys.add(key)
       }
     })

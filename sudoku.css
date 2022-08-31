@@ -235,10 +235,10 @@ button {
   top: 28%;
 }
 
-.grid .cell .cross-hatching::before {
-  content: '- '
+.grid .cell .excluded::before {
+  content: '-'
 }
-.grid .cell .cross-hatching {
+.grid .cell .excluded {
   font: normal clamp(11.52px, 3.2vmin, 13.44px) 'New Times Roman';
   color: lightgrey;
   position: relative;
