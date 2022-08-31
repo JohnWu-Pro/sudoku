@@ -38,15 +38,12 @@ class Timer {
   }
 
   #_start(accumulated) {
+    if(this.#handle !== 0) clearInterval(this.#handle)
+
     this.#setAccumulated(accumulated)
     this.#started = Date.now()
     this.#setStatus('running')
     this.#handle = setInterval(() => this.#tick(), 1000)
-  }
-
-  reset() {
-    this.stop()
-    this.start()
   }
 
   pause() {

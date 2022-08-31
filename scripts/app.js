@@ -82,7 +82,7 @@ window.App = window.App ?? (() => {
 
   function onRestart() {
     Sudoku.restart()
-    timer.reset()
+    timer.start()
   }
 
   function onSeedFilled() {
