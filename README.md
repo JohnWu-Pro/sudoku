@@ -20,13 +20,17 @@ v Enhance Highlight Cross Hatching (for cells in same box)
 v Polishing command symbols
 v Assume then restart, decoration incorrect
 v Highlight same settled cells
+? Timer after restart / start new
 . icon
 + PWA
 + Rolling title and game level
 + Highlight Cross Hatching on request only
 + Cell.value as String
 + Flash on timer paused
-? When app/page deactivated/closed ???
++ When app/page deactivated/closed ???
+  + Document: visibilitychange event
+  + Window: beforeunload event
++ Autosave every 5 minutes, on pause, on
 + Freeze/cover the game board when timer paused, and
   + touch to resume
 + On success

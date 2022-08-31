@@ -143,15 +143,15 @@ button {
 
 .grid .cell .value.if-1st,
 .assumption.if-1st {
-  background-color: #ffcccc;
+  background-color: #ccffcc;
 }
 .grid .cell .value.if-2nd,
 .assumption.if-2nd {
-  background-color: #ccffcc;
+  background-color: #ccccff;
 }
 .grid .cell .value.if-3rd,
 .assumption.if-3rd {
-  background-color: #ccccff;
+  background-color: #ffcccc;
 }
 
 .grid .row-1 .cell,
