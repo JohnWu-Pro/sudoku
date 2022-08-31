@@ -12,17 +12,17 @@ v Fix Assumptions Reject
 v Highlight Cross Hatching
 v Undo
 v Restart
-. icon
 v Polishing command buttons
 x Highlight row, column, and box?
 v Timer, pause & resume
 v Timer font
 v Enhance Highlight Cross Hatching (for cells in same box)
-+ Polishing command symbols
-? Assume then restart ???
+v Polishing command symbols
+v Assume then restart, decoration incorrect
++ Highlight same settled cells
+. icon
 + PWA
 + Rolling title and game level
-+ Highlight same settled cells
 + Highlight Cross Hatching on request only
 + Cell.value as String
 + Flash on timer paused

@@ -88,9 +88,8 @@ window.Sudoku = window.Sudoku ?? (() => {
 
     highlightCandidates()
     updateCommands(true)
-    Assumptions.clear()
     Assumptions.render()
-    Assumptions.renderOptionsFor(null)
+    Assumptions.renderOptionsFor()
 
     return Promise.resolve()
   }
@@ -110,6 +109,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function restart() {
+    Assumptions.clear()
     start(state.seed, state.seeding)
   }
 

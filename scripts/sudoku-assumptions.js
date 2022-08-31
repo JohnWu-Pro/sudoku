@@ -92,6 +92,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   function clear() {
     assumptions.length = 0
     Assumption.reset()
+    setCellTracer()
   }
 
   function accept(id) { // accept the assumption and its predecessor(s)
