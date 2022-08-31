@@ -86,6 +86,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
     state.focused = null
 
+    markCrossHatching()
     highlightCandidates()
     updateCommands(true)
     Assumptions.render()
@@ -131,7 +132,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function highlightCandidates(cell) {
-    const candidates = cell?.candidates ?? new Set([])
+    const candidates = cell?.candidates ?? new Set()
     Cell.CANDIDATES.forEach((candidate) => {
       $numbers[candidate].classList.toggle('candidate', candidates.has(candidate))
     })
@@ -187,11 +188,13 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function markCrossHatching(cell) {
-    if(!cell.settled) return
+    if(cell && !cell.settled) return
 
     // Clear existing cross-hatching marks
     $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
     $A('div.grid div.cell > div.cross-hatching').forEach(div => div.remove())
+
+    if(!cell) return
 
     const value = cell.value
     const markedKeys = new Set()
