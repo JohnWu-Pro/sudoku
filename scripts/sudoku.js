@@ -211,7 +211,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     Grid.peers(cell.key).forEach(key => {
       const cell = state.cells.get(key)
       if(!cell.settled && !markedKeys.has(key)) {
-        appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = `&nbsp;${value}&nbsp;`
+        appendElement('div', {className: 'cross-hatching'}, cell.div()).innerHTML = value
         markedKeys.add(key)
       }
     })

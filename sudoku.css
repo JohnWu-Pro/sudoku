@@ -235,10 +235,12 @@ button {
   top: 28%;
 }
 
+.grid .cell .cross-hatching::before {
+  content: '- '
+}
 .grid .cell .cross-hatching {
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  font: normal clamp(11.52px, 3.2vmin, 13.44px) 'New Times Roman';
   color: lightgrey;
-  text-decoration: line-through;
   position: relative;
   top: 10%;
 }
