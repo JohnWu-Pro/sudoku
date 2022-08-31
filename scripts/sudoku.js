@@ -86,6 +86,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
     state.focused = null
 
+    highlightCandidates()
     updateCommands(true)
     Assumptions.clear()
     Assumptions.render()
@@ -130,7 +131,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function highlightCandidates(cell) {
-    const candidates = cell?.candidates ?? []
+    const candidates = cell?.candidates ?? new Set([])
     Cell.CANDIDATES.forEach((candidate) => {
       $numbers[candidate].classList.toggle('candidate', candidates.has(candidate))
     })

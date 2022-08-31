@@ -19,7 +19,7 @@ button {
 }
 
 .header {
-  width: clamp(338px, 94vmin, 395px);
+  width: clamp(338.4px, 94vmin, 394.8px);
   margin: clamp(4px, 1vmax, 6px) auto;
 }
 
@@ -45,40 +45,33 @@ button {
   text-align: right;
 }
 
+.header select {
+  background: #f2f2f2;
+  color: navy;
+  font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  width: clamp(111.6px, 31vmin, 130.2px);
+}
+
+.header .title {
+  font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+}
+
 .header .buttons {
   display: flex;
   justify-content: space-evenly;
 }
 .header .buttons > button {
   display: block;
-  margin: auto;
-  padding: clamp(1.8px, 0.5vmin, 2.1px) clamp(7.2px, 2vmin, 8.4px);
+  padding: 0 clamp(5.4px, 1.5vmin, 6.3px) clamp(1.8px, 0.5vmin, 2.1px) clamp(5.4px, 1.5vmin, 6.3px);
 
   border: 1px outset #eaeaea;
-  border-radius: clamp(3.5px, 1vmin, 4.2px);
+  border-radius: clamp(3.6px, 1vmin, 4.2px);
 }
 .header .buttons > :first-child {
   margin: 0 auto 0 0 !important;
-  text-align: left;
-}
-.header .buttons > :not(:first-child):not(:last-child) {
-  margin: 0 !important;
-  text-align: center;
 }
 .header .buttons > :last-child {
   margin: 0 0 0 auto !important;
-  text-align: right;
-}
-
-.header select {
-  background: #f2f2f2;
-  color: navy;
-  font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
-  width: clamp(111px, 31vmin, 130px);
-}
-
-.header .title {
-  font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
 }
 
 @font-face {
@@ -86,28 +79,45 @@ button {
   src: url('fonts/digital-7.mono.ttf');
 }
 
-.header .timer {
+.header .buttons > button.timer {
   font: normal clamp(14.4px, 4vmin, 16.8px) 'Digital-7 Mono';
+  padding-right: 0;
 }
 
+.header .timer::after,
+.header .restart::after {
+  content: '';
+  display: inline-block;
+  background: border-box center/125% no-repeat;
+  position: relative;
+  top: 18%;
+  width: clamp(14.4px, 4vmin, 16.8px);
+  height: clamp(14.4px, 4vmin, 16.8px);
+}
+.header .timer::after {
+  padding-left: clamp(4.32px, 1.2vmin, 5.04px);
+}
 .header .timer.running::after {
-  content: '⏸' /* U+23F8 */
+  /* U+23F8⏸ */
+  background-image: url('images/U23F8.pause.png');
 }
 .header .timer.paused::after {
-  content: ' ▶' /* U+23F5⏵, U+25B6 ▶ */
+  /* U+23F5⏵, U+25B6 ▶ */
+  background-image: url('images/U25B6.play.png');
 }
 
 .header .restart::after {
-  content: '⭮' /* U+2B6E */
+  /* U+21BA ↺ */
+  background-image: url('images/U21BA.restart.png');
 }
 
 .main-content {
-  width: clamp(352px, 98vmin, 412px);
+  width: clamp(352.8px, 98vmin, 411.6px);
   margin: 0 auto;
 }
 
 .grid {
-  padding-left: clamp(6px, 1.6vmin, 8px);
+  padding-left: clamp(5.76px, 1.6vmin, 6.72px);
   width: 100%;
   text-align: center;
 }
@@ -120,12 +130,16 @@ button {
   aspect-ratio: 1 / 1;
   border: solid lightgrey;
   border-width: 1px 0 0 1px;
-  width: clamp(35.2px, 10vmin, 42px);
+  width: clamp(36px, 10vmin, 42px);
 }
 
 .grid .cell.focused {
   z-index: 1;
-  outline: #6666ff auto 1vmin;
+  outline: 1vmin auto #6666ff;
+}
+.grid .cell.same {
+  z-index: 1;
+  outline: 1vmin dash #6666ff;
 }
 
 .grid .cell .value.if-1st,
@@ -203,7 +217,7 @@ button {
 }
 
 .grid .cell .value {
-  font: bold clamp(22px, 6.4vmin, 28px) 'New Times Roman';
+  font: bold clamp(21.6px, 6vmin, 25.2px) 'New Times Roman';
   position: relative;
   top: 50%;
   margin: auto;
@@ -239,11 +253,11 @@ button {
   border-width: 1px 0 0 1px;
 
   color: lightgrey;
-  font: bold clamp(11px, 3.2vmin, 14px) 'New Times Roman';
+  font: bold clamp(11.52px, 3.2vmin, 13.44px) 'New Times Roman';
 }
 
 .grid .x-axis .coord {
-  width: clamp(35.2px, 10vmin, 42px);
+  width: clamp(36px, 10vmin, 42px);
 }
 
 .grid .y-axis {
@@ -268,14 +282,14 @@ button {
 
 .keys .key {
   aspect-ratio: 1 / 1;
-  width: clamp(35.2px, 10vmin, 42px);
+  width: clamp(36px, 10vmin, 42px);
   margin: 0.6vmin;
 
   border: 1px outset #eaeaea;
-  border-radius: clamp(3.5px, 1vmin, 4.2px);
+  border-radius: clamp(3.6px, 1vmin, 4.2px);
 
   color: grey;
-  font: normal clamp(22px, 6.4vmin, 28px) 'Arial';
+  font: normal clamp(23.4px, 6.5vmin, 27.3px) 'Arial';
   cursor: pointer;
 }
 
@@ -329,13 +343,13 @@ button {
 
 .commands .block {
   display: block;
-  margin: clamp(3.5px, 1vmin, 4.2px);
-  padding: clamp(3.5px, 1vmin, 4.2px) clamp(7.2px, 2vmin, 8.4px);
+  margin: clamp(3.6px, 1vmin, 4.2px);
+  padding: clamp(3.6px, 1vmin, 4.2px) clamp(7.2px, 2vmin, 8.4px);
 }
 
 .commands .border {
   border: 1px outset #eaeaea;
-  border-radius: clamp(3.5px, 1vmin, 4.2px);
+  border-radius: clamp(3.6px, 1vmin, 4.2px);
 }
 
 .commands .pending .assumption {
@@ -346,17 +360,37 @@ button {
   width: auto;
 }
 
+.commands .pending .assumption button {
+  display: block;
+  margin: clamp(3.6px, 1vmin, 4.2px);
+  padding: 0 clamp(5.4px, 1.5vmin, 6.3px) clamp(1.8px, 0.5vmin, 2.1px) clamp(5.4px, 1.5vmin, 6.3px);
+
+  border: 1px outset #eaeaea;
+  border-radius: clamp(3.6px, 1vmin, 4.2px);
+}
+.commands .pending .assumption button::after {
+  content: '';
+  display: inline-block;
+  background: border-box center/125% no-repeat;
+  position: relative;
+  top: 25%;
+  width: clamp(14.4px, 4vmin, 16.8px);
+  height: clamp(14.4px, 4vmin, 16.8px);
+}
+
 .commands .pending .assumption.first button[data-action="accept"]::after {
-  content: ''
+  background-image: none;
 }
 .commands .pending .assumption button[data-action="accept"]::after {
-  content: ' ⭳'
+  /* U+2B73 ⭳ */
+  background-image: url('images/U2B73.down-arrow-to-bar.png');
 }
 .commands .pending .assumption button[data-action="reject"]::after {
-  content: ' ↧'
+  /* U+21A7 ↧ */
+  background-image: url('images/U21A7.down-arrow-from-bar.png');
 }
 .commands .pending .assumption.last button[data-action="reject"]::after {
-  content: ''
+  background-image: none;
 }
 
 .commands .pending .assumption .block {

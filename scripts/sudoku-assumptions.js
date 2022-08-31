@@ -188,8 +188,8 @@ window.Assumptions = window.Assumptions ?? (() => {
     div.innerHTML = assumptions.reduce((html, assumption, index) => html + `
       <div class="assumption ${assumption.cssClass} border ${index===0 ? 'first' : ''} ${index===max ? 'last' : ''}">
         <span class="block">Assume ${assumption.key} is ${assumption.value}:</span>
-        <button class="block border" data-id="${assumption.id}" data-action="accept">Accept</button>
-        <button class="block border" data-id="${assumption.id}" data-action="reject">Reject</button>
+        <button data-id="${assumption.id}" data-action="accept">Accept</button>
+        <button data-id="${assumption.id}" data-action="reject">Reject</button>
       </div>
       `, '')
 

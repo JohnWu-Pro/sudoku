@@ -18,17 +18,21 @@ x Highlight row, column, and box?
 v Timer, pause & resume
 v Timer font
 v Enhance Highlight Cross Hatching (for cells in same box)
-+ Highlight Cross Hatching on request only
++ Polishing command symbols
+? Assume then restart ???
++ PWA
 + Rolling title and game level
++ Highlight same settled cells
++ Highlight Cross Hatching on request only
++ Cell.value as String
 + Flash on timer paused
 ? When app/page deactivated/closed ???
 + Freeze/cover the game board when timer paused, and
   + touch to resume
 + On success
 + Flash on timer resume and on success
-+ Polishing command symbols
-+ PWA
 + Save & restore/resume when re-entering
++ App, Game, Board, Grid, Cell
 + Stats
 + i18n
 + References
