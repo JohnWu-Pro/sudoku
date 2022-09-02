@@ -98,7 +98,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   function accept(id) { // accept the assumption and its predecessor(s)
     // console.debug("[DEBUG] Calling accept(%s), assumptions: %o ...", id, [...assumptions])
 
-    const cells = new Map() // {key: cell-that-need-to-be-re-rendered}
+    const keys = new Set() // {key of cell-that-need-to-be-re-rendered}
 
     let assumption = null
     do {
@@ -107,20 +107,19 @@ window.Assumptions = window.Assumptions ?? (() => {
 
       const cssClass = Assumption.ACCEPTED.cssClass
       for(const {key, value} of assumption.snapshots) {
-        const cell = new Cell(key, value, cssClass)
-        cells.set(key, cell)
-        Assumption.ACCEPTED.push(cell)
+        keys.add(key)
+        Assumption.ACCEPTED.push({key, value, cssClass})
       }
       assumption.accept()
     } while(assumption.id !== id)
 
     for(assumption of assumptions) {
       for(const {key} of assumption.snapshots) {
-        cells.delete(key)
+        keys.delete(key)
       }
     }
 
-    return cells.values()
+    return keys
   }
 
   function reject(id) { // reject the assumption and its successor(s)
@@ -233,7 +232,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   function warnNoMoreAssumption() {
     if(warned) return
 
-    Prompt.warn('No more assumption until any existing one is accepted or rejected!')
+    Prompt.warn('Maximum 3 assumptions are supported!')
     warned = true
   }
 

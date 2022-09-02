@@ -88,7 +88,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     }
     state.focused = null
 
-    markCrossHatching()
+    clearCrossHatching()
     highlightCandidates()
     updateCommands(true)
     Assumptions.render()
@@ -169,6 +169,8 @@ window.Sudoku = window.Sudoku ?? (() => {
       Assumptions.render()
     }
 
+    clearCrossHatching()
+
     const cell = new Cell(key, value, cssClass)
     state.cells.set(key, cell)
     onCellValueChanged(cell)
@@ -188,12 +190,16 @@ window.Sudoku = window.Sudoku ?? (() => {
     onCellValueChanged(cell)
   }
 
-  function markCrossHatching(cell) {
-    if(cell && !cell.settled) return
-
+  function clearCrossHatching() {
     // Clear existing cross-hatching marks
     $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
     $A('div.grid div.cell > div.excluded').forEach(div => div.remove())
+  }
+
+  function markCrossHatching(cell) {
+    if(cell && !cell.settled) return
+
+    clearCrossHatching()
 
     if(!cell) return
 
@@ -258,17 +264,21 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function onAssumptionAccepted(event) {
-    event.detail.affected.forEach(cell => {
-      state.cells.set(cell.key, cell)
+    const cssClass = Assumption.ACCEPTED.cssClass
+    for(const key of event.detail.affected) {
+      const cell = new Cell(key, state.cells.get(key).value, cssClass) // Keep current value
+      state.cells.set(key, cell)
       cell.render()
-    })
+    }
   }
 
   function onAssumptionRejected(event) {
-    event.detail.affected.forEach(cell => {
-      state.cells.set(cell.key, cell)
+    for(const cell of event.detail.affected) {
+      state.cells.set(cell.key, cell) // Bring back previous cell snapshot
       cell.render()
-    })
+    }
+
+    clearCrossHatching()
 
     const affected = event.detail.affected
     onFocus(affected[affected.length-1].key)
