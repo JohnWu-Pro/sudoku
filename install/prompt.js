@@ -56,6 +56,8 @@ function show() {
   $on(button, () => button.style.left = button.offsetWidth + 'px')
   .perform('slide-in')
   .then(() => button.style.left = '')
+  .then(() => delay(180000))
+  .then(() => { hide(); onAfterPrompted(); })
 }
 
 function hide() {
