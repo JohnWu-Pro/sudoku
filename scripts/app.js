@@ -2,100 +2,34 @@
 
 window.App = window.App ?? (() => {
 
-  const DONE_BUTTON_LABEL = 'Givens are Ready'
-
   const currentScript = document.currentScript
 
-  var timer = null
-  var $seedFilled = null
-
   function run() {
-    const $header = $E('div.header')
-    $header.innerHTML = `
-      <div>
-        <div>
-          <select class="block border">
-            <option value="">New Game ...</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
-            <option value="Expert">Expert</option>
-            <option value="Manual">Manually Input Givens</option>
-          </select>
-        </div>
-        <div>
-          <span class="title">Sudoku</span>
-        </div>
-        <div class="buttons">
-          <button class="timer">0:00:00</button>
-          <button class="restart" title="Restart"></button>
-        </div>
-      </div>
-    `
-    $E('select', $header).addEventListener('change', onNewGame)
-    $E('.restart', $header).addEventListener('click', onRestart)
-
-    $E('.commands .buttons').innerHTML = `
-      <button class="block border" id="undo"><span> Undo</span></button>
-      <button class="block border hidden" id="seed-filled">${DONE_BUTTON_LABEL}</button>
-      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
-      <button class="block border" id="clean"><span>Erase </span></button>
-    `
-    $seedFilled = $E('button#seed-filled')
-    $seedFilled.addEventListener('click', onSeedFilled)
-
     $E('div.footer').innerHTML = `
-      <a href="https://mozilla.org/MPL/2.0/" target="_blank">版权所有</a>
-      &copy; 2022
-      <a href="mailto: johnwu.pro@gmail.com" target="_blank">吴菊华</a>。
-      适用版权许可 <a href="javascript:openDoc('LICENSE.txt', '版权许可')" title="License Detail">MPL-2.0</a>。
+      &copy; 2022 <a href="mailto: johnwu.pro@gmail.com" target="_blank">John Wu</a>,
+      Licensed under the <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License Detail">MPL-2.0</a>。
     `
 
-    timer = new Timer('.header .buttons .timer')
-    Sudoku.init()
-    play('Easy')
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === 'visible') {
+        onActivate()
+      } else {
+        onDeactivate()
+      }
+    });
+
+    Game.init()
+    .then(() => Game.start())
   }
 
-  function onNewGame(event) {
-    const selected = event.target.value
-    if(! selected) return
-
-    if(selected === 'Manual') {
-      Promise.resolve(Seed.EMPTY)
-      .then((seed) => Sudoku.start(seed, true)) // to start manual seeding
-      Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
-      $show($seedFilled)
-    } else {
-      $hide($seedFilled)
-      play(selected)
-    }
-    event.target.value = ''
+  function onActivate() {
+    console.debug("[DEBUG] Calling onActivate() ...")
+    // Game.start() or Game.resume()
   }
 
-  function play(game) {
-    Seed.get(game)
-    .then((seed) => Sudoku.start(seed))
-    .then(() => timer.start())
-    .then(promptUsage)
-    .catch((error) => Prompt.error(error))
-  }
-
-  function onRestart() {
-    Sudoku.restart()
-    timer.start()
-  }
-
-  function onSeedFilled() {
-    $hide($seedFilled)
-    Promise.resolve(Seed.FILLED)
-    .then((seed) => Sudoku.start(seed))
-    .then(() => timer.start())
-    .then(promptUsage)
-  }
-
-  let prompted = 0
-  function promptUsage() {
-    if(prompted++ < 3) Prompt.info('Tap or click the cell for more assistive actions.')
+  function onDeactivate() {
+    console.debug("[DEBUG] Calling onDeactivate() ...")
+    // Game.pause()
   }
 
   function locale() {

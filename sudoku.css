@@ -111,7 +111,7 @@ button {
   background-image: url('images/U21BA.restart.png');
 }
 
-.main-content {
+.board {
   width: clamp(352.8px, 98vmin, 411.6px);
   margin: 0 auto;
 }

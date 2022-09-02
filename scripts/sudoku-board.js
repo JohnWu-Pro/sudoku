@@ -1,6 +1,6 @@
 'use strict';
 
-window.Sudoku = window.Sudoku ?? (() => {
+window.Board = window.Board ?? (() => {
   const state = {
     cells: new Map(),
     seed: [],
@@ -45,6 +45,8 @@ window.Sudoku = window.Sudoku ?? (() => {
     window.addEventListener("assumption-started", onAssumptionStarted)
     window.addEventListener("assumption-accepted", onAssumptionAccepted)
     window.addEventListener("assumption-rejected", onAssumptionRejected)
+
+    return Promise.resolve()
   }
 
   /**
@@ -112,7 +114,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function restart() {
-    start(state.seed, state.seeding)
+    return start(state.seed, state.seeding)
   }
 
   function onFocus(key) {
@@ -287,7 +289,7 @@ window.Sudoku = window.Sudoku ?? (() => {
   return {
     init,
     // save & restore,
+    start,
     restart,
-    start
   }
 })()

@@ -167,7 +167,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     if(!matched) return
 
     push(new Assumption(key, value))
-    // console.debug("Started %o, assumptions: %o", peek(), [...assumptions])
+    // console.debug("[DEBUG] Started %o, assumptions: %o", peek(), [...assumptions])
 
     // trigger synthetic event to update the grid
     window.dispatchEvent(new CustomEvent('assumption-started', {
