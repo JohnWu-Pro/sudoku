@@ -28,7 +28,7 @@ window.Prompt = window.Prompt ?? (() => {
   function css() { return singleBlockCommentIn(css) /*
     .app-prompt-panel {
       display: block;
-      position: absolute; z-index: 999;
+      position: absolute; z-index: 99;
       top: 90%;
       width: 100%;
       overflow: hidden;
@@ -42,7 +42,14 @@ window.Prompt = window.Prompt ?? (() => {
       text-align: center;
 
       background: rgba(255,255,255,0.6);
-      font: bold clamp(14.4px, 4vmin, 18px) 'New Times Roman';
+      font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+    }
+
+    .app-prompt-panel > .message > span {
+      display: inline-block;
+      margin: 3px;
+      padding: 3px 6px;
+      border: 2px solid;
     }
 
     .app-prompt-panel > .message.slide-in {
@@ -56,18 +63,22 @@ window.Prompt = window.Prompt ?? (() => {
     }
 
     .app-prompt-panel .info {
+      border-color: navy;
       color: navy;
     }
 
     .app-prompt-panel .warn {
+      border-color: orange;
       color: orange;
     }
 
     .app-prompt-panel .error {
+      border-color: red;
       color: red;
     }
 
     .app-prompt-panel .success {
+      border-color: green;
       color: green;
     }
   */
