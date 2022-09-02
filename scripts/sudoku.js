@@ -56,6 +56,8 @@ window.Sudoku = window.Sudoku ?? (() => {
    * @param {boolean} seeding whether to start manual seeding
    */
   function start(seed, seeding = false) {
+    Assumptions.clear()
+
     state.seed = seed
     state.seeding = seeding
 
@@ -110,7 +112,6 @@ window.Sudoku = window.Sudoku ?? (() => {
   }
 
   function restart() {
-    Assumptions.clear()
     start(state.seed, state.seeding)
   }
 
