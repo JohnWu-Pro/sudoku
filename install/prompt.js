@@ -52,10 +52,6 @@ function show() {
 
   button = $E('button', panel)
 
-  // Set properties
-  const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-  panel.style.top = Math.max(viewportHeight-52, 400) + 'px'
-
   // Slide in
   $on(button, () => button.style.left = button.offsetWidth + 'px')
   .perform('slide-in')
@@ -80,9 +76,9 @@ function hide() {
 function css() { return blockCommentOf(css) /*
   .install-prompt-panel {
     z-index: 999; position: absolute;
-    margin: 2px 0;
-    width: 44%;
-    left: 56%; top: 650px;
+    margin: clamp(1.8px, 0.5vmin, 2.1px) 0;
+    width: 64vw;
+    left: 36vw; top: 93.6vh;
     text-align: right;
     overflow: hidden;
   }
@@ -90,14 +86,15 @@ function css() { return blockCommentOf(css) /*
   .install-prompt-panel > button {
     position: relative;
     border: 1px outset #eaeaea;
-    border-radius: 24px 0 0 24px;
-    padding: 6px 12px 6px 18px;
+    border-radius: clamp(21.6px, 6vmin, 25.2px) 0 0 clamp(21.6px, 6vmin, 25.2px);
+    padding: clamp(5.4px, 1.5vmin, 6.3px) clamp(10.8px, 3vmin, 12.6px) clamp(5.4px, 1.5vmin, 6.3px) clamp(16.2px, 4.5vmin, 18.9px);
     display: inline-block;
-    font: normal 18px '宋体';
+    font: normal clamp(14.4px, 4vmin, 16.8px) '宋体';
     text-align: center;
     cursor: pointer;
     background: #f0f0ff;
     color: #e066ff;
+    white-space: nowrap;
   }
 
   .install-prompt-panel > button.slide-in {
@@ -112,15 +109,15 @@ function css() { return blockCommentOf(css) /*
 
   .install-prompt-panel > button > img {
     position: relative;
-    top: 2px;
-    height: 24px;
-    width: 24px;
+    top: clamp(1.8px, 0.5vmin, 2.1px);
+    height: clamp(21.6px, 6vmin, 25.2px);
+    width: clamp(21.6px, 6vmin, 25.2px);
   }
 
   .install-prompt-panel > button > span {
     position: relative;
-    top: -4px;
-    padding: 0 4px;
+    top: clamp(-4.2px, -1vmin, -3.6px);
+    padding: 0 clamp(3.6px, 1vmin, 4.2px);
   }
 */}
 
