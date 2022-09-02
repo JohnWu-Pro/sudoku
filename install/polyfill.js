@@ -164,7 +164,7 @@ function css() { return blockCommentOf(css) /*
     border-radius: 6px;
     padding: 6px 18px;
     display: inline-block;
-    font: normal 18px '宋体';
+    font: normal 18px 'New Times Roman';
     text-align: center;
     cursor: pointer;
     background: #f0f0ff;

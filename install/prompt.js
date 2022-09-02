@@ -89,7 +89,7 @@ function css() { return blockCommentOf(css) /*
     border-radius: clamp(21.6px, 6vmin, 25.2px) 0 0 clamp(21.6px, 6vmin, 25.2px);
     padding: clamp(5.4px, 1.5vmin, 6.3px) clamp(10.8px, 3vmin, 12.6px) clamp(5.4px, 1.5vmin, 6.3px) clamp(16.2px, 4.5vmin, 18.9px);
     display: inline-block;
-    font: normal clamp(14.4px, 4vmin, 16.8px) '宋体';
+    font: normal clamp(16.2px, 4.5vmin, 18.9px) 'New Times Roman';
     text-align: center;
     cursor: pointer;
     background: #f0f0ff;
