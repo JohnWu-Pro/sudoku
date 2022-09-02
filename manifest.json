@@ -5,7 +5,7 @@
   "categories": ["game", "sudoku"],
   "id": "/sudoku/index.html",
   "start_url": "/sudoku/index.html?mode=standalone",
-  "scope": "/",
+  "scope": "/sudoku/",
   "related_applications": [{
     "platform": "webapp",
     "url": "https://ejfun.natapp4.cc/sudoku/manifest.json"
