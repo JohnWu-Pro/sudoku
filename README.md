@@ -4,4 +4,4 @@ This is an installable online Sudoku web application. It is still under contruct
 
 The main goal of the application is to replace pencil and eraser while playing Sudoku.
 
-The game can be accessed at [index.html](/index.html).
+The game can be accessed at [Installable Online Sudoku](https://johnwu-pro.github.io/sudoku/index.html).
