@@ -163,10 +163,8 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function onStart(event) {
     // const option = firstOf(event.target.selectedOptions)
-    let [matched, key, value] = event.target.value.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
+    const [matched, key, value] = event.target.value.match(/^assume ([A-Z]\d+) is (\d+)$/) ?? []
     if(!matched) return
-
-    value = Number(value)
 
     push(new Assumption(key, value))
     // console.debug("Started %o, assumptions: %o", peek(), [...assumptions])

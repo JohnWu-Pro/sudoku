@@ -63,9 +63,9 @@ window.Seed = window.Seed ?? (() => {
   }
 
   /**
-   * Parse the string puzzle into a 2-demention number matrix (0 indicates empty cell).
+   * Parse the Sudoku givens string into a 2-dimention character matrix (cell values are '' or '1'..'9').
    *
-   * Digit 1-9 indicates a valid value for a cell,
+   * '1'..'9' indicates a non-empty value for a cell,
    * '.' or '0' indicates an empty cell,
    * all other characters will be siliently ignored.
    *
@@ -97,15 +97,13 @@ window.Seed = window.Seed ?? (() => {
    *  . 9 . | 1 5 . | . . .
    *  . . 8 | . . . | 1 . .
    *
-   * @param {string} puzzle the Sudoku given numbers in string
-   * @return {array} a 2-demention number matrix
+   * @param {string} puzzle the Sudoku givens in string
+   * @return {array} a 2-dimention character matrix
    */
   function parse(puzzle) {
     // console.debug("[DEBUG] Calling parse(\n%s) ...", puzzle)
 
-    const dot = '.'.codePointAt(0)
-    const zero = '0'.codePointAt(0)
-    const nine = '9'.codePointAt(0)
+    const empty = new Set(['.', '0'])
 
     const result = Array(CONFIG.scale)
 
@@ -116,9 +114,9 @@ window.Seed = window.Seed ?? (() => {
         do {
           if(index >= length) throw Error('Invalid puzzle input:\n' + puzzle)
 
-          const cp = puzzle.codePointAt(index++)
-          value = cp === dot ? 0 : (zero <= cp && cp <= nine) ? (cp - zero) : -1
-        } while(value === -1)
+          const char = puzzle.charAt(index++)
+          value = empty.has(char) ? '' : Cell.CANDIDATES.has(char) ? char : undefined
+        } while(value === undefined)
         row[colIndex] = value
       }
       result[rowIndex] = row

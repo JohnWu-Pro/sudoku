@@ -1,11 +1,11 @@
 'use strict';
 
 class Cell {
-  static CANDIDATES = new Set(Array(CONFIG.scale).fill(0).map((_, i) => 1+i))
+  static CANDIDATES = new Set(Array(CONFIG.scale).fill(0).map((_, i) => '123456789'.charAt(i)))
   static tracer
 
   #key
-  #value // single value (0, or 1..max), or values array
+  #value // single value ('', or '1'..'9'), or string of '1'..'9' (sorted)
   #cssClass // CSS decoration class when rendering the value
   #status // pending | seed | settled
 
@@ -19,11 +19,11 @@ class Cell {
   get key() { return this.#key }
 
   get value() { return this.#value }
-  set value(val) {
+  set value(val) { // accepts '', single-char string, multi-char string, or array (of single-char string)
     if(this.#status === 'seed') return
 
     val = Cell.#normalize(val)
-    if(Cell.#isEqual(val, this.#value)) return
+    if(val === this.#value) return
 
     Cell.tracer.push(this)
 
@@ -35,12 +35,11 @@ class Cell {
   get cssClass() { return this.#cssClass }
 
   get candidates() {
-    const array = Array.isArray(this.#value) ? this.#value : (this.#value ? [this.#value] : [])
-    return new Set(array)
+    return new Set(this.#value.split(''))
   }
 
-  get settled() { // single value in 1..max
-    return Array.isArray(this.#value) ? false : this.#value !== 0
+  get settled() { // single-char of '1'..'9'
+    return Cell.CANDIDATES.has(this.#value)
   }
 
   focus(on) {
@@ -48,11 +47,8 @@ class Cell {
   }
 
   render() {
-    let text = Array.isArray(this.#value) ? this.#value.join('') : (this.#value || '')
-    if(text.length > 4) text = '...'
-
-    let decoration = this.#cssClass
-    if(this.#value === 0) decoration = '', text = '&nbsp;'
+    const text = this.#value === '' ? '&nbsp;' : this.#value.length <= 4 ? this.#value : '...'
+    const decoration = this.#value === '' ? '' : this.#cssClass
 
     this.div().innerHTML =
       `<div class="value ${this.#status} ${decoration}">${text}</div>`
@@ -64,28 +60,18 @@ class Cell {
 
   static #normalize(val) {
     if(! val) {
-      return 0
+      return ''
     } else if(Array.isArray(val)) {
-      return val.length === 0 ? 0 : (val.length === 1 ? Cell.#norm(val[0]) : val.sort())
+      return val.length === 0 ? '' : (val.length === 1 ? Cell.#norm(val[0]) : val.sort().join(''))
+    } else if(val.length > 1) { // multi-char string
+      return val.split('').sort().join('')
     } else {
       return Cell.#norm(val)
     }
   }
 
   static #norm(val) {
-    return (0 < val && val <= CONFIG.scale) ? val : 0
-  }
-
-  static #isEqual(val1, val2) {
-    if(Array.isArray(val1) && Array.isArray(val2)) {
-      if(val1.length !== val2.length) return false
-
-      for(let i=0; i<val1.length; i++) {
-        if(val1[i] !== val2[i]) return false
-      }
-      return true
-    } else {
-      return val1 === val2
-    }
+    val = String(val)
+    return Cell.CANDIDATES.has(val) ? val : ''
   }
 }

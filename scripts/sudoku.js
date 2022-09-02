@@ -145,7 +145,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     const cell = state.cells.get(state.focused)
 
     if(state.seeding) {
-      cell.value = cell.value === number ? 0 : number
+      cell.value = cell.value === number ? '' : number
     } else {
       const candidates = cell.candidates
       if(!candidates.delete(number)) candidates.add(number)
@@ -186,7 +186,7 @@ window.Sudoku = window.Sudoku ?? (() => {
     if(!state.focused) return
 
     const cell = state.cells.get(state.focused)
-    cell.value = 0
+    cell.value = ''
     onCellValueChanged(cell)
   }
 
