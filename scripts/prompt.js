@@ -50,6 +50,7 @@ window.Prompt = window.Prompt ?? (() => {
       margin: 3px;
       padding: 3px 6px;
       border: 2px solid;
+      border-radius: clamp(3.6px, 1vmin, 4.2px);
     }
 
     .app-prompt-panel > .message.slide-in {
