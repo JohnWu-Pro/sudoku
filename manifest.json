@@ -3,12 +3,12 @@
   "short_name": "Sudoku",
   "description": "Installable free online Sudoku web application",
   "categories": ["game", "sudoku"],
-  "id": "/index.html",
-  "start_url": "/index.html?mode=standalone",
+  "id": "/sudoku/index.html",
+  "start_url": "/sudoku/index.html?mode=standalone",
   "scope": "/",
   "related_applications": [{
     "platform": "webapp",
-    "url": "https://ejfun.natapp4.cc/manifest.json"
+    "url": "https://ejfun.natapp4.cc/sudoku/manifest.json"
   },{
     "platform": "webapp",
     "url": "https://johnwu-pro.github.io/sudoku/manifest.json"
