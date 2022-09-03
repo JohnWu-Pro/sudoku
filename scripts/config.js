@@ -1,6 +1,6 @@
 'use strict';
 
-const CONFIG = {
+const Config = {
   box: 3,
   scale: 9,
 

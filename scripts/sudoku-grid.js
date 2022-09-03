@@ -3,8 +3,8 @@
 window.Grid = window.Grid ?? (() => {
   const LETTERS = 'ABCDEFGHIJKLMOPQ'
 
-  const ROWS = Array(CONFIG.scale).fill(0).map((_, i) => 1+i)
-  const COLUMNS = Array(CONFIG.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
+  const ROWS = Array(Config.scale).fill(0).map((_, i) => 1+i)
+  const COLUMNS = Array(Config.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
 
   const HOUSES = {
     row: {},       // rowId:   [keys in row]
@@ -18,11 +18,11 @@ window.Grid = window.Grid ?? (() => {
 
     COLUMNS.forEach(colId => HOUSES.column[colId] = ROWS.map(rowId => keyOf(rowId, colId)))
 
-    for(let topRowId = 1; topRowId <= CONFIG.scale; topRowId += CONFIG.box) {
-      for(let leftCol = 0; leftCol < CONFIG.scale; leftCol += CONFIG.box) {
+    for(let topRowId = 1; topRowId <= Config.scale; topRowId += Config.box) {
+      for(let leftCol = 0; leftCol < Config.scale; leftCol += Config.box) {
         const keys = []
-        for(let rowId = topRowId; rowId < topRowId+CONFIG.box; rowId++) {
-          for(const colId of LETTERS.substring(leftCol, leftCol + CONFIG.box)) {
+        for(let rowId = topRowId; rowId < topRowId+Config.box; rowId++) {
+          for(const colId of LETTERS.substring(leftCol, leftCol + Config.box)) {
             keys.push(keyOf(rowId, colId))
           }
         }
@@ -65,8 +65,8 @@ window.Grid = window.Grid ?? (() => {
   }
 
   function boxKeyOf(rowId, colId) {
-    const leftCol = Math.floor(LETTERS.indexOf(colId) / CONFIG.box) * CONFIG.box
-    const topRowId = Math.floor((rowId - 1) / CONFIG.box) * CONFIG.box + 1
+    const leftCol = Math.floor(LETTERS.indexOf(colId) / Config.box) * Config.box
+    const topRowId = Math.floor((rowId - 1) / Config.box) * Config.box + 1
     return keyOf(topRowId, LETTERS.substring(leftCol, leftCol + 1))
   }
 

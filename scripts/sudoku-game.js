@@ -5,7 +5,7 @@ window.Game = window.Game ?? (() => {
   const DONE_BUTTON_LABEL = 'Givens are Ready'
 
   var timer = null
-  var $seedFilled = null
+  var $givensFilled = null
 
   function init() {
     const $header = $E('div.header')
@@ -18,6 +18,7 @@ window.Game = window.Game ?? (() => {
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
             <option value="Expert">Expert</option>
+            <!-- <option value="Import">Import Givens</option> -->
             <option value="Manual">Manually Input Givens</option>
           </select>
         </div>
@@ -36,12 +37,12 @@ window.Game = window.Game ?? (() => {
 
     $E('.commands .buttons').innerHTML = `
       <button class="block border" id="undo"><span> Undo</span></button>
-      <button class="block border hidden" id="seed-filled">${DONE_BUTTON_LABEL}</button>
+      <button class="block border hidden" id="givens-filled">${DONE_BUTTON_LABEL}</button>
       <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
       <button class="block border" id="clean"><span>Erase </span></button>
     `
-    $seedFilled = $E('button#seed-filled')
-    $seedFilled.addEventListener('click', onSeedFilled)
+    $givensFilled = $E('button#givens-filled')
+    $givensFilled.addEventListener('click', onGivensFilled)
 
     timer = new Timer('.header .buttons .timer')
 
@@ -53,20 +54,20 @@ window.Game = window.Game ?? (() => {
     if(! selected) return
 
     if(selected === 'Manual') {
-      Promise.resolve(Seed.EMPTY)
-      .then((seed) => Board.load(seed, true)) // to start manual seeding
+      Promise.resolve(Givens.EMPTY)
+      .then((givens) => Board.load(givens, true)) // to start manual given filling
       Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
-      $show($seedFilled)
+      $show($givensFilled)
     } else {
-      $hide($seedFilled)
+      $hide($givensFilled)
       start(selected)
     }
     event.target.value = ''
   }
 
   function start(level) {
-    return Seed.get(level ?? 'Easy') // TODO: based on Config
-    .then((seed) => Board.load(seed))
+    return Givens.get(level ?? 'Easy') // TODO: based on Config
+    .then((givens) => Board.load(givens))
     .then(() => timer.start())
     .then(promptUsage)
     .catch((error) => Prompt.error(error))
@@ -87,17 +88,17 @@ window.Game = window.Game ?? (() => {
     .then(() => timer.start())
   }
 
-  function onSeedFilled() {
-    $hide($seedFilled)
-    Promise.resolve(Seed.FILLED)
-    .then((seed) => Board.load(seed))
+  function onGivensFilled() {
+    $hide($givensFilled)
+    Promise.resolve(Givens.FILLED)
+    .then((givens) => Board.load(givens))
     .then(() => timer.start())
     .then(promptUsage)
   }
 
   let prompted = 0
   function promptUsage() {
-    if(prompted++ < 3) Prompt.info('Tap or click the cell for more assistive options.')
+    if(prompted++ < 3) Prompt.info('Tap or click the cell for more auxiliary options.')
   }
 
   return {

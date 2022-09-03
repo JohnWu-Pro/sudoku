@@ -20,8 +20,8 @@ button {
 
 .header {
   width: clamp(345.6px, 96vmin, 403.2px);
-  margin-top: clamp(6.4px, 1vmax, 9px);
-  margin-bottom: clamp(2.56px, 0.4vmax, 3.6px);
+  margin: clamp(6.4px, 1vmax, 9px);
+  margin-bottom: clamp(5.12px, 0.8vmax, 7.2px);
   margin-left: auto;
   margin-right: auto;
 }
@@ -220,7 +220,7 @@ button {
   transform: translateY(-50%);
 }
 
-.grid .cell .value.seed {
+.grid .cell .value.given {
   color: black;
 }
 
@@ -330,7 +330,7 @@ button {
 .commands #undo::before {
   content: '⎌'
 }
-.commands #seed-filled {
+.commands #givens-filled {
   color: navy;
   font-weight: bold;
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-window.Seed = window.Seed ?? (() => {
+window.Givens = window.Givens ?? (() => {
 
   const EMPTY = 'EMPTY'
   const FILLED = 'FILLED'
@@ -32,10 +32,15 @@ window.Seed = window.Seed ?? (() => {
   const generator = new qqwing()
 
   /**
-   * Get a Sudoku's seed data by the given difficulty level and symmetry.
+   * Get a Sudoku givens by the specified difficulty level and symmetry.
+   *
+   * The givens are expected to be an array, each element represents a row.
+   * Each row itself is an array, each element represents a cell in that row.
+   * The cell value can be '1', '2', ..., '9', or empty ('').
    *
    * @param {enum} level Any, Easy, Medium, Hard, Expert
    * @param {enum} symmetry None, Rotate90, Rotate180, Mirror, Flip, Random
+   * @return {array} the givens, wrapped in a Promise
    */
   function get(level, symmetry) {
     return new Promise((resolve, reject) => {
@@ -105,12 +110,12 @@ window.Seed = window.Seed ?? (() => {
 
     const empty = new Set(['.', '0'])
 
-    const result = Array(CONFIG.scale)
+    const result = Array(Config.scale)
 
     let index = 0, value, length = puzzle.length
-    for(let rowIndex = 0; rowIndex < CONFIG.scale; rowIndex++) {
-      const row = Array(CONFIG.scale)
-      for(let colIndex = 0; colIndex < CONFIG.scale; colIndex++) {
+    for(let rowIndex = 0; rowIndex < Config.scale; rowIndex++) {
+      const row = Array(Config.scale)
+      for(let colIndex = 0; colIndex < Config.scale; colIndex++) {
         do {
           if(index >= length) throw Error('Invalid puzzle input:\n' + puzzle)
 
@@ -128,8 +133,6 @@ window.Seed = window.Seed ?? (() => {
   return {
     EMPTY,
     FILLED,
-    Difficulty,
-    Symmetry,
     parse,
     get
   }

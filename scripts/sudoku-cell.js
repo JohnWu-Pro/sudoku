@@ -1,26 +1,26 @@
 'use strict';
 
 class Cell {
-  static CANDIDATES = new Set(Array(CONFIG.scale).fill(0).map((_, i) => '123456789'.charAt(i)))
+  static CANDIDATES = new Set(Array(Config.scale).fill(0).map((_, i) => '123456789'.charAt(i)))
   static tracer
 
   #key
   #value // single value ('', or '1'..'9'), or string of '1'..'9' (sorted)
   #cssClass // CSS decoration class when rendering the value
-  #status // pending | seed | settled
+  #status // pending | given | settled
 
   constructor(key, val, cssClass, status) {
     this.#key = key
     this.#value = Cell.#normalize(val)
     this.#cssClass = cssClass ?? Cell.tracer.cssClass
-    this.#status = this.settled ? (status === 'seed' ? 'seed' : 'settled') : 'pending'
+    this.#status = this.settled ? (status === 'given' ? 'given' : 'settled') : 'pending'
   }
 
   get key() { return this.#key }
 
   get value() { return this.#value }
-  set value(val) { // accepts '', single-char string, multi-char string, or array (of single-char string)
-    if(this.#status === 'seed') return
+  set value(val) { // accept '', single-char string, multi-char string, or array (of single-char string)
+    if(this.#status === 'given') return
 
     val = Cell.#normalize(val)
     if(val === this.#value) return

@@ -3,9 +3,9 @@
 window.Board = window.Board ?? (() => {
   const state = {
     cells: new Map(),
-    seed: [],
+    givens: [],
     focused: null,
-    seeding: false
+    fillingGivens: false
   }
 
   var $numbers = [undefined], $eliminateByRules
@@ -50,37 +50,37 @@ window.Board = window.Board ?? (() => {
   }
 
   /**
-   * Load the Sudoku grid with the given seed.
+   * Load the Sudoku grid with the givens.
    *
-   * The seed is expected to be an array, each element represents a row.
+   * The givens are expected to be an array, each element represents a row.
    * Each row itself is an array, each element represents a cell in that row.
    * The cell value can be '1', '2', ..., '9', or empty ('').
    *
-   * @param {array} seed the Sudoku given numbers
-   * @param {boolean} seeding whether to start manual seeding
+   * @param {array} givens the Sudoku given numbers
+   * @param {boolean} fillingGivens whether to start manual fillingGivens
    */
-  function load(seed, seeding = false) {
+  function load(givens, fillingGivens = false) {
     Assumptions.clear()
 
-    state.seed = seed
-    state.seeding = seeding
+    state.givens = givens
+    state.fillingGivens = fillingGivens
 
-    if(seed === Seed.EMPTY) {
+    if(givens === Givens.EMPTY) {
       Grid.keys().forEach(key =>
         state.cells.set(key, new Cell(key, 0))
       )
-    } else if(seed === Seed.FILLED) {
+    } else if(givens === Givens.FILLED) {
       state.cells.forEach(cell => {
-        if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'seed'))
+        if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'given'))
       })
-      state.seed = seedFrom(state.cells)
-      console.debug("[DEBUG] Filled seed: %o", state.seed)
+      state.givens = givensFrom(state.cells)
+      console.debug("[DEBUG] Filled givens: %o", state.givens)
     } else {
       Grid.ROWS.forEach((rowId, rowIndex) => {
-        const row = seed[rowIndex]
+        const row = givens[rowIndex]
         Grid.COLUMNS.forEach((colId, colIndex) => {
           const key = Grid.keyOf(rowId, colId)
-          state.cells.set(key, new Cell(key, row[colIndex], undefined, 'seed'))
+          state.cells.set(key, new Cell(key, row[colIndex], undefined, 'given'))
         })
       })
     }
@@ -101,11 +101,11 @@ window.Board = window.Board ?? (() => {
     return Promise.resolve()
   }
 
-  function seedFrom(cells) {
-    const result = Array(CONFIG.scale)
+  function givensFrom(cells) {
+    const result = Array(Config.scale)
 
     Grid.ROWS.forEach((rowId, rowIndex) => {
-      const row = Array(CONFIG.scale)
+      const row = Array(Config.scale)
       Grid.COLUMNS.forEach((colId, colIndex) => {
         row[colIndex] = cells.get(Grid.keyOf(rowId, colId)).value
       })
@@ -116,7 +116,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function reload() {
-    return load(state.seed, state.seeding)
+    return load(state.givens, state.fillingGivens)
   }
 
   function onFocus(key) {
@@ -129,7 +129,7 @@ window.Board = window.Board ?? (() => {
     cell.focus(true)
     highlightCandidates(cell)
 
-    if(state.seeding) return
+    if(state.fillingGivens) return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
@@ -148,7 +148,7 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(state.focused)
 
-    if(state.seeding) {
+    if(state.fillingGivens) {
       cell.value = cell.value === number ? '' : number
     } else {
       const candidates = cell.candidates
@@ -201,11 +201,8 @@ window.Board = window.Board ?? (() => {
   }
 
   function markCrossHatching(cell) {
-    if(cell && !cell.settled) return
-
-    clearCrossHatching()
-
-    if(!cell) return
+    if(cell.settled || cell.value !== '') clearCrossHatching()
+    if(!cell.settled) return
 
     const value = cell.value
     const markedKeys = new Set()
@@ -232,7 +229,7 @@ window.Board = window.Board ?? (() => {
     cell.render()
     highlightCandidates(cell)
 
-    if(state.seeding) return
+    if(state.fillingGivens) return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
