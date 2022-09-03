@@ -25,8 +25,9 @@ window.Game = window.Game ?? (() => {
           <span class="title">Sudoku</span>
         </div>
         <div class="buttons">
-          <button class="timer">0:00:00</button>
           <button class="restart" title="Restart"></button>
+          <span class="timer" title="Timer">0:00:00</span>
+          <button class="settings" title="Settings"></button>
         </div>
       </div>
     `

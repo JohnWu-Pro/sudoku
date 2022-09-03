@@ -20,19 +20,21 @@ button {
 
 .header {
   width: clamp(338.4px, 94vmin, 394.8px);
-  margin: clamp(4px, 1vmax, 6px) auto;
+  margin-top: clamp(3.84px, 0.6vmax, 5.4px);
+  margin-bottom: clamp(2.56px, 0.4vmax, 3.6px);
+  margin-left: clamp(9px, 2.5vmin, 10.5px);
+  margin-right: clamp(12.6px, 3.5vmin, 14.7px);
 }
 
 .header > div {
   background: #f2f2f2;
   display: flex;
-  width: 98.6%;
 }
 
 .header > div > div {
   position: relative;
   margin-top: auto;
-  bottom: 0;
+  margin-bottom: auto;
   flex: 1 1 0;
 }
 .header > div > :first-child {
@@ -70,6 +72,11 @@ button {
 .header .buttons > :first-child {
   margin: 0 auto 0 0 !important;
 }
+.header .buttons > :not(:first-child):not(:last-child) {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
 .header .buttons > :last-child {
   margin: 0 0 0 auto !important;
 }
@@ -79,36 +86,28 @@ button {
   src: url('fonts/digital-7.mono.ttf');
 }
 
-.header .buttons > button.timer {
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'Digital-7 Mono';
-  padding-right: 0;
+.header .buttons > .timer {
+  display: inline-block;
+  font: normal clamp(16.2px, 4.5vmin, 18.9px) 'Digital-7 Mono';
+  margin: auto;
 }
 
-.header .timer::after,
 .header .restart::after {
   content: '';
   display: inline-block;
-  background: border-box center/125% no-repeat;
+  /* U+21BA ↺ */
+  background: url('images/U21BA.restart.png') border-box center/125% no-repeat;
   position: relative;
   top: 18%;
   width: clamp(14.4px, 4vmin, 16.8px);
   height: clamp(14.4px, 4vmin, 16.8px);
 }
-.header .timer::after {
-  padding-left: clamp(4.32px, 1.2vmin, 5.04px);
-}
-.header .timer.running::after {
-  /* U+23F8⏸ */
-  background-image: url('images/U23F8.pause.png');
-}
-.header .timer.paused::after {
-  /* U+23F5⏵, U+25B6 ▶ */
-  background-image: url('images/U25B6.play.png');
-}
 
-.header .restart::after {
-  /* U+21BA ↺ */
-  background-image: url('images/U21BA.restart.png');
+.header .settings::after {
+  /* U+2699 ⚙ */
+  content: '⚙';
+  display: inline-block;
+  font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
 }
 
 .board {

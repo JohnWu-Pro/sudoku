@@ -127,8 +127,6 @@ function resolveStaticCachableResources(indexHtml) {
     CONTEXT_PATH + "/images/U2B73.down-arrow-to-bar.png",
     CONTEXT_PATH + "/images/U21A7.down-arrow-from-bar.png",
     CONTEXT_PATH + "/images/U21BA.restart.png",
-    CONTEXT_PATH + "/images/U23F8.pause.png",
-    CONTEXT_PATH + "/images/U25B6.play.png",
     ...styles.map(path => CONTEXT_PATH + '/' + path),
     ...scripts.map(path => CONTEXT_PATH + '/' + path),
     CONTEXT_PATH + "/LICENSE.txt"

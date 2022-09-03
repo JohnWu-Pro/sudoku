@@ -21,8 +21,7 @@ class Timer {
     this.#started = 0
     this.#status = 'stopped'
 
-    this.#$element.classList.add(this.#status)
-    this.#$element.addEventListener('click', () => this.#onClicked())
+    // this.#$element.classList.add(this.#status)
   }
 
   get elapsed() {
@@ -64,21 +63,6 @@ class Timer {
     this.#handle = 0
   }
 
-  #onClicked() {
-    switch (this.#status) {
-      case 'stopped':
-        // do-nothing
-        break;
-      case 'running':
-        this.pause()
-        break;
-      case 'paused':
-        this.resume()
-        break;
-      default:
-    }
-  }
-
   #tick() {
     this.#$element.innerHTML = Timer.format(this.#accumulated + Date.now() - this.#started)
   }
@@ -89,9 +73,9 @@ class Timer {
   }
 
   #setStatus(value) {
-    this.#$element.classList.remove(this.#status)
+    // this.#$element.classList.remove(this.#status)
     this.#status = value
-    this.#$element.classList.add(this.#status)
+    // this.#$element.classList.add(this.#status)
   }
 
   static format(millis) {
@@ -105,7 +89,7 @@ class Timer {
     let {value: mm, rem: _min} = mod(_hour, 60000)
     let {value: ss, rem: _sec} = mod(_min, 1000)
 
-    const dd = (n) => n < 10 ? '0' + n : n.toString()
+    const dd = (n) => n < 10 ? '0' + n : String(n)
     return `${h}:${dd(mm)}:${dd(ss)}`
   }
 }
