@@ -199,8 +199,11 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function onEnd(event) {
     const dataset = event.target.dataset
-    const id = dataset.id
-    const action = dataset.action
+    trigger(dataset.action, dataset.id)
+  }
+
+  function trigger(action, id) {
+    if(id === Assumption.ACCEPTED.id) return
 
     const index = assumptions.findIndex(it => it.id === id)
     const assumption = assumptions[index]
@@ -210,7 +213,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     // accept or reject
     const affected = action === 'accept' ? accept(id) : reject(id)
 
-    // trigger synthetic event to update the grid
+    // trigger synthetic event to update the board
     window.dispatchEvent(new CustomEvent(`assumption-${action}ed`, {
       detail: {affected}
     }))
@@ -245,6 +248,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     pop,
     push,
     render,
-    renderOptionsFor
+    renderOptionsFor,
+    trigger,
   }
 })()

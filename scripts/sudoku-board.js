@@ -5,7 +5,7 @@ window.Board = window.Board ?? (() => {
     cells: new Map(),
     givens: [],
     focused: null,
-    fillingGivens: false
+    status: '' // filling-givens | solving | solved
   }
 
   var $numbers = [undefined], $eliminateByRules
@@ -57,13 +57,13 @@ window.Board = window.Board ?? (() => {
    * The cell value can be '1', '2', ..., '9', or empty ('').
    *
    * @param {array} givens the Sudoku given numbers
-   * @param {boolean} fillingGivens whether to start manual fillingGivens
+   * @param {boolean} fillingGivens whether to start manually filling in givens
    */
   function load(givens, fillingGivens = false) {
     Assumptions.clear()
 
     state.givens = givens
-    state.fillingGivens = fillingGivens
+    state.status = fillingGivens ? 'filling-givens' : 'solving'
 
     if(givens === Givens.EMPTY) {
       Grid.keys().forEach(key =>
@@ -73,7 +73,7 @@ window.Board = window.Board ?? (() => {
       state.cells.forEach(cell => {
         if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'given'))
       })
-      state.givens = givensFrom(state.cells)
+      state.givens = matrixFrom(state.cells)
       console.debug("[DEBUG] Filled givens: %o", state.givens)
     } else {
       Grid.ROWS.forEach((rowId, rowIndex) => {
@@ -101,7 +101,7 @@ window.Board = window.Board ?? (() => {
     return Promise.resolve()
   }
 
-  function givensFrom(cells) {
+  function matrixFrom(cells) {
     const result = Array(Config.scale)
 
     Grid.ROWS.forEach((rowId, rowIndex) => {
@@ -116,7 +116,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function reload() {
-    return load(state.givens, state.fillingGivens)
+    return load(state.givens, state.status === 'filling-givens')
   }
 
   function onFocus(key) {
@@ -129,7 +129,7 @@ window.Board = window.Board ?? (() => {
     cell.focus(true)
     highlightCandidates(cell)
 
-    if(state.fillingGivens) return
+    if(state.status === 'filling-givens') return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
@@ -144,11 +144,12 @@ window.Board = window.Board ?? (() => {
   }
 
   function onKeyPress(number) {
+    if(state.status === 'solved') return
     if(!state.focused) return
 
     const cell = state.cells.get(state.focused)
 
-    if(state.fillingGivens) {
+    if(state.status === 'filling-givens') {
       cell.value = cell.value === number ? '' : number
     } else {
       const candidates = cell.candidates
@@ -160,6 +161,8 @@ window.Board = window.Board ?? (() => {
   }
 
   function onUndo() {
+    if(state.status === 'solved') return
+
     const assumption = Assumptions.peek()
     if(assumption.isEmpty()) {
       Prompt.info('No more step to undo!')
@@ -187,6 +190,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function onCleanFocused() {
+    if(state.status === 'solved') return
     if(!state.focused) return
 
     const cell = state.cells.get(state.focused)
@@ -229,16 +233,72 @@ window.Board = window.Board ?? (() => {
     cell.render()
     highlightCandidates(cell)
 
-    if(state.fillingGivens) return
+    if(state.status === 'filling-givens') return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
+    delay(1).then(() => validate(cell))
     Assumptions.renderOptionsFor(cell)
   }
 
   function updateCommands(settled) {
     $toggle($eliminateByRules, settled)
     $A('.commands .buttons button span').forEach(span => $toggle(span, !settled))
+  }
+
+  function validate(cell) {
+    if(!cell.settled) return
+
+    for(const [house, keys] of Grid.houses(cell.key)) {
+      if(duplicates(cell, keys)) {
+        Prompt.error(`Cell ${cell.key} value '${cell.value}' is duplicated in its ${house}.`)
+        return
+      }
+    }
+
+    if(isCompleted()) {
+      state.status = 'solved'
+      Assumptions.trigger('accept', Assumptions.peek().id)
+
+      // const givens = Givens.stringify(state.givens)
+      // const solution = Givens.stringify(matrixFrom(state.cells))
+      window.dispatchEvent(new CustomEvent('puzzle-solved' /* , {
+        detail: {givens, solution}
+      } */))
+    }
+  }
+
+  function duplicates(cell, keys) {
+    const {key, value} = cell
+    for(const k of keys) {
+      if(k === key) continue
+      const cell = state.cells.get(k)
+      if(cell.value === value) return true
+    }
+    return false
+  }
+
+  function isCompleted() {
+    for(const [house, houses] of Grid.HOUSES) {
+      for(const [houseId, keys] of houses) {
+        const values = new Set()
+        for(const key of keys) {
+          const {value, settled} = state.cells.get(key)
+          if(!settled) return false
+          if(values.has(value)) {
+            Prompt.error(`Cell ${key} value '${value}' is duplicated in ${singular(house)}-${houseId}.`)
+            return false
+          }
+          values.add(value)
+        }
+        if(values.size !== Config.scale) return false
+      }
+    }
+    return true
+  }
+
+  function singular(word) {
+    return word.replaceAll(/e?s$/g, '')
   }
 
   function onEliminateByRules() {

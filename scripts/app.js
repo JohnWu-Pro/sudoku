@@ -6,8 +6,9 @@ window.App = window.App ?? (() => {
 
   function run() {
     $E('div.footer').innerHTML = `
-      &copy; 2022 <a href="mailto: johnwu.pro@gmail.com" target="_blank">John Wu</a>,
-      Licensed under the <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License Detail">MPL-2.0</a>。
+      <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">Copyright &copy; 2022</a>
+      <a href="mailto: johnwu.pro@gmail.com" target="_blank">John Wu</a>,
+      Licensed under the <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
     `
 
     document.addEventListener("visibilitychange", () => {

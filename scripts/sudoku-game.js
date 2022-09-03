@@ -46,6 +46,8 @@ window.Game = window.Game ?? (() => {
 
     timer = new Timer('.header .buttons .timer')
 
+    window.addEventListener("puzzle-solved", onSolved)
+
     return Board.init()
   }
 
@@ -94,6 +96,15 @@ window.Game = window.Game ?? (() => {
     .then((givens) => Board.load(givens))
     .then(() => timer.start())
     .then(promptUsage)
+  }
+
+  function onSolved() {
+    timer.stop()
+    Prompt.success(`
+      Congratulations!<br>
+      You solved this Sudoku game in ${Timer.format(timer.elapsed)}.<br>
+      Keep going!
+      `)
   }
 
   let prompted = 0

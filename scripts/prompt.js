@@ -11,10 +11,10 @@ window.Prompt = window.Prompt ?? (() => {
     $panel.innerHTML = ''
   }
 
-  function message(type, text) {
+  function message(type, html) {
     $panel.innerHTML = `
       <div class="message">
-        <span class="${type}">${text}</span>
+        <span class="${type}">${html}</span>
       </div>
       `
     $on($E('div', $panel), (div) => div.style.top = div.offsetHeight + 'px')
@@ -85,13 +85,15 @@ window.Prompt = window.Prompt ?? (() => {
   */
   }
 
+  //
+  // Initialize
+  //
+  document.addEventListener("DOMContentLoaded", init)
+
   return {
-    init,
-    info: (text) => message('info', text),
-    warn: (text) => message('warn', text),
-    error: (text) => message('error', text),
-    success: (text) => message('success', text)
+    info: (html) => message('info', html),
+    warn: (html) => message('warn', html),
+    error: (html) => message('error', html),
+    success: (html) => message('success', html)
   }
 })()
-
-document.addEventListener("DOMContentLoaded", Prompt.init)
