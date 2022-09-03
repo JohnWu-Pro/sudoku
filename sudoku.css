@@ -19,16 +19,18 @@ button {
 }
 
 .header {
-  width: clamp(338.4px, 94vmin, 394.8px);
-  margin-top: clamp(3.84px, 0.6vmax, 5.4px);
+  width: clamp(345.6px, 96vmin, 403.2px);
+  margin-top: clamp(6.4px, 1vmax, 9px);
   margin-bottom: clamp(2.56px, 0.4vmax, 3.6px);
-  margin-left: clamp(9px, 2.5vmin, 10.5px);
-  margin-right: clamp(12.6px, 3.5vmin, 14.7px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .header > div {
   background: #f2f2f2;
   display: flex;
+  margin-left: 0;
+  margin-right: clamp(7.2px, 2vmin, 8.4px);
 }
 
 .header > div > div {
@@ -411,10 +413,10 @@ button {
 
 .footer {
   position: absolute;
-  width: 100vmin;
+  width: 100%;
   margin: 0.6vmin auto;
   text-align: center;
   font: clamp(10.8px, 3vmin, 12.6px) 'New Times Roman';
   color: #d0d0d0;
-  top: 96vmax;
+  top: 96%;
 }
