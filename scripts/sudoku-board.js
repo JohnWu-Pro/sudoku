@@ -50,14 +50,16 @@ window.Board = window.Board ?? (() => {
   }
 
   /**
-   * Show the Sudoku grid. The seed should be an array, each element represents a row.
+   * Load the Sudoku grid with the given seed.
+   *
+   * The seed is expected to be an array, each element represents a row.
    * Each row itself is an array, each element represents a cell in that row.
-   * The cell value can be 1, 2, 3, ..., max. And the zero (`0`) indicates no value yet.
+   * The cell value can be '1', '2', ..., '9', or empty ('').
    *
    * @param {array} seed the Sudoku given numbers
    * @param {boolean} seeding whether to start manual seeding
    */
-  function start(seed, seeding = false) {
+  function load(seed, seeding = false) {
     Assumptions.clear()
 
     state.seed = seed
@@ -113,8 +115,8 @@ window.Board = window.Board ?? (() => {
     return result
   }
 
-  function restart() {
-    return start(state.seed, state.seeding)
+  function reload() {
+    return load(state.seed, state.seeding)
   }
 
   function onFocus(key) {
@@ -289,7 +291,7 @@ window.Board = window.Board ?? (() => {
   return {
     init,
     // save & restore,
-    start,
-    restart,
+    load,
+    reload,
   }
 })()

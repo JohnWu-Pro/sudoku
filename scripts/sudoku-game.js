@@ -43,6 +43,7 @@ window.Game = window.Game ?? (() => {
     $seedFilled.addEventListener('click', onSeedFilled)
 
     timer = new Timer('.header .buttons .timer')
+
     return Board.init()
   }
 
@@ -52,7 +53,7 @@ window.Game = window.Game ?? (() => {
 
     if(selected === 'Manual') {
       Promise.resolve(Seed.EMPTY)
-      .then((seed) => Board.start(seed, true)) // to start manual seeding
+      .then((seed) => Board.load(seed, true)) // to start manual seeding
       Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
       $show($seedFilled)
     } else {
@@ -64,36 +65,45 @@ window.Game = window.Game ?? (() => {
 
   function start(level) {
     return Seed.get(level ?? 'Easy') // TODO: based on Config
-    .then((seed) => Board.start(seed))
+    .then((seed) => Board.load(seed))
     .then(() => timer.start())
     .then(promptUsage)
     .catch((error) => Prompt.error(error))
   }
 
+  function pause() {
+    // pause
+    // save the state
+  }
+
+  function resume() {
+    // might need to restore state first
+    // resume
+  }
+
   function onRestart() {
-    Board.restart()
+    Board.reload()
     .then(() => timer.start())
   }
 
   function onSeedFilled() {
     $hide($seedFilled)
     Promise.resolve(Seed.FILLED)
-    .then((seed) => Board.start(seed))
+    .then((seed) => Board.load(seed))
     .then(() => timer.start())
     .then(promptUsage)
   }
 
   let prompted = 0
   function promptUsage() {
-    if(prompted++ < 3) Prompt.info('Tap or click the cell for more assistive actions.')
+    if(prompted++ < 3) Prompt.info('Tap or click the cell for more assistive options.')
   }
 
   return {
     init,
     start,
-    // pause (and save), (restore then) resume
+    pause,
+    resume
   }
 
 })()
-
-document.addEventListener("DOMContentLoaded", Game.run)

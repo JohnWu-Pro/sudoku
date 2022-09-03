@@ -65,10 +65,9 @@ window.App = window.App ?? (() => {
     return scripts
   }
 
-  return {
-    run
-  }
+  //
+  // Initialize
+  //
+  document.addEventListener("DOMContentLoaded", run)
 
 })()
-
-document.addEventListener("DOMContentLoaded", App.run)
