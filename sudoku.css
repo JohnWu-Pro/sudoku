@@ -94,22 +94,17 @@ button {
   margin: auto;
 }
 
-.header .restart::after {
-  content: '';
+.header .buttons > button::after {
   display: inline-block;
-  /* U+21BA ↺ */
-  background: url('images/U21BA.restart.png') border-box center/125% no-repeat;
-  position: relative;
-  top: 18%;
-  width: clamp(14.4px, 4vmin, 16.8px);
-  height: clamp(14.4px, 4vmin, 16.8px);
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
 }
-
+.header .restart::after {
+  /* U+21BB ↻*/
+  content: '↻';
+}
 .header .settings::after {
   /* U+2699 ⚙ */
   content: '⚙';
-  display: inline-block;
-  font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
 }
 
 .board {
