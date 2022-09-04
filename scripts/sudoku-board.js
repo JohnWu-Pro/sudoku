@@ -8,7 +8,7 @@ window.Board = window.Board ?? (() => {
     status: '' // filling-givens | solving | solved
   }
 
-  var $numbers = [undefined], $eliminateByRules
+  var $numbers = [undefined], $counts = [undefined], $eliminateByRules
 
   function init() {
     const $grid = $E('div.grid')
@@ -29,11 +29,16 @@ window.Board = window.Board ?? (() => {
     const $keys = $E('div.keys')
     const numbers = Array(...Cell.CANDIDATES)
     $keys.innerHTML = numbers.reduce((html, number) => html + `
-      <div class="key key-${number}"><div class="value">${number}</div></div>`, '')
+      <div class="key key-${number}">
+        <div class="value">${number}</div>
+        <div class="count">0</div>
+      </div>
+      `, '')
     numbers.forEach((number) => {
       const $number = $E('div.key-'+number, $keys)
       $numbers.push($number)
       $number.addEventListener('click', () => onKeyPress(number))
+      $counts.push($E('div.count', $number))
     })
 
     const $commands = $E('div.commands')
@@ -94,6 +99,7 @@ window.Board = window.Board ?? (() => {
 
     clearCrossHatching()
     highlightCandidates()
+    updateNumberCounts()
     updateCommands(true)
     Assumptions.render()
     Assumptions.renderOptionsFor()
@@ -237,13 +243,26 @@ window.Board = window.Board ?? (() => {
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
-    delay(1).then(() => validate(cell))
+    delay(0)
+    .then(() => updateNumberCounts())
+    .then(() => validate(cell))
     Assumptions.renderOptionsFor(cell)
   }
 
   function updateCommands(settled) {
     $toggle($eliminateByRules, settled)
     $A('.commands .buttons button span').forEach(span => $toggle(span, !settled))
+  }
+
+  function updateNumberCounts() {
+    const counts = Array(Config.scale + 1).fill(0)
+    state.cells.forEach(({value, settled}) => {
+      if(settled) counts[Number(value)]++
+    })
+
+    for(let index=1; index<=Config.scale; index++) {
+      $counts[index].innerHTML = counts[index]
+    }
   }
 
   function validate(cell) {
