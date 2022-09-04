@@ -7,13 +7,13 @@ class Cell {
   #key
   #value // single value ('', or '1'..'9'), or string of '1'..'9' (sorted)
   #cssClass // CSS decoration class when rendering the value
-  #status // pending | given | settled
+  #status // pending | given | solved
 
   constructor(key, val, cssClass, status) {
     this.#key = key
     this.#value = Cell.#normalize(val)
     this.#cssClass = cssClass ?? Cell.tracer.cssClass
-    this.#status = this.settled ? (status === 'given' ? 'given' : 'settled') : 'pending'
+    this.#status = this.solved ? (status === 'given' ? 'given' : 'solved') : 'pending'
   }
 
   get key() { return this.#key }
@@ -29,7 +29,7 @@ class Cell {
 
     this.#value = val
     this.#cssClass = Cell.tracer.cssClass
-    this.#status = this.settled ? 'settled' : 'pending'
+    this.#status = this.solved ? 'solved' : 'pending'
   }
 
   get cssClass() { return this.#cssClass }
@@ -38,7 +38,7 @@ class Cell {
     return new Set(this.#value.split(''))
   }
 
-  get settled() { // single-char of '1'..'9'
+  get solved() { // single-char of '1'..'9'
     return Cell.CANDIDATES.has(this.#value)
   }
 

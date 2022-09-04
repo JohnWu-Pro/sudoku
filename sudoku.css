@@ -256,7 +256,7 @@ button {
   top: 10%;
 }
 
-.grid .cell .value.settled {
+.grid .cell .value.solved {
   color: blue;
 }
 

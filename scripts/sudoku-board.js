@@ -76,7 +76,7 @@ window.Board = window.Board ?? (() => {
       )
     } else if(givens === Givens.FILLED) {
       state.cells.forEach(cell => {
-        if(cell.settled) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'given'))
+        if(cell.solved) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'given'))
       })
       state.givens = matrixFrom(state.cells)
       console.debug("[DEBUG] Filled givens: %o", state.givens)
@@ -139,7 +139,7 @@ window.Board = window.Board ?? (() => {
 
     if(state.status === 'filling-givens') return
 
-    updateCommands(cell.settled)
+    updateCommands(cell.solved)
     markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
@@ -213,8 +213,8 @@ window.Board = window.Board ?? (() => {
   }
 
   function highlightSameValue(cell) {
-    if(cell.settled || cell.value !== '') clearSameValue()
-    if(!cell.settled) return
+    if(cell.solved || cell.value !== '') clearSameValue()
+    if(!cell.solved) return
 
     const {value} = cell
     state.cells.forEach(same => {
@@ -230,8 +230,8 @@ window.Board = window.Board ?? (() => {
   }
 
   function markCrossHatching(cell) {
-    if(cell.settled || cell.value !== '') clearCrossHatching()
-    if(!cell.settled) return
+    if(cell.solved || cell.value !== '') clearCrossHatching()
+    if(!cell.solved) return
 
     const {value} = cell
     const markedKeys = new Set()
@@ -240,7 +240,7 @@ window.Board = window.Board ?? (() => {
 
       Grid.peers(key).forEach(peerKey => {
         const peer = state.cells.get(peerKey)
-        if(!peer.settled && !markedKeys.has(peerKey)) {
+        if(!peer.solved && !markedKeys.has(peerKey)) {
           appendElement('div', {className: 'excluded'}, peer.div()).innerHTML = value
           markedKeys.add(peerKey)
         }
@@ -259,20 +259,20 @@ window.Board = window.Board ?? (() => {
 
     if(state.status === 'filling-givens') return
 
-    updateCommands(cell.settled)
+    updateCommands(cell.solved)
     markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
 
-  function updateCommands(settled) {
-    $toggle($eliminateByRules, settled)
-    $A('.commands .buttons button span').forEach(span => $toggle(span, !settled))
+  function updateCommands(solved) {
+    $toggle($eliminateByRules, solved)
+    $A('.commands .buttons button span').forEach(span => $toggle(span, !solved))
   }
 
   function updateNumberCounts() {
     const counts = Array(Config.scale + 1).fill(0)
-    state.cells.forEach(({value, settled}) => {
-      if(settled) counts[Number(value)]++
+    state.cells.forEach(({value, solved}) => {
+      if(solved) counts[Number(value)]++
     })
 
     for(let index=1; index<=Config.scale; index++) {
@@ -281,7 +281,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function validate(cell) {
-    if(!cell.settled) return undefined
+    if(!cell.solved) return undefined
 
     for(const [house, keys] of Grid.houses(cell.key)) {
       if(duplicates(cell, keys)) {
@@ -321,8 +321,8 @@ window.Board = window.Board ?? (() => {
       for(const [houseId, keys] of houses) {
         const values = new Set()
         for(const key of keys) {
-          const {value, settled} = state.cells.get(key)
-          if(!settled) return false
+          const {value, solved} = state.cells.get(key)
+          if(!solved) return false
           if(values.has(value)) {
             Prompt.error(`Cell ${key} value '${value}' is duplicated in ${singular(house)}-${houseId}.`)
             return false
@@ -345,7 +345,7 @@ window.Board = window.Board ?? (() => {
     const candidates = new Set(Cell.CANDIDATES)
     Grid.peers(state.focused).forEach(key => {
       const cell = state.cells.get(key)
-      if(cell.settled) candidates.delete(cell.value)
+      if(cell.solved) candidates.delete(cell.value)
     })
 
     const cell = state.cells.get(state.focused)

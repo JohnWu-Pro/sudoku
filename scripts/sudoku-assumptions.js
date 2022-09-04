@@ -143,7 +143,7 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function renderOptionsFor(cell) {
     const div = $E('div.assumptions > div.tentative')
-    if(!cell || cell.settled || !Assumption.allowMore()) {
+    if(!cell || cell.solved || !Assumption.allowMore()) {
       div.innerHTML = ''
       return
     }
