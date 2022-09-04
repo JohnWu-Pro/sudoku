@@ -97,6 +97,7 @@ window.Board = window.Board ?? (() => {
     }
     state.focused = null
 
+    clearSameValue()
     clearCrossHatching()
     highlightCandidates()
     updateNumberCounts()
@@ -133,6 +134,7 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(key)
     cell.focus(true)
+    highlightSameValue(cell)
     highlightCandidates(cell)
 
     if(state.status === 'filling-givens') return
@@ -163,7 +165,7 @@ window.Board = window.Board ?? (() => {
       cell.value = [...candidates]
     }
 
-    onCellValueChanged(cell)
+    onValueChanged(cell)
   }
 
   function onUndo() {
@@ -182,11 +184,12 @@ window.Board = window.Board ?? (() => {
       Assumptions.render()
     }
 
+    clearSameValue()
     clearCrossHatching()
 
     const cell = new Cell(key, value, cssClass)
     state.cells.set(key, cell)
-    onCellValueChanged(cell)
+    onValueChanged(cell)
 
     if(state.focused) {
       state.cells.get(state.focused).focus(false)
@@ -201,12 +204,28 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(state.focused)
     cell.value = ''
-    onCellValueChanged(cell)
+    onValueChanged(cell)
+  }
+
+  function clearSameValue() {
+    // Clear existing same-value highlights
+    $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
+  }
+
+  function highlightSameValue(cell) {
+    if(cell.settled || cell.value !== '') clearSameValue()
+    if(!cell.settled) return
+
+    const {value} = cell
+    state.cells.forEach(same => {
+      if(same.value !== value) return
+
+      same.div().classList.add('same')
+    })
   }
 
   function clearCrossHatching() {
     // Clear existing cross-hatching marks
-    $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
     $A('div.grid div.cell > div.excluded').forEach(div => div.remove())
   }
 
@@ -214,33 +233,29 @@ window.Board = window.Board ?? (() => {
     if(cell.settled || cell.value !== '') clearCrossHatching()
     if(!cell.settled) return
 
-    const value = cell.value
+    const {value} = cell
     const markedKeys = new Set()
-    state.cells.forEach(cell => {
-      if(cell.value === value) {
-        cell.div().classList.add('same')
-        crossHatchingRowAndColumn(markedKeys, cell)
-      }
+    state.cells.forEach((same, key) => {
+      if(same.value !== value) return
+
+      Grid.peers(key).forEach(peerKey => {
+        const peer = state.cells.get(peerKey)
+        if(!peer.settled && !markedKeys.has(peerKey)) {
+          appendElement('div', {className: 'excluded'}, peer.div()).innerHTML = value
+          markedKeys.add(peerKey)
+        }
+      })
     })
   }
 
-  function crossHatchingRowAndColumn(markedKeys, cell) {
-    const value = cell.value
-    Grid.peers(cell.key).forEach(key => {
-      const cell = state.cells.get(key)
-      if(!cell.settled && !markedKeys.has(key)) {
-        appendElement('div', {className: 'excluded'}, cell.div()).innerHTML = value
-        markedKeys.add(key)
-      }
-    })
-  }
-
-  function onCellValueChanged(cell) {
+  function onValueChanged(cell) {
     cell.render()
+    highlightSameValue(cell)
     highlightCandidates(cell)
     delay(1)
     .then(() => updateNumberCounts())
     .then(() => validate(cell))
+    .then((valid) => { if(valid) checkCompletion() })
 
     if(state.status === 'filling-givens') return
 
@@ -266,25 +281,16 @@ window.Board = window.Board ?? (() => {
   }
 
   function validate(cell) {
-    if(!cell.settled) return
+    if(!cell.settled) return undefined
 
     for(const [house, keys] of Grid.houses(cell.key)) {
       if(duplicates(cell, keys)) {
         Prompt.error(`Cell ${cell.key} value '${cell.value}' is duplicated in its ${house}.`)
-        return
+        return false
       }
     }
 
-    if(isCompleted()) {
-      state.status = 'solved'
-      Assumptions.trigger('accept', Assumptions.peek().id)
-
-      // const givens = Givens.stringify(state.givens)
-      // const solution = Givens.stringify(matrixFrom(state.cells))
-      window.dispatchEvent(new CustomEvent('puzzle-solved' /* , {
-        detail: {givens, solution}
-      } */))
-    }
+    return true
   }
 
   function duplicates(cell, keys) {
@@ -295,6 +301,19 @@ window.Board = window.Board ?? (() => {
       if(cell.value === value) return true
     }
     return false
+  }
+
+  function checkCompletion() {
+    if(isCompleted()) {
+      state.status = 'solved'
+      Assumptions.trigger('accept', Assumptions.peek().id)
+
+      // const givens = Givens.stringify(state.givens)
+      // const solution = Givens.stringify(matrixFrom(state.cells))
+      window.dispatchEvent(new CustomEvent('puzzle-solved' /* , {
+        detail: {givens, solution}
+      } */))
+    }
   }
 
   function isCompleted() {
@@ -331,7 +350,7 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(state.focused)
     cell.value = [...candidates]
-    onCellValueChanged(cell)
+    onValueChanged(cell)
   }
 
   function onAssumptionStarted(event) {
@@ -340,7 +359,7 @@ window.Board = window.Board ?? (() => {
     const {key, value} = event.detail
     const cell = state.cells.get(key)
     cell.value = value
-    onCellValueChanged(cell)
+    onValueChanged(cell)
   }
 
   function onAssumptionAccepted(event) {
@@ -358,6 +377,7 @@ window.Board = window.Board ?? (() => {
       cell.render()
     }
 
+    clearSameValue()
     clearCrossHatching()
 
     const affected = event.detail.affected
