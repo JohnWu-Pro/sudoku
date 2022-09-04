@@ -274,9 +274,9 @@ button {
 }
 .grid .cell .cross.column {
   left: 45%; /* 50% - (1vmin / 10vmin) / 2 */
-  top: 5%;
+  top: 6%;
   width: clamp(3.6px, 1vmin, 4.2px);
-  height: 92%;
+  height: 88%;
 }
 
 .grid .coord {

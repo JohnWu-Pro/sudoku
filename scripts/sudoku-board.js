@@ -8,7 +8,7 @@ window.Board = window.Board ?? (() => {
     status: '' // filling-givens | solving | solved
   }
 
-  var $numbers = [undefined], $counts = [undefined], $eliminateByRules
+  var $numbers = [undefined], $counts = [undefined], $eliminateByRules, $markCrossHatching
 
   function init() {
     const $grid = $E('div.grid')
@@ -46,6 +46,8 @@ window.Board = window.Board ?? (() => {
     $E('button#clean', $commands).addEventListener('click', onCleanFocused)
     $eliminateByRules = $E('#eliminate-by-rules', $commands)
     $eliminateByRules.addEventListener('click', onEliminateByRules)
+    $markCrossHatching = $E('#mark-cross-hatching', $commands)
+    $markCrossHatching.addEventListener('click', onMarkCrossHatching)
 
     window.addEventListener("assumption-started", onAssumptionStarted)
     window.addEventListener("assumption-accepted", onAssumptionAccepted)
@@ -101,7 +103,7 @@ window.Board = window.Board ?? (() => {
     clearCrossHatching()
     highlightCandidates()
     updateNumberCounts()
-    updateCommands(true)
+    updateCommands()
     Assumptions.render()
     Assumptions.renderOptionsFor()
 
@@ -139,8 +141,8 @@ window.Board = window.Board ?? (() => {
 
     if(state.status === 'filling-givens') return
 
+    clearCrossHatching(cell)
     updateCommands(cell.solved)
-    markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -224,32 +226,6 @@ window.Board = window.Board ?? (() => {
     })
   }
 
-  function clearCrossHatching() {
-    // Clear existing cross-hatching marks
-    $A('div.grid div.cell > div.cross').forEach(div => $hide(div))
-  }
-
-  function markCrossHatching(cell) {
-    if(cell.solved || cell.value !== '') clearCrossHatching()
-    if(!cell.solved) return
-
-    const {value} = cell
-    state.cells.forEach(same => {
-      if(same.value !== value) return
-
-      const houses = Grid.houses(same.key)
-      houses.delete('box')
-      houses.forEach((keys, house) => {
-        keys.forEach(key => {
-          const peer = state.cells.get(key)
-          if(!peer.solved) {
-            $show($E('div.' + house, peer.div()))
-          }
-        })
-      })
-    })
-  }
-
   function onValueChanged(cell) {
     cell.render()
     highlightSameValue(cell)
@@ -262,13 +238,13 @@ window.Board = window.Board ?? (() => {
     if(state.status === 'filling-givens') return
 
     updateCommands(cell.solved)
-    markCrossHatching(cell)
     Assumptions.renderOptionsFor(cell)
   }
 
   function updateCommands(solved) {
-    $toggle($eliminateByRules, solved)
-    $A('.commands .buttons button span').forEach(span => $toggle(span, !solved))
+    $toggle($eliminateByRules, solved === undefined || solved)
+    $toggle($markCrossHatching, solved === undefined || !solved)
+    $A('.commands .buttons button .cmd-text').forEach(text => $toggle(text, !(solved === undefined || solved)))
   }
 
   function updateNumberCounts() {
@@ -353,6 +329,36 @@ window.Board = window.Board ?? (() => {
     const cell = state.cells.get(state.focused)
     cell.value = [...candidates]
     onValueChanged(cell)
+  }
+
+  function onMarkCrossHatching() {
+    if(!state.focused) return
+
+    const cell = state.cells.get(state.focused)
+    if(!cell.solved) return
+
+    const {value} = cell
+    state.cells.forEach(same => {
+      if(same.value !== value) return
+
+      const houses = Grid.houses(same.key)
+      houses.delete('box')
+      houses.forEach((keys, house) => {
+        keys.forEach(key => {
+          const peer = state.cells.get(key)
+          if(!peer.solved) {
+            $show($E('div.' + house, peer.div()))
+          }
+        })
+      })
+    })
+  }
+
+  function clearCrossHatching(cell) {
+    if(!cell || cell.value !== '') {
+      // Clear existing cross-hatching marks
+      $A('div.grid div.cell > div.cross').forEach(div => $hide(div))
+    }
   }
 
   function onAssumptionStarted(event) {
