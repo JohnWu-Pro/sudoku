@@ -50,8 +50,11 @@ class Cell {
     const text = this.#value === '' ? '&nbsp;' : this.#value.length <= 4 ? this.#value : '...'
     const decoration = this.#value === '' ? '' : this.#cssClass
 
-    this.div().innerHTML =
-      `<div class="value ${this.#status} ${decoration}">${text}</div>`
+    this.div().innerHTML = `
+      <div class="value ${this.#status} ${decoration}">${text}</div>
+      <div class="cross row hidden"></div>
+      <div class="cross column hidden"></div>
+    `
   }
 
   div() {

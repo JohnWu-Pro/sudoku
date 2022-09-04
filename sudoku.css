@@ -141,6 +141,7 @@ button {
   aspect-ratio: 1 / 1;
   border: solid lightgrey;
   border-width: 1px 0 0 1px;
+  position: relative;
   width: clamp(36px, 10vmin, 42px);
 }
 
@@ -246,6 +247,10 @@ button {
   top: 28%;
 }
 
+.grid .cell .value.solved {
+  color: blue;
+}
+
 .grid .cell .excluded::before {
   content: '-'
 }
@@ -256,8 +261,22 @@ button {
   top: 10%;
 }
 
-.grid .cell .value.solved {
-  color: blue;
+.grid .cell .cross {
+  background-color: #ffccff;
+  position: absolute;
+  margin: auto;
+  z-index: 1;
+}
+.grid .cell .cross.row {
+  left: 6%;
+  width: 88%;
+  height: clamp(3.6px, 1vmin, 4.2px);
+}
+.grid .cell .cross.column {
+  left: 45%; /* 50% - (1vmin / 10vmin) / 2 */
+  top: 5%;
+  width: clamp(3.6px, 1vmin, 4.2px);
+  height: 92%;
 }
 
 .grid .coord {
@@ -313,7 +332,7 @@ button {
 }
 
 .keys .key.candidate {
-  outline: #6666ff auto 1vmin;
+  outline: auto #6666ff;
 }
 
 .keys .key .count {

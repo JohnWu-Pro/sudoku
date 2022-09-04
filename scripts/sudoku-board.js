@@ -226,7 +226,7 @@ window.Board = window.Board ?? (() => {
 
   function clearCrossHatching() {
     // Clear existing cross-hatching marks
-    $A('div.grid div.cell > div.excluded').forEach(div => div.remove())
+    $A('div.grid div.cell > div.cross').forEach(div => $hide(div))
   }
 
   function markCrossHatching(cell) {
@@ -234,16 +234,18 @@ window.Board = window.Board ?? (() => {
     if(!cell.solved) return
 
     const {value} = cell
-    const markedKeys = new Set()
-    state.cells.forEach((same, key) => {
+    state.cells.forEach(same => {
       if(same.value !== value) return
 
-      Grid.peers(key).forEach(peerKey => {
-        const peer = state.cells.get(peerKey)
-        if(!peer.solved && !markedKeys.has(peerKey)) {
-          appendElement('div', {className: 'excluded'}, peer.div()).innerHTML = value
-          markedKeys.add(peerKey)
-        }
+      const houses = Grid.houses(same.key)
+      houses.delete('box')
+      houses.forEach((keys, house) => {
+        keys.forEach(key => {
+          const peer = state.cells.get(key)
+          if(!peer.solved) {
+            $show($E('div.' + house, peer.div()))
+          }
+        })
       })
     })
   }
