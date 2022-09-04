@@ -17,10 +17,11 @@ window.Prompt = window.Prompt ?? (() => {
         <span class="${type}">${html}</span>
       </div>
       `
-    $on($E('div', $panel), (div) => div.style.top = div.offsetHeight + 'px')
-    .perform('slide-in')
+    Promise.resolve($E('div', $panel))
+    .then((div) => (div.style.top = div.offsetHeight + 'px', div))
+    .then((div) => $on(div).perform('slide-in'))
     .then((div) => (div.style.top = '', div))
-    .then((div) => delay(8000).then(() => div))
+    .then((div) => delay(8000, div))
     .then((div) => $on(div).perform('fade-out'))
     .then((div) => div.remove())
   }
@@ -55,12 +56,12 @@ window.Prompt = window.Prompt ?? (() => {
 
     .app-prompt-panel > .message.slide-in {
       transform: translateY(-100%);
-      transition: transform 0.6s ease 0.6s;
+      transition: transform 0.6s ease;
     }
 
     .app-prompt-panel > .message.fade-out {
       opacity: 0;
-      transition: opacity 2s ease 2s;
+      transition: opacity 2s ease;
     }
 
     .app-prompt-panel .info {
