@@ -20,17 +20,17 @@ window.App = window.App ?? (() => {
     });
 
     Game.init()
-    .then(() => Game.start())
+    .then(() => Game.startup())
   }
 
   function onActivate() {
     console.debug("[DEBUG] Calling onActivate() ...")
-    // Game.start() or Game.resume()
+    Game.resume()
   }
 
   function onDeactivate() {
     console.debug("[DEBUG] Calling onDeactivate() ...")
-    // Game.pause()
+    Game.pause()
   }
 
   function locale() {

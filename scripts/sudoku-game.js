@@ -4,7 +4,7 @@ window.Game = window.Game ?? (() => {
 
   const DONE_BUTTON_LABEL = 'Givens are Ready'
 
-  var timer = null
+  var timer
   var $gameSelection, $givensFilled
 
   function init() {
@@ -34,7 +34,7 @@ window.Game = window.Game ?? (() => {
       </div>
     `
     $gameSelection = $E('.game-selection', $header)
-    $E('select', $header).addEventListener('change', onNewGame)
+    $E('select', $header).addEventListener('change', onSelected)
     $E('.restart', $header).addEventListener('click', onRestart)
 
     $E('.commands .buttons').innerHTML = `
@@ -53,32 +53,53 @@ window.Game = window.Game ?? (() => {
     return Board.init()
   }
 
-  function onNewGame(event) {
+  function startup() {
+    // if(Settings['start-up'] === 'resume') {
+    //   // to restore & resume
+    //   // TODO
+    // } else {
+      // to start a new game
+      const level = 'Easy' // Settings['start-up']
+      start(level)
+    // }
+  }
+
+  function pause() {
+    timer.pause()
+    // save the state
+  }
+
+  function resume() {
+    timer.resume()
+  }
+
+  function onSelected(event) {
     const selected = event.target.value
     if(! selected) return
 
-    if(selected === 'Manual') {
-      Promise.resolve(Givens.EMPTY)
-      .then((givens) => Board.load(givens, true)) // to start manual given filling
-      .then(() => timer.reset())
-      .then(() => rollingTitle('Filling Givens'))
-      Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
-      $show($givensFilled)
-    } else {
-      $hide($givensFilled)
-      start(selected)
-    }
+    start(selected)
+
     event.target.value = ''
   }
 
-  function start(level) {
-    level ??= 'Easy'
-    return Givens.get(level) // TODO: based on Config
-    .then((givens) => Board.load(givens))
-    .then(() => timer.start())
-    .then(() => rollingTitle('Level: ' + level))
-    .then(promptUsage)
-    .catch((error) => Prompt.error(error))
+  function start(selected) {
+    $toggle($givensFilled, selected !== 'Manual')
+
+    if(selected === 'Manual') {
+      return Promise.resolve(Givens.EMPTY)
+      .then((givens) => Board.load(givens, true)) // to start manual given filling
+      .then(() => timer.reset())
+      .then(() => rollingTitle('Filling Givens'))
+      .then(() => Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`))
+      .catch((error) => Prompt.error(error))
+    } else {
+      return Givens.get(selected)
+      .then((givens) => Board.load(givens))
+      .then(() => timer.start())
+      .then(() => rollingTitle('Level: ' + selected))
+      .then(promptUsage)
+      .catch((error) => Prompt.error(error))
+    }
   }
 
   let inRolling = false
@@ -115,16 +136,6 @@ window.Game = window.Game ?? (() => {
       // .then(() => console.debug("[DEBUG] Sliding out >>> >>> >>> ends."))
   }
 
-  function pause() {
-    // pause
-    // save the state
-  }
-
-  function resume() {
-    // might need to restore state first
-    // resume
-  }
-
   function onRestart() {
     Board.reload()
     .then(() => timer.start())
@@ -137,6 +148,7 @@ window.Game = window.Game ?? (() => {
     .then(() => timer.start())
     .then(() => rollingTitle('Manual Givens'))
     .then(promptUsage)
+    .catch((error) => Prompt.error(error))
   }
 
   function onSolved() {
@@ -155,7 +167,7 @@ window.Game = window.Game ?? (() => {
 
   return {
     init,
-    start,
+    startup,
     pause,
     resume
   }
