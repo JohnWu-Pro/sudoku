@@ -5,13 +5,13 @@ window.Game = window.Game ?? (() => {
   const DONE_BUTTON_LABEL = 'Givens are Ready'
 
   var timer = null
-  var $givensFilled = null
+  var $gameSelection, $givensFilled
 
   function init() {
     const $header = $E('div.header')
     $header.innerHTML = `
       <div>
-        <div>
+        <div class="left">
           <select class="block border">
             <option value="">New Game ...</option>
             <option value="Easy">Easy</option>
@@ -22,16 +22,18 @@ window.Game = window.Game ?? (() => {
             <option value="Manual">Manually Input Givens</option>
           </select>
         </div>
-        <div>
-          <span class="title">Sudoku</span>
+        <div class="center">
+          <div class="title">Sudoku</div>
+          <div class="game-selection hidden"></div>
         </div>
-        <div class="buttons">
+        <div class="right buttons">
           <button class="restart" title="Restart"></button>
           <span class="timer" title="Timer">0:00:00</span>
           <button class="settings" title="Settings"></button>
         </div>
       </div>
     `
+    $gameSelection = $E('.game-selection', $header)
     $E('select', $header).addEventListener('change', onNewGame)
     $E('.restart', $header).addEventListener('click', onRestart)
 
@@ -58,6 +60,8 @@ window.Game = window.Game ?? (() => {
     if(selected === 'Manual') {
       Promise.resolve(Givens.EMPTY)
       .then((givens) => Board.load(givens, true)) // to start manual given filling
+      .then(() => timer.reset())
+      .then(() => rollingTitle('Filling Givens'))
       Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`)
       $show($givensFilled)
     } else {
@@ -68,11 +72,47 @@ window.Game = window.Game ?? (() => {
   }
 
   function start(level) {
-    return Givens.get(level ?? 'Easy') // TODO: based on Config
+    level ??= 'Easy'
+    return Givens.get(level) // TODO: based on Config
     .then((givens) => Board.load(givens))
     .then(() => timer.start())
+    .then(() => rollingTitle('Level: ' + level))
     .then(promptUsage)
     .catch((error) => Prompt.error(error))
+  }
+
+  let inRolling = false
+  function rollingTitle(gameSelection) {
+    $gameSelection.innerHTML = gameSelection
+
+    if(inRolling) return
+    inRolling = true
+
+    rolling($E('div.header .title'), $gameSelection)
+  }
+
+  function rolling(div1, div2) {
+    Promise.resolve()
+      .then(() => delay(8000)).then(() => slideOut(div1)).then(() => slideIn(div2))
+      .then(() => delay(8000)).then(() => slideOut(div2)).then(() => slideIn(div1))
+      .then(() => rolling(div1, div2))
+  }
+
+  function slideIn(div) {
+    return Promise.resolve($show(div), div.style.top = div.offsetHeight + 'px')
+      // .then(() => delay(33))
+      // .then(() => console.debug("[DEBUG] Sliding in. <<< begins."))
+      .then(() => $on(div).perform('slide-up'))
+      // .then(() => console.debug("[DEBUG] Sliding in. <<< <<< <<< ends."))
+      .then(() => div.style.top = '')
+  }
+
+  function slideOut(div) {
+    return Promise.resolve()
+      // .then(() => console.debug("[DEBUG] Sliding out >>> begins."))
+      .then(() => $on(div).perform('slide-up'))
+      .then(() => $hide(div))
+      // .then(() => console.debug("[DEBUG] Sliding out >>> >>> >>> ends."))
   }
 
   function pause() {
@@ -95,6 +135,7 @@ window.Game = window.Game ?? (() => {
     Promise.resolve(Givens.FILLED)
     .then((givens) => Board.load(givens))
     .then(() => timer.start())
+    .then(() => rollingTitle('Manual Givens'))
     .then(promptUsage)
   }
 

@@ -238,14 +238,14 @@ window.Board = window.Board ?? (() => {
   function onCellValueChanged(cell) {
     cell.render()
     highlightCandidates(cell)
+    delay(1)
+    .then(() => updateNumberCounts())
+    .then(() => validate(cell))
 
     if(state.status === 'filling-givens') return
 
     updateCommands(cell.settled)
     markCrossHatching(cell)
-    delay(0)
-    .then(() => updateNumberCounts())
-    .then(() => validate(cell))
     Assumptions.renderOptionsFor(cell)
   }
 

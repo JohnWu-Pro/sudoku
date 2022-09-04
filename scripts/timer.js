@@ -63,6 +63,11 @@ class Timer {
     this.#handle = 0
   }
 
+  reset() {
+    this.stop()
+    this.#setAccumulated(0)
+  }
+
   #tick() {
     this.#$element.innerHTML = Timer.format(this.#accumulated + Date.now() - this.#started)
   }

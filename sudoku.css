@@ -56,8 +56,23 @@ button {
   width: clamp(111.6px, 31vmin, 130.2px);
 }
 
+.header .center {
+  overflow: hidden;
+}
+.header .center > div {
+  position: relative;
+}
+.header .center > .slide-up {
+  transform: translateY(-100%);
+  transition: transform 1s ease-in-out;
+}
+
 .header .title {
   font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+}
+.header .game-selection {
+  color: navy;
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
 }
 
 .header .buttons {
