@@ -69,8 +69,10 @@ window.Game = window.Game ?? (() => {
       restore()
         .then((game) => {
           if(Object.isEmpty(game)) {
-            console.info("[INFO] No stored game exists while trying to restore.")
-            _do_(Settings.DEFAULT.onStartup)
+            console.info("[INFO] No saved game exists while trying to restore and resume.")
+            _do_(Settings.startupFallback)
+          } else {
+            console.info(`[INFO] Successfully restored the game to its status at ${Timer.format(game.timer.elapsed)}.`)
           }
         })
         .catch((error) => {

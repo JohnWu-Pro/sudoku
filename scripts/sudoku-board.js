@@ -422,7 +422,7 @@ window.Board = window.Board ?? (() => {
 
     const {focused} = state
     return render()
-      .then(() => onFocus(focused))
+      .then(() => { if(focused) onFocus(focused) })
   }
 
   return {

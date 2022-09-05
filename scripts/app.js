@@ -12,12 +12,16 @@ window.App = window.App ?? (() => {
     `
 
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === 'visible') {
+      if(document.visibilityState === 'visible') {
         onActivate()
       } else {
         onDeactivate()
       }
-    });
+    })
+    window.addEventListener('beforeunload', (event) => {
+      // console.debug("[DEBUG] About to unload the page ...")
+      onDeactivate()
+    })
 
     Game.init()
     .then(() => Game.startup())
@@ -57,10 +61,10 @@ window.App = window.App ?? (() => {
     for(const qualifier of [lang, locale]) {
       if(definedQualifiers.includes(qualifier)) qualifiers.push(qualifier)
     }
-    // console.debug("[DEBUG] Resolved qualifiers: %o", qualifiers);
+    // console.debug("[DEBUG] Resolved qualifiers: %o", qualifiers)
 
-    const scripts = qualifiers.map(qualifier => `${HREF_BASE}/scripts/i18n.resources.${qualifier}.js?${version}`);
-    // console.debug("[DEBUG] Resolved dynamic scripts: %o", scripts);
+    const scripts = qualifiers.map(qualifier => `${HREF_BASE}/scripts/i18n.resources.${qualifier}.js?${version}`)
+    // console.debug("[DEBUG] Resolved dynamic scripts: %o", scripts)
     return scripts
   }
 

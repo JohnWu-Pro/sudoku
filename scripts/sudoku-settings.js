@@ -1,9 +1,11 @@
 'use strict';
 
 class Settings {
+  static startupFallback = 'start-Easy'
+
   static DEFAULT = Object.freeze({
     // resume | start-Easy | start-Medium | start-Hard | start-Expert | start-Manual
-    onStartup: 'start-Easy',
+    onStartup: 'resume',
 
     allowUndo: true,
     checkCorrectnessbyRules: true,
