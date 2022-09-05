@@ -31,3 +31,15 @@ function resolveNavigatorLocale() {
 function singleBlockCommentIn(fun) {
   return fun.toString().replace(/^[^\/]+\/\*/, '').replace(/\*\/[^\/]+$/, '')
 }
+
+Object.isEmpty = function(object) {
+  return !object
+    || object.length === 0
+    || object.size === 0
+    || Object.keys(object).length === 0
+}
+
+Array.replace = function(target, subs) {
+  target.length = 0
+  if(!Object.isEmpty(subs)) target.push(...subs)
+}

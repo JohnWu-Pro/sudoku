@@ -55,19 +55,61 @@ window.Game = window.Game ?? (() => {
   }
 
   function startup() {
-    // if(Settings['start-up'] === 'resume') {
-    //   // to restore & resume
-    //   // TODO
-    // } else {
-      // to start a new game
-      const level = 'Easy' // Settings['start-up']
-      start(level)
-    // }
+    function _do_(onStartup) {
+      const [matched, selected] = onStartup?.match(/^start-(Easy|Medium|Hard|Expert|Manual)$/) ?? []
+      if(matched) {
+        start(selected)
+      } else {
+        Prompt.error(`Invalid Settings.onStartup value '${onStartup}'!`)
+      }
+    }
+
+    const onStartup = Settings.onStartup
+    if(onStartup === 'resume') {
+      restore()
+        .then((game) => {
+          if(Object.isEmpty(game)) {
+            console.info("[INFO] No stored game exists while trying to restore ...")
+            _do_(Settings.DEFAULT.onStartup)
+          }
+        })
+        .catch((error) => Prompt.error(error)
+          .then(() => _do_(Settings.DEFAULT.onStartup))
+        )
+    } else {
+      _do_(onStartup)
+    }
   }
 
   function pause() {
     timer.pause()
+
     // save the state
+    State.set({
+      game: snapshot(),
+      board: Board.snapshot(),
+      assumptions: Assumptions.snapshot()
+    })
+  }
+
+  function snapshot() {
+    return {
+      timer: timer.elapsed,
+      title: {selection: $gameSelection.innerHTML}
+    }
+  }
+
+  function restore() {
+    return State.load()
+      .then(({game, board, assumptions}) =>
+        Object.isEmpty(game)
+        ? Promise.resolve(game)
+        : Assumptions.restore(assumptions)
+          .then(() => Board.restore(board))
+          .then(() => timer.resume(game.timer.elapsed))
+          .then(() => rollingTitle(game.title.selection))
+          .then(() => game)
+      )
   }
 
   function resume() {
@@ -88,18 +130,18 @@ window.Game = window.Game ?? (() => {
 
     if(selected === 'Manual') {
       return Promise.resolve(Givens.EMPTY)
-      .then((givens) => Board.load(givens, true)) // to start manual given filling
-      .then(() => timer.reset())
-      .then(() => rollingTitle('Filling Givens'))
-      .then(() => Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`))
-      .catch((error) => Prompt.error(error))
+        .then((givens) => Board.load(givens, true)) // to start manual given filling
+        .then(() => timer.reset())
+        .then(() => rollingTitle('Filling Givens'))
+        .then(() => Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`))
+        .catch((error) => Prompt.error(error))
     } else {
       return Givens.get(selected)
-      .then((givens) => Board.load(givens))
-      .then(() => timer.start())
-      .then(() => rollingTitle('Level: ' + selected))
-      .then(promptUsage)
-      .catch((error) => Prompt.error(error))
+        .then((givens) => Board.load(givens))
+        .then(() => timer.start())
+        .then(() => rollingTitle('Level: ' + selected))
+        .then(promptUsage)
+        .catch((error) => Prompt.error(error))
     }
   }
 
@@ -139,17 +181,17 @@ window.Game = window.Game ?? (() => {
 
   function onRestart() {
     Board.reload()
-    .then(() => timer.start())
+      .then(() => timer.start())
   }
 
   function onGivensFilled() {
     $hide($givensFilled)
     Promise.resolve(Givens.FILLED)
-    .then((givens) => Board.load(givens))
-    .then(() => timer.start())
-    .then(() => rollingTitle('Manual Givens'))
-    .then(promptUsage)
-    .catch((error) => Prompt.error(error))
+      .then((givens) => Board.load(givens))
+      .then(() => timer.start())
+      .then(() => rollingTitle('Manual Givens'))
+      .then(promptUsage)
+      .catch((error) => Prompt.error(error))
   }
 
   function onSolved() {

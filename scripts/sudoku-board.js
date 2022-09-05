@@ -81,7 +81,6 @@ window.Board = window.Board ?? (() => {
         if(cell.solved) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'given'))
       })
       state.givens = matrixFrom(state.cells)
-      console.debug("[DEBUG] Filled givens: %o", state.givens)
     } else {
       Grid.ROWS.forEach((rowId, rowIndex) => {
         const row = givens[rowIndex]
@@ -92,6 +91,10 @@ window.Board = window.Board ?? (() => {
       })
     }
 
+    return render()
+  }
+
+  function render() {
     state.cells.forEach(cell => cell.render())
 
     if(state.focused) {
@@ -392,10 +395,31 @@ window.Board = window.Board ?? (() => {
     onFocus(affected[affected.length-1].key)
   }
 
+  function snapshot() {
+    const result = {...state}
+    result.cells = Object.fromEntries(state.cells)
+    return result
+  }
+
+  function restore(_state) {
+    if(Object.isEmpty(_state) || Object.isEmpty(_state.cells)) return Promise.resolve()
+
+    Object.assign(state, _state)
+    state.cells = new Map(Object.entries(state.cells))
+    state.cells.forEach((cell, key) => {
+      state.cells.set(key, Cell.from(cell))
+    })
+
+    const {focused} = state
+    return render()
+      .then(() => onFocus(focused))
+  }
+
   return {
     init,
-    // save & restore,
     load,
     reload,
+    restore,
+    snapshot,
   }
 })()

@@ -5,9 +5,9 @@ class Cell {
   static tracer
 
   #key
-  #value // single value ('', or '1'..'9'), or string of '1'..'9' (sorted)
-  #cssClass // CSS decoration class when rendering the value
-  #status // pending | given | solved
+  #value    // single value ('', or '1'..'9'), or string of '1'..'9' (sorted)
+  #cssClass // decoration CSS class when rendering the value
+  #status   // given | pending | solved
 
   constructor(key, val, cssClass, status) {
     this.#key = key
@@ -59,6 +59,16 @@ class Cell {
 
   div() {
     return $E('div.cell-' + this.#key)
+  }
+
+  toJSON() {
+    const {key, value, cssClass} = this
+    return {key, value, cssClass, status: this.#status}
+  }
+
+  static from(object) {
+    const {key, value, cssClass, status} = this
+    return new Cell(key, value, cssClass, status)
   }
 
   static #normalize(val) {

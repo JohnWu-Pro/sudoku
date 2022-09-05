@@ -17,7 +17,7 @@ window.Prompt = window.Prompt ?? (() => {
         <span class="${type}">${html}</span>
       </div>
       `
-    Promise.resolve($E('div', $panel))
+    return Promise.resolve($E('div', $panel))
     .then((div) => (div.style.top = div.offsetHeight + 'px', div))
     .then((div) => $on(div).perform('slide-in'))
     .then((div) => (div.style.top = '', div))

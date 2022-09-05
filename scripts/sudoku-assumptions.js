@@ -5,25 +5,25 @@ class Assumption {
   static ACCEPTED = new Assumption('Xn', undefined, '')
   static #CSS_CLASSES = ['if-3rd', 'if-2nd', 'if-1st']
 
-  static #availableCssClasses = [...Assumption.#CSS_CLASSES]
+  static cssClasses = [...Assumption.#CSS_CLASSES]
   static #nextCssClass() {
-    return Assumption.#availableCssClasses.pop()
+    return Assumption.cssClasses.pop()
   }
   static #releaseCssClass(cssClass) {
-    if(cssClass) Assumption.#availableCssClasses.push(cssClass)
+    if(cssClass) Assumption.cssClasses.push(cssClass)
   }
   static allowMore() {
-    return Assumption.#availableCssClasses.length > 0
+    return Assumption.cssClasses.length > 0
   }
   static reset() {
-    Assumption.#availableCssClasses = [...Assumption.#CSS_CLASSES]
+    Assumption.cssClasses = [...Assumption.#CSS_CLASSES]
   }
 
   #id
-  #key
-  #value
-  #cssClass
-  #snapshots // array of {key: string, value: number | number[]}
+  #key        // the key of the cell for which the assumption is made
+  #value      // the assumed value of the cell
+  #cssClass   // the decoration CSS class to be used by the assumption target cell and changed cells subsequently
+  #snapshots  // array of {key: string, value: string, cssClass: string}
 
   constructor(key, value, cssClass) {
     this.#id = Date.now().toString()
@@ -59,6 +59,20 @@ class Assumption {
   reject() {
     Assumption.#releaseCssClass(this.#cssClass)
   }
+
+  toJSON() {
+    const {id, key, value, cssClass, snapshots} = this
+    return {id, key, value, cssClass, snapshots}
+  }
+
+  static from(object) {
+    const {id, key, value, cssClass, snapshots} = object
+    const result = new Assumption(key, value, '')
+    result.#id = id
+    result.#cssClass = cssClass
+    result.#snapshots = snapshots
+    return result
+  }
 }
 
 window.Assumptions = window.Assumptions ?? (() => {
@@ -93,6 +107,31 @@ window.Assumptions = window.Assumptions ?? (() => {
     assumptions.length = 0
     Assumption.reset()
     setCellTracer()
+  }
+
+  function snapshot() {
+    return {
+      ACCEPTED: Assumption.ACCEPTED,
+      assumptions,
+      cssClasses: Assumption.cssClasses
+    }
+  }
+
+  function restore(state) {
+    if(Object.isEmpty(state)) return Promise.resolve()
+
+    if(!Object.isEmpty(state.ACCEPTED)) {
+      Assumption.ACCEPTED = Assumption.from(state.ACCEPTED)
+    }
+    if(!Object.isEmpty(state.assumptions)) {
+      Array.replace(assumptions, state.assumptions.map(it => Assumption.from(it)))
+    }
+    if(!Object.isEmpty(state.cssClasses)) {
+      Array.replace(Assumption.cssClasses, state.cssClasses)
+    }
+    setCellTracer()
+
+    return Promise.resolve()
   }
 
   function accept(id) { // accept the assumption and its predecessor(s)
@@ -249,6 +288,8 @@ window.Assumptions = window.Assumptions ?? (() => {
     push,
     render,
     renderOptionsFor,
+    restore,
+    snapshot,
     trigger,
   }
 })()
