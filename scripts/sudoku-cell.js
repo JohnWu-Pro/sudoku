@@ -67,7 +67,7 @@ class Cell {
   }
 
   static from(object) {
-    const {key, value, cssClass, status} = this
+    const {key, value, cssClass, status} = object
     return new Cell(key, value, cssClass, status)
   }
 

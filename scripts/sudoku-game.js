@@ -69,13 +69,15 @@ window.Game = window.Game ?? (() => {
       restore()
         .then((game) => {
           if(Object.isEmpty(game)) {
-            console.info("[INFO] No stored game exists while trying to restore ...")
+            console.info("[INFO] No stored game exists while trying to restore.")
             _do_(Settings.DEFAULT.onStartup)
           }
         })
-        .catch((error) => Prompt.error(error)
+        .catch((error) => {
+          console.error("[ERROR] Error occurred while trying to restore!", error)
+          Prompt.error(error)
           .then(() => _do_(Settings.DEFAULT.onStartup))
-        )
+        })
     } else {
       _do_(onStartup)
     }
@@ -94,7 +96,7 @@ window.Game = window.Game ?? (() => {
 
   function snapshot() {
     return {
-      timer: timer.elapsed,
+      timer: {elapsed: timer.elapsed},
       title: {selection: $gameSelection.innerHTML}
     }
   }
