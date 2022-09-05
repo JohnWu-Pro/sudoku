@@ -3,8 +3,8 @@
 window.Grid = window.Grid ?? (() => {
   const LETTERS = 'ABCDEFGHIJKLMOPQ'
 
-  const ROWS = Array(Config.scale).fill(0).map((_, i) => 1+i)
-  const COLUMNS = Array(Config.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1))
+  const ROWS = Object.freeze(Array(Config.scale).fill(0).map((_, i) => 1+i))
+  const COLUMNS = Object.freeze(Array(Config.scale).fill(0).map((_, i) => LETTERS.substring(i,i+1)))
 
   const HOUSES = new Map([
     ['rows', new Map()],     // rowId:   [keys in row]
@@ -42,8 +42,9 @@ window.Grid = window.Grid ?? (() => {
         ])
       })
     })
-    // console.debug("[DEBUG] Peers: %o", PEERS)
-    // console.debug("[DEBUG] keys: %o", keys())
+
+    Object.freeze(HOUSES)
+    Object.freeze(PEERS)
   }
 
   function keys() {

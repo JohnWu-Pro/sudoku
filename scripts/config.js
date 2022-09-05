@@ -1,8 +1,8 @@
 'use strict';
 
-const Config = {
+const Config = Object.freeze({
   box: 3,
   scale: 9,
 
   definedQualifiers: ['en-CA'],
-}
+})
