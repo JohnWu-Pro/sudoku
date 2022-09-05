@@ -38,7 +38,7 @@ window.Game = window.Game ?? (() => {
     $E('.restart', $header).addEventListener('click', onRestart)
 
     $E('.commands .buttons').innerHTML = `
-      <button class="block border" id="undo"><span class="cmd-text"> Undo</span></button>
+      <button class="block border hidden" id="undo"><span class="cmd-text"> Undo</span></button>
       <button class="block border hidden" id="givens-filled">${DONE_BUTTON_LABEL}</button>
       <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
       <button class="block border hidden" id="mark-cross-hatching">Mark Cross-Hatching</button>

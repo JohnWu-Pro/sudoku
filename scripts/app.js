@@ -24,12 +24,10 @@ window.App = window.App ?? (() => {
   }
 
   function onActivate() {
-    console.debug("[DEBUG] Calling onActivate() ...")
     Game.resume()
   }
 
   function onDeactivate() {
-    console.debug("[DEBUG] Calling onDeactivate() ...")
     Game.pause()
   }
 

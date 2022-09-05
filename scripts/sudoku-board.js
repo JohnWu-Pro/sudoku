@@ -8,7 +8,7 @@ window.Board = window.Board ?? (() => {
     status: '' // filling-givens | solving | solved
   }
 
-  var $numbers = [undefined], $counts = [undefined], $eliminateByRules, $markCrossHatching
+  var $numbers = [undefined], $counts = [undefined], $undo, $eliminateByRules, $markCrossHatching
 
   function init() {
     const $grid = $E('div.grid')
@@ -31,7 +31,7 @@ window.Board = window.Board ?? (() => {
     $keys.innerHTML = numbers.reduce((html, number) => html + `
       <div class="key key-${number}">
         <div class="value">${number}</div>
-        <div class="count">0</div>
+        <div class="count"></div>
       </div>
       `, '')
     numbers.forEach((number) => {
@@ -42,7 +42,8 @@ window.Board = window.Board ?? (() => {
     })
 
     const $commands = $E('div.commands')
-    $E('button#undo', $commands).addEventListener('click', onUndo)
+    $undo = $E('button#undo', $commands)
+    $undo.addEventListener('click', onUndo)
     $E('button#clean', $commands).addEventListener('click', onCleanFocused)
     $eliminateByRules = $E('#eliminate-by-rules', $commands)
     $eliminateByRules.addEventListener('click', onEliminateByRules)
@@ -174,6 +175,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function onUndo() {
+    if(!Settings.allowUndo) return
     if(state.status === 'solved') return
 
     const assumption = Assumptions.peek()
@@ -218,6 +220,8 @@ window.Board = window.Board ?? (() => {
   }
 
   function highlightSameValue(cell) {
+    if(!Settings.highlightSolvedSameValue) return
+
     if(cell.solved || cell.value !== '') clearSameValue()
     if(!cell.solved) return
 
@@ -235,8 +239,8 @@ window.Board = window.Board ?? (() => {
     highlightCandidates(cell)
     delay(1)
     .then(() => updateNumberCounts())
-    .then(() => validate(cell))
-    .then((valid) => { if(valid) checkCompletion() })
+    .then(() => checkCorrectnessbyRules(cell))
+    .then((valid) => { if(valid !== false) checkCompletion() })
 
     if(state.status === 'filling-givens') return
 
@@ -245,12 +249,15 @@ window.Board = window.Board ?? (() => {
   }
 
   function updateCommands(solved) {
-    $toggle($eliminateByRules, solved === undefined || solved)
-    $toggle($markCrossHatching, solved === undefined || !solved)
-    $A('.commands .buttons button .cmd-text').forEach(text => $toggle(text, !(solved === undefined || solved)))
+    $toggle($undo, !Settings.allowUndo)
+    $toggle($eliminateByRules, !Settings.eliminateByRules || solved === undefined || solved)
+    $toggle($markCrossHatching, !Settings.markCrossHatching || solved === undefined || !solved)
+    $A('.commands .buttons button .cmd-text').forEach(text => $toggle(text, !(!Settings.eliminateByRules || solved === undefined || solved)))
   }
 
   function updateNumberCounts() {
+    if(!Settings.countSolvedNumbers) return
+
     const counts = Array(Config.scale + 1).fill(0)
     state.cells.forEach(({value, solved}) => {
       if(solved) counts[Number(value)]++
@@ -261,7 +268,8 @@ window.Board = window.Board ?? (() => {
     }
   }
 
-  function validate(cell) {
+  function checkCorrectnessbyRules(cell) {
+    if(!Settings.checkCorrectnessbyRules) return undefined
     if(!cell.solved) return undefined
 
     for(const [house, keys] of Grid.houses(cell.key)) {
@@ -321,6 +329,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function onEliminateByRules() {
+    if(!Settings.eliminateByRules) return
     if(!state.focused) return
 
     const candidates = new Set(Cell.CANDIDATES)
@@ -335,6 +344,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function onMarkCrossHatching() {
+    if(!Settings.markCrossHatching) return
     if(!state.focused) return
 
     const cell = state.cells.get(state.focused)

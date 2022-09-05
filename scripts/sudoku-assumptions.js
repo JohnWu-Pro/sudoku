@@ -182,7 +182,7 @@ window.Assumptions = window.Assumptions ?? (() => {
 
   function renderOptionsFor(cell) {
     const div = $E('div.assumptions > div.tentative')
-    if(!cell || cell.value === '' || cell.solved || !Assumption.allowMore()) {
+    if(!Settings.traceAssumptions || !cell || cell.value === '' || cell.solved || !Assumption.allowMore()) {
       div.innerHTML = ''
       return
     }
@@ -219,6 +219,8 @@ window.Assumptions = window.Assumptions ?? (() => {
   }
 
   function render() {
+    if(!Settings.traceAssumptions) return
+
     const div = $E('div.assumptions > div.pending')
 
     const max = assumptions.length - 1
