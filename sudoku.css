@@ -315,9 +315,9 @@ button {
 
 .keys .key {
   aspect-ratio: 1 / 1;
-  width: clamp(36px, 10vmin, 42px);
+  width: clamp(28.8px, 8vmin, 33.6px);
   position: relative;
-  margin: 0.6vmin;
+  margin: clamp(1.8px, 0.5vmin, 2.1px);
 
   border: 1px outset #eaeaea;
   border-radius: clamp(3.6px, 1vmin, 4.2px);
@@ -326,11 +326,28 @@ button {
   font: normal clamp(23.4px, 6.5vmin, 27.3px) 'Arial';
   cursor: pointer;
 }
-.keys .input-mode-ctrl {
+.keys .key.key-mode-ctrl {
   aspect-ratio: 5 / 4;
-  width: clamp(28.8px, 8vmin, 33.6px);
-  background: #f2f2f2;
-  border-style: groove;
+  width: clamp(23.04px, 6.4vmin, 26.88px);
+}
+
+.keys .key.key-mode-ctrl > div {
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'Arial';
+  position: absolute;
+  z-index: 1;
+}
+.keys .key.key-mode-ctrl .value.from-mode {
+  top: clamp(7.2px, 2vmin, 8.4px);
+  left: clamp(1.8px, 0.5vmin, 2.1px);
+}
+.keys .key.key-mode-ctrl .symbol {
+  color: #990099;
+  top: clamp(12.6px, 3.5vmin, 14.7px);
+  left: clamp(3.6px, 1vmin, 4.2px);
+}
+.keys .key.key-mode-ctrl .value.to-mode {
+  bottom: clamp(9px, 2.5vmin, 10.5px);
+  right: clamp(1.8px, 0.5vmin, 2.1px);
 }
 
 .keys .key .value {
@@ -340,7 +357,8 @@ button {
 }
 
 .keys.eliminating :not(:last-child) .value,
-.keys:not(.eliminating) :last-child .value {
+.keys.eliminating .value.from-mode,
+.keys:not(.eliminating) .value.to-mode {
   text-decoration: 1px line-through red;
 }
 
@@ -354,7 +372,7 @@ button {
   bottom: 0;
   padding: 0 0 1px 2px;
 
-  font-size: 8pt;
+  font-size: clamp(10.8px, 3vmin, 12.6px);
   color: #990099;
   text-align: left;
 }

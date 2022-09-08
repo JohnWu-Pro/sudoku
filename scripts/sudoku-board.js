@@ -9,7 +9,7 @@ window.Board = window.Board ?? (() => {
     status: '' // filling-in-givens | solving | solved
   }
 
-  var $keys, $numberKeys = [undefined], $numberCounts = [undefined], $inputModeCtrl
+  var $keys, $numberKeys = [undefined], $numberCounts = [undefined], $keyModeCtrl
   var $undo, $eliminateByRules, $markCrossHatching
 
   function init() {
@@ -35,15 +35,21 @@ window.Board = window.Board ?? (() => {
         <div class="value">${number}</div>
         <div class="count"></div>
       </div>
-      `, '') + '<div class="key input-mode-ctrl"><div class="value">0</div></div>'
+      `, '') + `
+      <div class="key key-mode-ctrl">
+        <div class="value from-mode">0</div>
+        <div class="symbol">⤷</div>
+        <div class="value to-mode">0</div>
+      </div>
+      `
     numbers.forEach((number) => {
       const $numberKey = $E('div.key-'+number, $keys)
       $numberKeys.push($numberKey)
       $numberKey.addEventListener('click', () => onKeyPress(number))
       $numberCounts.push($E('div.count', $numberKey))
     })
-    $inputModeCtrl = $E('div.keys .input-mode-ctrl')
-    $inputModeCtrl.addEventListener('click', onToggleInputMode)
+    $keyModeCtrl = $E('div.keys .key-mode-ctrl')
+    $keyModeCtrl.addEventListener('click', onToggleKeyMode)
 
     const $commands = $E('div.commands')
     $undo = $E('button#undo', $commands)
@@ -75,6 +81,7 @@ window.Board = window.Board ?? (() => {
     Assumptions.clear()
 
     state.givens = givens
+    state.inputMode = 'nominating'
     state.status = fillingInGivens ? 'filling-in-givens' : 'solving'
 
     if(givens === Givens.EMPTY) {
@@ -110,7 +117,7 @@ window.Board = window.Board ?? (() => {
     clearSameValue()
     clearCrossHatching()
     highlightCandidates()
-    updateInputMode()
+    updateKeyMode()
     updateNumberCounts()
     updateCommands()
     Assumptions.render()
@@ -184,13 +191,13 @@ window.Board = window.Board ?? (() => {
     onValueChanged(cell)
   }
 
-  function onToggleInputMode() {
+  function onToggleKeyMode() {
     state.inputMode = isEliminating() ? 'nominating' : 'eliminating'
-    updateInputMode()
+    updateKeyMode()
   }
 
-  function updateInputMode() {
-    $toggle($inputModeCtrl, state.status === 'filling-in-givens')
+  function updateKeyMode() {
+    $toggle($keyModeCtrl, state.status === 'filling-in-givens')
 
     if(state.status === 'filling-in-givens') return
 
