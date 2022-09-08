@@ -6,7 +6,7 @@ window.Board = window.Board ?? (() => {
     givens: [],
     inputMode: 'nominating', // nominating | eliminating
     focused: null,
-    status: '' // filling-givens | solving | solved
+    status: '' // filling-in-givens | solving | solved
   }
 
   var $keys, $numberKeys = [undefined], $numberCounts = [undefined], $inputModeCtrl
@@ -69,21 +69,21 @@ window.Board = window.Board ?? (() => {
    * The cell value can be '1', '2', ..., '9', or empty ('').
    *
    * @param {array} givens the Sudoku given numbers
-   * @param {boolean} fillingGivens whether to start manually filling in givens
+   * @param {boolean} fillingInGivens whether to start manually filling in givens
    */
-  function load(givens, fillingGivens = false) {
+  function load(givens, fillingInGivens = false) {
     Assumptions.clear()
 
     state.givens = givens
-    state.status = fillingGivens ? 'filling-givens' : 'solving'
+    state.status = fillingInGivens ? 'filling-in-givens' : 'solving'
 
     if(givens === Givens.EMPTY) {
       Grid.keys().forEach(key =>
         state.cells.set(key, new Cell(key, '', ''))
       )
     } else if(givens === Givens.FILLED) {
-      state.cells.forEach(cell => {
-        if(cell.solved) state.cells.set(cell.key, new Cell(cell.key, cell.value, '', undefined, 'given'))
+      state.cells.forEach(({key, value, solved}) => {
+        if(solved) state.cells.set(key, new Cell(key, value, '', undefined, 'given'))
       })
       state.givens = matrixFrom(state.cells)
     } else {
@@ -134,7 +134,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function reload() {
-    return load(state.givens, state.status === 'filling-givens')
+    return load(state.givens, state.status === 'filling-in-givens')
   }
 
   function onFocus(key) {
@@ -148,7 +148,7 @@ window.Board = window.Board ?? (() => {
     highlightSameValue(cell)
     highlightCandidates(cell)
 
-    if(state.status === 'filling-givens') return
+    if(state.status === 'filling-in-givens') return
 
     clearCrossHatching(cell)
     updateCommands(cell.solved)
@@ -168,7 +168,7 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(state.focused)
 
-    if(state.status === 'filling-givens') {
+    if(state.status === 'filling-in-givens') {
       cell.value = cell.value === number ? '' : number
     } else if(isEliminating()) {
       const candidates = cell.eliminations
@@ -190,9 +190,9 @@ window.Board = window.Board ?? (() => {
   }
 
   function updateInputMode() {
-    $toggle($inputModeCtrl, state.status === 'filling-givens')
+    $toggle($inputModeCtrl, state.status === 'filling-in-givens')
 
-    if(state.status === 'filling-givens') return
+    if(state.status === 'filling-in-givens') return
 
     $toggle($keys, isEliminating(), 'eliminating')
 
@@ -273,7 +273,7 @@ window.Board = window.Board ?? (() => {
     .then(() => checkCorrectnessbyRules(cell))
     .then((valid) => { if(valid !== false) checkCompletion() })
 
-    if(state.status === 'filling-givens') return
+    if(state.status === 'filling-in-givens') return
 
     updateCommands(cell.solved)
     Assumptions.renderOptionsFor(cell)
