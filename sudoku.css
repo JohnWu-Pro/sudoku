@@ -337,17 +337,17 @@ button {
   z-index: 1;
 }
 .keys .key.key-mode-ctrl .value.from-mode {
-  top: clamp(7.2px, 2vmin, 8.4px);
-  left: clamp(1.8px, 0.5vmin, 2.1px);
+  top: clamp(9px, 2.5vmin, 10.5px);
+  left: clamp(1.08px, 0.3vmin, 1.26px);
 }
 .keys .key.key-mode-ctrl .symbol {
   color: #990099;
-  top: clamp(12.6px, 3.5vmin, 14.7px);
-  left: clamp(3.6px, 1vmin, 4.2px);
+  top: clamp(9px, 2.5vmin, 10.5px);
+  left: clamp(2.88px, 0.8vmin, 3.36px);
 }
 .keys .key.key-mode-ctrl .value.to-mode {
   bottom: clamp(9px, 2.5vmin, 10.5px);
-  right: clamp(1.8px, 0.5vmin, 2.1px);
+  right: clamp(1.08px, 0.3vmin, 1.26px);
 }
 
 .keys .key .value {
