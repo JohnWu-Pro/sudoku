@@ -40,8 +40,8 @@ class Assumption {
   get snapshots() { return [...this.#snapshots] }
 
   push(cell) {
-    const {key, value, cssClass} = cell
-    this.#snapshots.push({key, value, cssClass})
+    const {key, value, eliminated, cssClass} = cell
+    this.#snapshots.push({key, value, eliminated, cssClass})
   }
 
   pop() {
@@ -145,9 +145,9 @@ window.Assumptions = window.Assumptions ?? (() => {
       if(!assumption) throw Error(`Invalid assumption id: '${id}'.`)
 
       const cssClass = Assumption.ACCEPTED.cssClass
-      for(const {key, value} of assumption.snapshots) {
+      for(const {key, value, eliminated} of assumption.snapshots) {
         keys.add(key)
-        Assumption.ACCEPTED.push({key, value, cssClass})
+        Assumption.ACCEPTED.push({key, value, eliminated, cssClass})
       }
       assumption.accept()
     } while(assumption.id !== id)
@@ -171,8 +171,8 @@ window.Assumptions = window.Assumptions ?? (() => {
       assumption = pop()
       if(!assumption) throw Error(`Invalid assumption id: '${id}'.`)
 
-      for(const {key, value, cssClass} of assumption.snapshots.reverse()) {
-        cells.push(new Cell(key, value, cssClass))
+      for(const {key, value, eliminated, cssClass} of assumption.snapshots.reverse()) {
+        cells.push(new Cell(key, value, eliminated, cssClass))
       }
       assumption.reject()
     } while(assumption.id !== id)

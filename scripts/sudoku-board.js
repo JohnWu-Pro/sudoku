@@ -4,11 +4,13 @@ window.Board = window.Board ?? (() => {
   const state = {
     cells: new Map(),
     givens: [],
+    inputMode: 'nominating', // nominating | eliminating
     focused: null,
     status: '' // filling-givens | solving | solved
   }
 
-  var $numbers = [undefined], $counts = [undefined], $undo, $eliminateByRules, $markCrossHatching
+  var $keys, $numberKeys = [undefined], $numberCounts = [undefined], $inputModeCtrl
+  var $undo, $eliminateByRules, $markCrossHatching
 
   function init() {
     const $grid = $E('div.grid')
@@ -26,20 +28,22 @@ window.Board = window.Board ?? (() => {
       $E('div.cell-' + key, $grid).addEventListener('click', () => onFocus(key))
     })
 
-    const $keys = $E('div.keys')
     const numbers = Array(...Cell.CANDIDATES)
+    $keys = $E('div.keys')
     $keys.innerHTML = numbers.reduce((html, number) => html + `
       <div class="key key-${number}">
         <div class="value">${number}</div>
         <div class="count"></div>
       </div>
-      `, '')
+      `, '') + '<div class="key input-mode-ctrl"><div class="value">0</div></div>'
     numbers.forEach((number) => {
-      const $number = $E('div.key-'+number, $keys)
-      $numbers.push($number)
-      $number.addEventListener('click', () => onKeyPress(number))
-      $counts.push($E('div.count', $number))
+      const $numberKey = $E('div.key-'+number, $keys)
+      $numberKeys.push($numberKey)
+      $numberKey.addEventListener('click', () => onKeyPress(number))
+      $numberCounts.push($E('div.count', $numberKey))
     })
+    $inputModeCtrl = $E('div.keys .input-mode-ctrl')
+    $inputModeCtrl.addEventListener('click', onToggleInputMode)
 
     const $commands = $E('div.commands')
     $undo = $E('button#undo', $commands)
@@ -75,11 +79,11 @@ window.Board = window.Board ?? (() => {
 
     if(givens === Givens.EMPTY) {
       Grid.keys().forEach(key =>
-        state.cells.set(key, new Cell(key, 0))
+        state.cells.set(key, new Cell(key, '', ''))
       )
     } else if(givens === Givens.FILLED) {
       state.cells.forEach(cell => {
-        if(cell.solved) state.cells.set(cell.key, new Cell(cell.key, cell.value, undefined, 'given'))
+        if(cell.solved) state.cells.set(cell.key, new Cell(cell.key, cell.value, '', undefined, 'given'))
       })
       state.givens = matrixFrom(state.cells)
     } else {
@@ -87,7 +91,7 @@ window.Board = window.Board ?? (() => {
         const row = givens[rowIndex]
         Grid.COLUMNS.forEach((colId, colIndex) => {
           const key = Grid.keyOf(rowId, colId)
-          state.cells.set(key, new Cell(key, row[colIndex], undefined, 'given'))
+          state.cells.set(key, new Cell(key, row[colIndex], '', undefined, 'given'))
         })
       })
     }
@@ -106,6 +110,7 @@ window.Board = window.Board ?? (() => {
     clearSameValue()
     clearCrossHatching()
     highlightCandidates()
+    updateInputMode()
     updateNumberCounts()
     updateCommands()
     Assumptions.render()
@@ -151,9 +156,9 @@ window.Board = window.Board ?? (() => {
   }
 
   function highlightCandidates(cell) {
-    const candidates = cell?.candidates ?? new Set()
+    const candidates = cell ? (isEliminating() ? cell.eliminations : cell.candidates) : new Set()
     Cell.CANDIDATES.forEach((candidate) => {
-      $numbers[candidate].classList.toggle('candidate', candidates.has(candidate))
+      $numberKeys[candidate].classList.toggle('candidate', candidates.has(candidate))
     })
   }
 
@@ -165,13 +170,38 @@ window.Board = window.Board ?? (() => {
 
     if(state.status === 'filling-givens') {
       cell.value = cell.value === number ? '' : number
+    } else if(isEliminating()) {
+      const candidates = cell.eliminations
+      if(!candidates.delete(number)) candidates.add(number)
+      cell.eliminated = [...candidates]
     } else {
       const candidates = cell.candidates
       if(!candidates.delete(number)) candidates.add(number)
       cell.value = [...candidates]
     }
 
+    clearCrossHatching(cell)
     onValueChanged(cell)
+  }
+
+  function onToggleInputMode() {
+    state.inputMode = isEliminating() ? 'nominating' : 'eliminating'
+    updateInputMode()
+  }
+
+  function updateInputMode() {
+    $toggle($inputModeCtrl, state.status === 'filling-givens')
+
+    if(state.status === 'filling-givens') return
+
+    $toggle($keys, isEliminating(), 'eliminating')
+
+    const cell = state.focused ? state.cells.get(state.focused) : null
+    highlightCandidates(cell)
+  }
+
+  function isEliminating() {
+    return state.inputMode === 'eliminating'
   }
 
   function onUndo() {
@@ -184,7 +214,7 @@ window.Board = window.Board ?? (() => {
       return
     }
 
-    const {key, value, cssClass} = assumption.pop()
+    const {key, value, eliminated, cssClass} = assumption.pop()
     if(assumption.isEmpty()) { // check empty after pop()
       assumption.reject()
       Assumptions.pop()
@@ -194,7 +224,7 @@ window.Board = window.Board ?? (() => {
     clearSameValue()
     clearCrossHatching()
 
-    const cell = new Cell(key, value, cssClass)
+    const cell = new Cell(key, value, eliminated, cssClass)
     state.cells.set(key, cell)
     onValueChanged(cell)
 
@@ -211,6 +241,7 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(state.focused)
     cell.value = ''
+    cell.eliminated = ''
     onValueChanged(cell)
   }
 
@@ -264,7 +295,7 @@ window.Board = window.Board ?? (() => {
     })
 
     for(let index=1; index<=Config.scale; index++) {
-      $counts[index].innerHTML = counts[index]
+      $numberCounts[index].innerHTML = counts[index]
     }
   }
 
@@ -340,6 +371,7 @@ window.Board = window.Board ?? (() => {
 
     const cell = state.cells.get(state.focused)
     cell.value = [...candidates]
+    clearCrossHatching(cell)
     onValueChanged(cell)
   }
 
@@ -386,7 +418,8 @@ window.Board = window.Board ?? (() => {
   function onAssumptionAccepted(event) {
     const cssClass = Assumption.ACCEPTED.cssClass
     for(const key of event.detail.affected) {
-      const cell = new Cell(key, state.cells.get(key).value, cssClass) // Keep current value
+      const {value, eliminated} = state.cells.get(key)
+      const cell = new Cell(key, value, eliminated, cssClass) // Keep current value
       state.cells.set(key, cell)
       cell.render()
     }

@@ -251,12 +251,12 @@ button {
   color: blue;
 }
 
-.grid .cell .excluded::before {
-  content: '-'
+.grid .cell .eliminated:not(:empty)::before {
+  content: '-';
 }
-.grid .cell .excluded {
+.grid .cell .eliminated {
   font: normal clamp(11.52px, 3.2vmin, 13.44px) 'New Times Roman';
-  color: lightgrey;
+  color: #999999;
   position: relative;
   top: 10%;
 }
@@ -304,11 +304,13 @@ button {
 
 .keys {
   display: flex;
-  justify-content: space-evenly;
   margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
-  padding-right: 2%;
-  width: 92%;
+  padding-right: 1%;
+  width: 97%;
   text-align: center;
+}
+.keys > :last-child {
+  margin-left: clamp(7.2px, 2vmin, 8.4px) !important;
 }
 
 .keys .key {
@@ -324,11 +326,22 @@ button {
   font: normal clamp(23.4px, 6.5vmin, 27.3px) 'Arial';
   cursor: pointer;
 }
+.keys .input-mode-ctrl {
+  aspect-ratio: 5 / 4;
+  width: clamp(28.8px, 8vmin, 33.6px);
+  background: #f2f2f2;
+  border-style: groove;
+}
 
 .keys .key .value {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.keys.eliminating :not(:last-child) .value,
+.keys:not(.eliminating) :last-child .value {
+  text-decoration: 1px line-through red;
 }
 
 .keys .key.candidate {
@@ -338,12 +351,15 @@ button {
 .keys .key .count {
   position: absolute;
   z-index: 1;
-  top: 56%;
+  bottom: 0;
   padding: 0 0 1px 2px;
 
   font-size: 8pt;
   color: #990099;
   text-align: left;
+}
+.keys.eliminating .key .count {
+  display: none;
 }
 
 .commands {

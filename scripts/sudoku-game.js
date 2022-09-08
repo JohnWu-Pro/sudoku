@@ -136,7 +136,7 @@ window.Game = window.Game ?? (() => {
       return Promise.resolve(Givens.EMPTY)
         .then((givens) => Board.load(givens, true)) // to start manual given filling
         .then(() => timer.reset())
-        .then(() => rollingTitle('Filling Givens'))
+        .then(() => rollingTitle('Filling in Givens'))
         .then(() => Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`))
         .catch((error) => Prompt.error(error))
     } else {
