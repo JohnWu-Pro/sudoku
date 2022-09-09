@@ -3,6 +3,19 @@
 window.Game = window.Game ?? (() => {
 
   const DONE_BUTTON_LABEL = 'Givens are Ready'
+  const COMPLETION_MESSAGES = {
+    'Easy': "That was easy!",
+    'Medium': "That wasn't easy!",
+    'Hard': "That was hard!",
+    'Expert': "You're an expert!",
+    'Manual': "The givens were manully filled in.",
+  }
+
+  const state = {
+    selected: 'Easy',
+    timer: {elapsed: 0},
+    title: ''
+  }
 
   var timer
   var $gameSelection, $givensFilled
@@ -97,10 +110,8 @@ window.Game = window.Game ?? (() => {
   }
 
   function snapshot() {
-    return {
-      timer: {elapsed: timer.elapsed},
-      title: {selection: $gameSelection.innerHTML}
-    }
+    state.timer.elapsed = timer.elapsed
+    return state
   }
 
   function restore() {
@@ -110,8 +121,9 @@ window.Game = window.Game ?? (() => {
         ? Promise.resolve(game)
         : Assumptions.restore(assumptions)
           .then(() => Board.restore(board))
+          .then(() => Object.assign(state, game))
           .then(() => timer.resume(game.timer.elapsed))
-          .then(() => rollingTitle(game.title.selection))
+          .then(() => rollingTitle(game.title))
           .then(() => game)
       )
   }
@@ -130,6 +142,8 @@ window.Game = window.Game ?? (() => {
   }
 
   function start(selected) {
+    state.selected = selected
+
     $toggle($givensFilled, selected !== 'Manual')
 
     if(selected === 'Manual') {
@@ -151,6 +165,8 @@ window.Game = window.Game ?? (() => {
 
   let inRolling = false
   function rollingTitle(gameSelection) {
+    state.title = gameSelection
+
     $gameSelection.innerHTML = gameSelection
 
     if(inRolling) return
@@ -202,8 +218,8 @@ window.Game = window.Game ?? (() => {
     timer.stop()
     Prompt.success(`
       Congratulations!<br>
-      You solved this Sudoku game in ${Timer.format(timer.elapsed)}.<br>
-      Keep going!
+      You solved the Sudoku in ${Timer.format(timer.elapsed)}.<br>
+      ${COMPLETION_MESSAGES[state.selected]} Keep going!
       `)
   }
 
