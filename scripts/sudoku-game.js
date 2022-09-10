@@ -13,7 +13,7 @@ window.Game = window.Game ?? (() => {
 
   const state = {
     selected: 'Easy',
-    timer: {elapsed: 0},
+    timer: {elapsed: 0, status: 'stopped'},
     title: ''
   }
 
@@ -99,18 +99,18 @@ window.Game = window.Game ?? (() => {
   }
 
   function pause() {
-    timer.pause()
-
     // save the state
     State.set({
       game: snapshot(),
       board: Board.snapshot(),
       assumptions: Assumptions.snapshot()
     })
+
+    timer.pause()
   }
 
   function snapshot() {
-    state.timer.elapsed = timer.elapsed
+    state.timer = timer.snapshot()
     return state
   }
 
@@ -122,7 +122,7 @@ window.Game = window.Game ?? (() => {
         : Assumptions.restore(assumptions)
           .then(() => Board.restore(board))
           .then(() => Object.assign(state, game))
-          .then(() => timer.resume(game.timer.elapsed))
+          .then(() => timer.restore(game.timer))
           .then(() => rollingTitle(game.title))
           .then(() => game)
       )

@@ -17,23 +17,23 @@ class Timer {
   constructor(selector) {
     this.#$element = $E(selector)
     this.#handle = 0
-    this.#accumulated = 0
+    this.#setAccumulated(0)
     this.#started = 0
-    this.#status = 'stopped'
-
-    // this.#$element.classList.add(this.#status)
+    this.#setStatus('stopped')
   }
 
   get elapsed() {
     return this.#accumulated + (this.#status === 'running' ? Date.now() - this.#started : 0)
   }
 
+  get status() { return this.#status }
+
   start() {
     this.#_start(0)
   }
 
-  resume(accumulated) {
-    this.#_start(accumulated ?? this.#accumulated)
+  resume() {
+    if(this.#status === 'paused') this.#_start(this.#accumulated)
   }
 
   #_start(accumulated) {
@@ -46,7 +46,7 @@ class Timer {
   }
 
   pause() {
-    this.#_stop('paused')
+    if(this.#status === 'running') this.#_stop('paused')
   }
 
   stop() {
@@ -68,13 +68,28 @@ class Timer {
     this.#setAccumulated(0)
   }
 
+  snapshot() {
+    const {elapsed, status} = this
+    return {elapsed, status}
+  }
+
+  restore(state) {
+    const {elapsed, status} = state
+    if(status === 'running') {
+      this.#_start(elapsed)
+    } else {
+      this.#setAccumulated(elapsed)
+    }
+    this.#setStatus(status)
+  }
+
   #tick() {
     this.#$element.innerHTML = Timer.format(this.#accumulated + Date.now() - this.#started)
   }
 
   #setAccumulated(value) {
     this.#accumulated = value
-    this.#$element.innerHTML = Timer.format(this.#accumulated)
+    this.#$element.innerHTML = Timer.format(value)
   }
 
   #setStatus(value) {
