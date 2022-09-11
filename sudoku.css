@@ -5,7 +5,7 @@
 }
 
 :root {
-  --default-font-family: 'New Times Roman';
+  --main-font-family: var(--default-font-family, 'New Times Roman');
   --digit-font-family: 'Arial';
 
   --size-1vmin: clamp(3.6px, 1vmin, 4.2px);
@@ -74,7 +74,7 @@ button {
 .header select {
   background: #f2f2f2;
   color: navy;
-  font: bold var(--size-4vmin) var(--default-font-family);
+  font: bold var(--size-4vmin) var(--main-font-family);
   width: calc(var(--size-1vmin) * 31);
 }
 
@@ -90,11 +90,11 @@ button {
 }
 
 .header .title {
-  font: bold var(--size-5vmin) var(--default-font-family);
+  font: bold var(--size-5vmin) var(--main-font-family);
 }
 .header .game-selection {
   color: navy;
-  font: normal var(--size-4vmin) var(--default-font-family);
+  font: normal var(--size-4vmin) var(--main-font-family);
 }
 
 .header .buttons {
@@ -133,7 +133,7 @@ button {
 
 .header .buttons > button::after {
   display: inline-block;
-  font: normal var(--size-4vmin) var(--default-font-family);
+  font: normal var(--size-4vmin) var(--main-font-family);
 }
 .header .restart::after {
   /* U+21BB ↻*/
@@ -250,7 +250,7 @@ button {
 }
 
 .grid .cell .value {
-  font: bold var(--size-6vmin) var(--default-font-family);
+  font: bold var(--size-6vmin) var(--main-font-family);
   position: relative;
   top: 50%;
   margin: auto;
@@ -263,7 +263,7 @@ button {
 }
 
 .grid .cell .value.pending {
-  font: normal var(--size-4vmin) var(--default-font-family);
+  font: normal var(--size-4vmin) var(--main-font-family);
   color: grey;
   position: relative;
   top: 28%;
@@ -277,7 +277,7 @@ button {
   content: '-';
 }
 .grid .cell .eliminated {
-  font: normal calc(var(--size-1vmin) * 3.2) var(--default-font-family);
+  font: normal calc(var(--size-1vmin) * 3.2) var(--main-font-family);
   color: #999999;
   position: relative;
   top: 10%;
@@ -306,7 +306,7 @@ button {
   border-width: 1px 0 0 1px;
 
   color: lightgrey;
-  font: bold calc(var(--size-1vmin) * 3.2) var(--default-font-family);
+  font: bold calc(var(--size-1vmin) * 3.2) var(--main-font-family);
 }
 
 .grid .x-axis .coord {
@@ -408,13 +408,15 @@ button {
   padding-right: 2%;
   width: 92%;
   text-align: center;
-  font: normal var(--size-4vmin) var(--default-font-family);
 }
 
 .commands .buttons {
   display: flex;
   justify-content: space-evenly;
   white-space: nowrap;
+}
+.commands .buttons > button {
+  font: normal var(--size-4vmin) var(--main-font-family);
 }
 .commands .buttons > :first-child {
   margin-right: auto;
@@ -458,6 +460,10 @@ button {
 
   border: 1px solid #eaeaea;
   width: auto;
+}
+
+.commands .pending .assumption > * {
+  font: normal var(--size-4vmin) var(--main-font-family);
 }
 
 .commands .pending .assumption button {
@@ -514,7 +520,7 @@ button {
   width: 100%;
   margin: var(--size-0_5vmin) auto;
   text-align: center;
-  font: var(--size-3vmin) var(--default-font-family);
+  font: var(--size-3vmin) var(--main-font-family);
   color: #d0d0d0;
   top: 96%;
 }
@@ -535,7 +541,7 @@ button {
 .settings-header {
   padding: var(--size-3vmin) 0;
   border-bottom: 2px solid lightgrey;
-  font: bold var(--size-5vmin) var(--default-font-family);
+  font: bold var(--size-5vmin) var(--main-font-family);
 }
 .settings-header > span:not(:first-child) {
   margin-left: var(--size-8vmin);
@@ -554,7 +560,7 @@ button {
 .settings-content,
 .settings-content select {
   background: white;
-  font: normal var(--size-4vmin) var(--default-font-family);
+  font: normal var(--size-4vmin) var(--main-font-family);
   text-align: right;
 }
 .settings-content select#auxiliary-features {
