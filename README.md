@@ -2,13 +2,13 @@
 
 This is an installable online Sudoku web application.
 
-+ Designed for playing on mobile phones,
++ Designed for playing on mobile devices,
 + Usable as a normal web application (a.k.a. webpage or website) on your desktop or mobile phone,
 + Installable to your desktop or mobile home screen as a progressive web application (PWA).
 
 # Features
-While the initial goal of the application is to replace pencil and eraser while playing Sudoku.
-It's been developed and enhanced with the following features:
+While the initial goal of the application is to replace pencil and eraser while playing Sudoku,
+it's been developed and enhanced with the following features:
 
 ### Built-in
 + Pause (and save state) when leaving or closing the webapp/page,

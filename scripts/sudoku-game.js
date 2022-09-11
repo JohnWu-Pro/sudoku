@@ -49,6 +49,7 @@ window.Game = window.Game ?? (() => {
     $gameSelection = $E('.game-selection', $header)
     $E('select', $header).addEventListener('change', onSelected)
     $E('.restart', $header).addEventListener('click', onRestart)
+    $E('.settings', $header).addEventListener('click', Settings.View.show)
 
     $E('.commands .buttons').innerHTML = `
       <button class="block border hidden" id="undo"><span class="cmd-text"> Undo</span></button>

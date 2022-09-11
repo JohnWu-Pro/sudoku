@@ -4,7 +4,7 @@ window.Board = window.Board ?? (() => {
   const state = {
     cells: new Map(),
     givens: [],
-    inputMode: 'nominating', // nominating | eliminating
+    keyMode: 'nominating', // nominating | eliminating
     focused: null,
     status: '' // filling-in-givens | solving | solved
   }
@@ -81,7 +81,7 @@ window.Board = window.Board ?? (() => {
     Assumptions.clear()
 
     state.givens = givens
-    state.inputMode = 'nominating'
+    state.keyMode = 'nominating'
     state.status = fillingInGivens ? 'filling-in-givens' : 'solving'
 
     if(givens === Givens.EMPTY) {
@@ -192,12 +192,12 @@ window.Board = window.Board ?? (() => {
   }
 
   function onToggleKeyMode() {
-    state.inputMode = isEliminating() ? 'nominating' : 'eliminating'
+    state.keyMode = isEliminating() ? 'nominating' : 'eliminating'
     updateKeyMode()
   }
 
   function updateKeyMode() {
-    $toggle($keyModeCtrl, state.status === 'filling-in-givens')
+    $toggle($keyModeCtrl, !Settings.markEliminated || state.status === 'filling-in-givens')
 
     if(state.status === 'filling-in-givens') return
 
@@ -208,7 +208,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function isEliminating() {
-    return state.inputMode === 'eliminating'
+    return Settings.markEliminated && state.keyMode === 'eliminating'
   }
 
   function onUndo() {
@@ -277,7 +277,7 @@ window.Board = window.Board ?? (() => {
     highlightCandidates(cell)
     delay(1)
     .then(() => updateNumberCounts())
-    .then(() => checkCorrectnessbyRules(cell))
+    .then(() => checkCorrectnessByRules(cell))
     .then((valid) => { if(valid !== false) checkCompletion() })
 
     if(state.status === 'filling-in-givens') return
@@ -306,8 +306,8 @@ window.Board = window.Board ?? (() => {
     }
   }
 
-  function checkCorrectnessbyRules(cell) {
-    if(!Settings.checkCorrectnessbyRules) return undefined
+  function checkCorrectnessByRules(cell) {
+    if(!Settings.checkCorrectnessByRules) return undefined
     if(!cell.solved) return undefined
 
     for(const [house, keys] of Grid.houses(cell.key)) {

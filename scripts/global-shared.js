@@ -43,3 +43,14 @@ Array.replace = function(target, subs) {
   target.length = 0
   if(!Object.isEmpty(subs)) target.push(...subs)
 }
+
+function camelize(hyphenized) {
+  return hyphenized
+    .split('-')
+    .map((word, i) => i===0 ? word : word.at(0).toUpperCase() + word.substring(1))
+    .join('')
+}
+
+function hyphenize(camelized) {
+  return camelized.replaceAll(/([^A-Z])([A-Z])/g, '$1-$2').toLowerCase()
+}

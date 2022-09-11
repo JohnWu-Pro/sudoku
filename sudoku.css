@@ -10,6 +10,10 @@ a, a:hover, a:visited {
   text-decoration: none;
 }
 
+body {
+  position: relative;
+}
+
 button {
   cursor: pointer;
 }
@@ -20,10 +24,8 @@ button {
 
 .header {
   width: clamp(345.6px, 96vmin, 403.2px);
-  margin: clamp(6.4px, 1vmax, 9px);
+  margin: clamp(6.4px, 1vmax, 9px) auto 0 auto;
   margin-bottom: clamp(5.12px, 0.8vmax, 7.2px);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .header > div {
@@ -489,9 +491,88 @@ button {
 .footer {
   position: absolute;
   width: 100%;
-  margin: 0.6vmin auto;
+  margin: clamp(1.8px, 0.5vmin, 2.1px) auto;
   text-align: center;
   font: clamp(10.8px, 3vmin, 12.6px) 'New Times Roman';
   color: #d0d0d0;
-  top: 96%;
+  top: 96vh;
+}
+
+.overlay {
+  z-index: 10; position: absolute;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: white;
+  opacity: 1;
+}
+
+.settings-view {
+  width: clamp(338.4px, 94vmin, 394.8px);
+  margin: 0 auto;
+}
+
+.settings-header {
+  padding: clamp(10.8px, 3vmin, 12.6px) 0;
+  border-bottom: 2px solid lightgrey;
+  font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+}
+.settings-header > span:not(:first-child) {
+  margin-left: clamp(10.8px, 2vmin, 12.6px);
+}
+.settings-header .go-back::before {
+  content: '🡠';
+}
+
+.settings-content,
+.settings-content select {
+  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+}
+
+.settings-content > div {
+  padding: clamp(10.8px, 2vmin, 12.6px) 0;
+  border-bottom: 1px solid lightgrey;
+  display: inline-flex;
+  width: 100%;
+}
+.settings-content > div > * {
+  display: inline-block;
+}
+.settings-content > div > :last-child {
+  margin-left: auto;
+}
+
+.switch {
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+
+  --switch-size: clamp(18px, 5vmin, 21px);
+  --switch-edge: clamp(1.8px, 0.5vmin, 2.1px);
+
+  height: var(--switch-size);
+  width: calc(var(--switch-size) * 1.8);
+  border-radius: calc(var(--switch-size) / 2);
+  border: none;
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  background: lightgrey;
+  transition: all .2s ease;
+}
+.switch:after {
+  content: '';
+  position: absolute;
+  top: var(--switch-edge);
+  left: var(--switch-edge);
+  width: calc(var(--switch-size) - var(--switch-edge) * 2);
+  height: calc(var(--switch-size) - var(--switch-edge) * 2);
+  border-radius: 50%;
+  background: white;
+  transition: all .2s cubic-bezier(.5,.1,.75,1.35);
+}
+.switch:checked {
+  background: #3333ff;
+}
+.switch:checked:after {
+  transform: translateX(calc(var(--switch-size) * 0.8));
 }
