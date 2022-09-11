@@ -2,16 +2,16 @@
   border: none;
   margin: 0;
   padding: 0;
-  z-index: 0;
 }
 
 a, a:hover, a:visited {
-  color: #d0d0d0;
+  color: #cccccc;
   text-decoration: none;
 }
 
 body {
-  position: relative;
+  position: static;
+  z-index: 0;
 }
 
 button {
@@ -525,7 +525,12 @@ button {
 
 .settings-content,
 .settings-content select {
+  background: white;
   font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  text-align: right;
+}
+.settings-content select#auxiliary-features {
+  width: 70%;
 }
 
 .settings-content > div {
@@ -534,8 +539,17 @@ button {
   display: inline-flex;
   width: 100%;
 }
+.settings-content > div.level-1 > label {
+  font-weight: bold;
+}
+.settings-content > div.level-2 {
+  margin-left: clamp(10.8px, 2vmin, 12.6px);
+  width: calc(100% - clamp(10.8px, 2vmin, 12.6px));
+  border-bottom: 1px dotted lightgrey;
+}
 .settings-content > div > * {
   display: inline-block;
+  white-space: nowrap;
 }
 .settings-content > div > :last-child {
   margin-left: auto;

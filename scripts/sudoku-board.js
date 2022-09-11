@@ -197,7 +197,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function updateKeyMode() {
-    $toggle($keyModeCtrl, !Settings.markEliminated || state.status === 'filling-in-givens')
+    $toggle($keyModeCtrl, !Settings.supportMarkingEliminated || state.status === 'filling-in-givens')
 
     if(state.status === 'filling-in-givens') return
 
@@ -208,7 +208,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function isEliminating() {
-    return Settings.markEliminated && state.keyMode === 'eliminating'
+    return Settings.supportMarkingEliminated && state.keyMode === 'eliminating'
   }
 
   function onUndo() {

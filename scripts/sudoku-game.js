@@ -61,9 +61,11 @@ window.Game = window.Game ?? (() => {
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
 
-    timer = new Timer('.header .buttons .timer')
+    timer = new Timer('.header .timer')
 
     window.addEventListener("puzzle-solved", onSolved)
+    window.addEventListener("overlay-rendered", () => timer.pause())
+    window.addEventListener("overlay-closed", () => timer.resume())
 
     return Board.init()
   }

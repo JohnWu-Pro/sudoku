@@ -23,6 +23,10 @@ window.App = window.App ?? (() => {
       onDeactivate()
     })
 
+    // Clear location - remove hash if exists
+    const {pathname, search, hash} = window.location
+    if(hash) history.replaceState(null, document.title, pathname + search)
+
     Game.init()
     .then(() => Game.startup())
   }
