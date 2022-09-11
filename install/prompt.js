@@ -80,7 +80,7 @@ function css() { return blockCommentOf(css) /*
     z-index: 999; position: absolute;
     margin: clamp(1.8px, 0.5vmin, 2.1px) 0;
     width: 64vw;
-    left: 36vw; top: 93.6vh;
+    left: 36vw; top: 93.6%;
     text-align: right;
     overflow: hidden;
   }

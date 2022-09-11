@@ -495,7 +495,7 @@ button {
   text-align: center;
   font: clamp(10.8px, 3vmin, 12.6px) 'New Times Roman';
   color: #d0d0d0;
-  top: 96vh;
+  top: 96%;
 }
 
 .overlay {

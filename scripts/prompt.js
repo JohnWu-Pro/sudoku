@@ -30,7 +30,7 @@ window.Prompt = window.Prompt ?? (() => {
     .app-prompt-panel {
       display: block;
       position: absolute; z-index: 99;
-      top: 90vh;
+      top: 90%;
       width: 100%;
       overflow: hidden;
     }
