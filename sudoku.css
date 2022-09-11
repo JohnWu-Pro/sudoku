@@ -4,6 +4,26 @@
   padding: 0;
 }
 
+:root {
+  --default-font-family: 'New Times Roman';
+  --digit-font-family: 'Arial';
+
+  --size-1vmin: clamp(3.6px, 1vmin, 4.2px);
+
+  --size-0_5vmin: calc(var(--size-1vmin) * 0.5);
+  --size-1_5vmin: calc(var(--size-1vmin) * 1.5);
+  --size-2vmin:   calc(var(--size-1vmin) * 2);
+  --size-2_5vmin: calc(var(--size-1vmin) * 2.5);
+  --size-3vmin:   calc(var(--size-1vmin) * 3);
+  --size-4vmin:   calc(var(--size-1vmin) * 4);
+  --size-5vmin:   calc(var(--size-1vmin) * 5);
+  --size-6vmin:   calc(var(--size-1vmin) * 6);
+  --size-8vmin:   calc(var(--size-1vmin) * 8);
+  --size-10vmin:  calc(var(--size-1vmin) * 10);
+
+  --size-1vmax: clamp(6.4px, 1vmax, 9px);
+}
+
 a, a:hover, a:visited {
   color: #cccccc;
   text-decoration: none;
@@ -23,16 +43,16 @@ button {
 }
 
 .header {
-  width: clamp(345.6px, 96vmin, 403.2px);
-  margin: clamp(6.4px, 1vmax, 9px) auto 0 auto;
-  margin-bottom: clamp(5.12px, 0.8vmax, 7.2px);
+  width: calc(var(--size-1vmin) * 96);
+  margin: var(--size-1vmax) auto 0 auto;
+  margin-bottom: calc(var(--size-1vmax) * 0.8);
 }
 
 .header > div {
   background: #f2f2f2;
   display: flex;
   margin-left: 0;
-  margin-right: clamp(7.2px, 2vmin, 8.4px);
+  margin-right: var(--size-2vmin);
 }
 
 .header > div > div {
@@ -54,8 +74,8 @@ button {
 .header select {
   background: #f2f2f2;
   color: navy;
-  font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
-  width: clamp(111.6px, 31vmin, 130.2px);
+  font: bold var(--size-4vmin) var(--default-font-family);
+  width: calc(var(--size-1vmin) * 31);
 }
 
 .header .center {
@@ -70,11 +90,11 @@ button {
 }
 
 .header .title {
-  font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+  font: bold var(--size-5vmin) var(--default-font-family);
 }
 .header .game-selection {
   color: navy;
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  font: normal var(--size-4vmin) var(--default-font-family);
 }
 
 .header .buttons {
@@ -83,7 +103,7 @@ button {
 }
 .header .buttons > button {
   display: block;
-  padding: 0 clamp(5.4px, 1.5vmin, 6.3px) clamp(1.8px, 0.5vmin, 2.1px) clamp(5.4px, 1.5vmin, 6.3px);
+  padding: 0 var(--size-1_5vmin) var(--size-0_5vmin) var(--size-1_5vmin);
 
   border: 1px outset #eaeaea;
   border-radius: clamp(3.6px, 1vmin, 4.2px);
@@ -107,13 +127,13 @@ button {
 
 .header .buttons > .timer {
   display: inline-block;
-  font: normal clamp(16.2px, 4.5vmin, 18.9px) 'Digital-7 Mono';
+  font: normal calc(var(--size-1vmin) * 4.5) 'Digital-7 Mono';
   margin: auto;
 }
 
 .header .buttons > button::after {
   display: inline-block;
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  font: normal var(--size-4vmin) var(--default-font-family);
 }
 .header .restart::after {
   /* U+21BB ↻*/
@@ -125,12 +145,12 @@ button {
 }
 
 .board {
-  width: clamp(352.8px, 98vmin, 411.6px);
+  width: calc(var(--size-1vmin) * 98);
   margin: 0 auto;
 }
 
 .grid {
-  padding-left: clamp(5.76px, 1.6vmin, 6.72px);
+  padding-left: calc(var(--size-1vmin) * 1.6);
   width: 100%;
   text-align: center;
 }
@@ -144,7 +164,7 @@ button {
   border: solid lightgrey;
   border-width: 1px 0 0 1px;
   position: relative;
-  width: clamp(36px, 10vmin, 42px);
+  width: var(--size-10vmin);
 }
 
 .grid .cell.focused {
@@ -230,7 +250,7 @@ button {
 }
 
 .grid .cell .value {
-  font: bold clamp(21.6px, 6vmin, 25.2px) 'New Times Roman';
+  font: bold var(--size-6vmin) var(--default-font-family);
   position: relative;
   top: 50%;
   margin: auto;
@@ -243,7 +263,7 @@ button {
 }
 
 .grid .cell .value.pending {
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  font: normal var(--size-4vmin) var(--default-font-family);
   color: grey;
   position: relative;
   top: 28%;
@@ -257,7 +277,7 @@ button {
   content: '-';
 }
 .grid .cell .eliminated {
-  font: normal clamp(11.52px, 3.2vmin, 13.44px) 'New Times Roman';
+  font: normal calc(var(--size-1vmin) * 3.2) var(--default-font-family);
   color: #999999;
   position: relative;
   top: 10%;
@@ -272,12 +292,12 @@ button {
 .grid .cell .cross.row {
   left: 6%;
   width: 88%;
-  height: clamp(3.6px, 1vmin, 4.2px);
+  height: var(--size-1vmin);
 }
 .grid .cell .cross.column {
   left: 45%; /* 50% - (1vmin / 10vmin) / 2 */
   top: 6%;
-  width: clamp(3.6px, 1vmin, 4.2px);
+  width: var(--size-1vmin);
   height: 88%;
 }
 
@@ -286,11 +306,11 @@ button {
   border-width: 1px 0 0 1px;
 
   color: lightgrey;
-  font: bold clamp(11.52px, 3.2vmin, 13.44px) 'New Times Roman';
+  font: bold calc(var(--size-1vmin) * 3.2) var(--default-font-family);
 }
 
 .grid .x-axis .coord {
-  width: clamp(36px, 10vmin, 42px);
+  width: var(--size-10vmin);
 }
 
 .grid .y-axis {
@@ -306,50 +326,51 @@ button {
 
 .keys {
   display: flex;
-  margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
+  justify-content: space-around;
+  margin: var(--size-3vmin) auto 0 auto;
   padding-right: 1%;
   width: 97%;
   text-align: center;
 }
 .keys > :last-child {
-  margin-left: clamp(7.2px, 2vmin, 8.4px) !important;
+  margin-left: var(--size-2vmin) !important;
 }
 
 .keys .key {
   aspect-ratio: 1 / 1;
-  width: clamp(28.8px, 8vmin, 33.6px);
+  width: var(--size-8vmin);
   position: relative;
-  margin: clamp(1.8px, 0.5vmin, 2.1px);
+  margin: var(--size-0_5vmin);
 
   border: 1px outset #eaeaea;
-  border-radius: clamp(3.6px, 1vmin, 4.2px);
+  border-radius: var(--size-1vmin);
 
   color: grey;
-  font: normal clamp(23.4px, 6.5vmin, 27.3px) 'Arial';
+  font: normal calc(var(--size-1vmin) * 6.5) var(--digit-font-family);
   cursor: pointer;
 }
 .keys .key.key-mode-ctrl {
   aspect-ratio: 5 / 4;
-  width: clamp(23.04px, 6.4vmin, 26.88px);
+  width: calc(var(--size-1vmin) * 6.4);
 }
 
 .keys .key.key-mode-ctrl > div {
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'Arial';
+  font: normal var(--size-4vmin) var(--digit-font-family);
   position: absolute;
   z-index: 1;
 }
 .keys .key.key-mode-ctrl .value.from-mode {
-  top: clamp(9px, 2.5vmin, 10.5px);
-  left: clamp(1.08px, 0.3vmin, 1.26px);
+  top: var(--size-2_5vmin);
+  left: calc(var(--size-1vmin) * 0.3);
 }
 .keys .key.key-mode-ctrl .symbol {
   color: #990099;
-  top: clamp(9px, 2.5vmin, 10.5px);
-  left: clamp(2.88px, 0.8vmin, 3.36px);
+  top: var(--size-2_5vmin);
+  left: calc(var(--size-1vmin) * 0.8);
 }
 .keys .key.key-mode-ctrl .value.to-mode {
-  bottom: clamp(9px, 2.5vmin, 10.5px);
-  right: clamp(1.08px, 0.3vmin, 1.26px);
+  bottom: var(--size-2_5vmin);
+  right: calc(var(--size-1vmin) * 0.3);
 }
 
 .keys .key .value {
@@ -374,7 +395,7 @@ button {
   bottom: 0;
   padding: 0 0 1px 2px;
 
-  font-size: clamp(10.8px, 3vmin, 12.6px);
+  font-size: var(--size-3vmin);
   color: #990099;
   text-align: left;
 }
@@ -383,11 +404,11 @@ button {
 }
 
 .commands {
-  margin: clamp(10.8px, 3vmin, 12.6px) auto 0 auto;
+  margin: var(--size-3vmin) auto 0 auto;
   padding-right: 2%;
   width: 92%;
   text-align: center;
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  font: normal var(--size-4vmin) var(--default-font-family);
 }
 
 .commands .buttons {
@@ -422,13 +443,13 @@ button {
 
 .commands .block {
   display: block;
-  margin: clamp(3.6px, 1vmin, 4.2px);
-  padding: clamp(3.6px, 1vmin, 4.2px) clamp(7.2px, 2vmin, 8.4px);
+  margin: var(--size-1vmin);
+  padding: var(--size-1vmin) var(--size-2vmin);
 }
 
 .commands .border {
   border: 1px outset #eaeaea;
-  border-radius: clamp(3.6px, 1vmin, 4.2px);
+  border-radius: var(--size-1vmin);
 }
 
 .commands .pending .assumption {
@@ -441,11 +462,11 @@ button {
 
 .commands .pending .assumption button {
   display: block;
-  margin: clamp(3.6px, 1vmin, 4.2px);
-  padding: 0 clamp(5.4px, 1.5vmin, 6.3px) clamp(1.8px, 0.5vmin, 2.1px) clamp(5.4px, 1.5vmin, 6.3px);
+  margin: var(--size-1vmin);
+  padding: 0 var(--size-1_5vmin) var(--size-0_5vmin) var(--size-1_5vmin);
 
   border: 1px outset #eaeaea;
-  border-radius: clamp(3.6px, 1vmin, 4.2px);
+  border-radius: var(--size-1vmin);
 }
 .commands .pending .assumption button::after {
   content: '';
@@ -453,8 +474,8 @@ button {
   background: border-box center/125% no-repeat;
   position: relative;
   top: 25%;
-  width: clamp(14.4px, 4vmin, 16.8px);
-  height: clamp(14.4px, 4vmin, 16.8px);
+  width: var(--size-4vmin);
+  height: var(--size-4vmin);
 }
 
 .commands .pending .assumption.first button[data-action="accept"]::after {
@@ -491,9 +512,9 @@ button {
 .footer {
   position: absolute;
   width: 100%;
-  margin: clamp(1.8px, 0.5vmin, 2.1px) auto;
+  margin: var(--size-0_5vmin) auto;
   text-align: center;
-  font: clamp(10.8px, 3vmin, 12.6px) 'New Times Roman';
+  font: var(--size-3vmin) var(--default-font-family);
   color: #d0d0d0;
   top: 96%;
 }
@@ -507,17 +528,17 @@ button {
 }
 
 .settings-view {
-  width: clamp(338.4px, 94vmin, 394.8px);
+  width: calc(var(--size-1vmin) * 94);
   margin: 0 auto;
 }
 
 .settings-header {
-  padding: clamp(10.8px, 3vmin, 12.6px) 0;
+  padding: var(--size-3vmin) 0;
   border-bottom: 2px solid lightgrey;
-  font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
+  font: bold var(--size-5vmin) var(--default-font-family);
 }
 .settings-header > span:not(:first-child) {
-  margin-left: clamp(28.8px, 8vmin, 33.6px);
+  margin-left: var(--size-8vmin);
 }
 .settings-header .go-back::before {
   /* U+1F860 🡠, U+1F868 🡨, U+1F870 🡰 */
@@ -525,15 +546,15 @@ button {
   display: inline-block;
   position: absolute;
   background: border-box 50% 0 / 125% no-repeat url('images/U1F860.left-arrow.png');
-  width: clamp(21.6px, 6vmin, 25.2px);
-  height: clamp(21.6px, 6vmin, 25.2px);
+  width: var(--size-6vmin);
+  height: var(--size-6vmin);
   cursor: pointer;
 }
 
 .settings-content,
 .settings-content select {
   background: white;
-  font: normal clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+  font: normal var(--size-4vmin) var(--default-font-family);
   text-align: right;
 }
 .settings-content select#auxiliary-features {
@@ -541,7 +562,7 @@ button {
 }
 
 .settings-content > div {
-  padding: clamp(10.8px, 3vmin, 12.6px) 0;
+  padding: var(--size-3vmin) 0;
   border-bottom: 1px solid lightgrey;
   display: inline-flex;
   width: 100%;
@@ -550,8 +571,8 @@ button {
   font-weight: bold;
 }
 .settings-content > div.level-2 {
-  margin-left: clamp(10.8px, 3vmin, 12.6px);
-  width: calc(100% - clamp(10.8px, 3vmin, 12.6px));
+  margin-left: var(--size-3vmin);
+  width: calc(100% - var(--size-3vmin));
   border-bottom: 1px dotted lightgrey;
 }
 .settings-content > div > * {
@@ -567,8 +588,8 @@ button {
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
-  --switch-size: clamp(18px, 5vmin, 21px);
-  --switch-edge: clamp(1.8px, 0.5vmin, 2.1px);
+  --switch-size: var(--size-5vmin);
+  --switch-edge: var(--size-0_5vmin);
 
   height: var(--switch-size);
   width: calc(var(--switch-size) * 1.8);
