@@ -75,7 +75,7 @@ function hide() {
   panel = null
 }
 
-function css() { return blockCommentOf(css) /*
+function css() { return `
   .install-prompt-panel {
     z-index: 999; position: absolute;
     margin: clamp(1.8px, 0.5vmin, 2.1px) 0;
@@ -120,14 +120,12 @@ function css() { return blockCommentOf(css) /*
     position: relative;
     top: clamp(-4.2px, -1vmin, -3.6px);
     padding: 0 clamp(3.6px, 1vmin, 4.2px);
-  }
-*/}
+  }`
+}
 
-function content() { return blockCommentOf(content) /*
-  <button type="button" onclick="InstallPrompt.onClick()"><img src="install/icon.png"><span>Add to Home Screen</span></button>
-*/}
-
-function blockCommentOf(func) { return func.toString().replace(/^[^\/]+\/\*/, '').replace(/\*\/[^\/]+$/, '') }
+function content() { return `
+  <button type="button" onclick="InstallPrompt.onClick()"><img src="install/icon.png"><span>Add to Home Screen</span></button>`
+}
 
 return {onBeforePrompt, onClick, onAfterPrompted}
 

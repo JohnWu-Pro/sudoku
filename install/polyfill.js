@@ -40,6 +40,10 @@ if(!('onappinstalled' in window)) {
 //
 // Install-Demo UI and control
 //
+const images = [ undefined,
+  'install/firefox.step-1.en.png',
+  'install/firefox.step-2.en.png',
+]
 var panel = {}
 var closed = false
 
@@ -47,13 +51,13 @@ function show() {
   // console.debug("[DEBUG] Calling InstallDemo.show() ...")
 
   // Preload install-demo images
-  appendElement('link', {rel: "preload", href: "install/firefox.step-1.png", as: "image"}, document.head)
-  appendElement('link', {rel: "preload", href: "install/firefox.step-2.png", as: "image"}, document.head)
+  appendElement('link', {rel: "preload", href: images[1], as: "image"}, document.head)
+  appendElement('link', {rel: "preload", href: images[2], as: "image"}, document.head)
 
   // Load style and div
   appendElement('style', {type: "text/css", id: "install-demo"}, document.head).innerHTML = css()
 
-  panel = appendElement('div', {className: "install-demo-panel hide"})
+  panel = appendElement('div', {className: "install-demo-panel hidden"})
   panel.innerHTML = content()
 
   closed = false
@@ -61,7 +65,7 @@ function show() {
   // Show the steps
   const stepDiv = $E('div.step-x', panel)
   return delay(300)
-    .then(() => closed ? 0 : panel.classList.remove('hide'))
+    .then(() => closed ? 0 : panel.classList.remove('hidden'))
     .then(() => closed ? 0 : (stepDiv.innerHTML = step1()))
     .then(() => closed ? 0 : delay(1500))
     .then(() => closed ? 0 : $E('.annotation', stepDiv).classList.add('animate'))
@@ -79,11 +83,11 @@ function onClose() {
   closed = true
   $E('div.install-demo-panel').remove()
   $E('style#install-demo', document.head).remove()
-  $E('link[href="install/firefox.step-1.png"]', document.head).remove()
-  $E('link[href="install/firefox.step-2.png"]', document.head).remove()
+  $E(`link[href="${images[1]}"]`, document.head).remove()
+  $E(`link[href="${images[2]}"]`, document.head).remove()
 }
 
-function css() { return blockCommentOf(css) /*
+function css() { return `
   .install-demo-panel {
     z-index: 100; position: absolute;
     width: 84%;
@@ -94,7 +98,7 @@ function css() { return blockCommentOf(css) /*
     background-color: #0099ff;
   }
 
-  .install-demo-panel.hide {
+  .install-demo-panel.hidden {
     display: none;
   }
 
@@ -111,7 +115,7 @@ function css() { return blockCommentOf(css) /*
 
   .install-demo-panel .step-1.annotation {
     z-index: 200; position: absolute;
-    left: 79.6%; top: 79.8%;
+    left: 79.6%; top: 80.8%;
     width: 24%; height: 10%;
   }
 
@@ -134,7 +138,7 @@ function css() { return blockCommentOf(css) /*
 
   .install-demo-panel .step-2.annotation {
     z-index: 200; position: absolute;
-    left: 35.6%; top: 48.4%;
+    left: 30.8%; top: 48.4%;
     width: 40%; height: 36%;
   }
 
@@ -169,36 +173,34 @@ function css() { return blockCommentOf(css) /*
     cursor: pointer;
     background: #f0f0ff;
     color: #e066ff;
-  }
-*/}
+  }`
+}
 
-function content() { return blockCommentOf(content) /*
+function content() { return `
   <div class="step-x">
   </div>
   <div class="cmd">
-    <button type="button" onclick="InstallDemo.onClose()">已了解</button>
-  </div>
-*/}
+    <button type="button" onclick="InstallDemo.onClose()">Got it!</button>
+  </div>`
+}
 
-function step1() { return blockCommentOf(step1) /*
-  <img src="install/firefox.step-1.png">
+function step1() { return `
+  <img src="${images[1]}">
   <div class="step-1 annotation">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50%" cy="50%" rx="16" ry="24" />
     </svg>
-  </div>
-*/}
+  </div>`
+}
 
-function step2() { return blockCommentOf(step2) /*
-  <img src="install/firefox.step-2.png">
+function step2() { return `
+  <img src="${images[2]}">
   <div class="step-2 annotation">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50%" cy="50%" rx="16" ry="32" />
     </svg>
-  </div>
-*/}
-
-function blockCommentOf(func) { return func.toString().replace(/^[^\/]+\/\*/, '').replace(/\*\/[^\/]+$/, '') }
+  </div>`
+}
 
 window.InstallDemo = {show, onClose}
 
