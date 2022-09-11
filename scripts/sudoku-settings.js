@@ -7,7 +7,7 @@ class Settings {
     // resume | start-Easy | start-Medium | start-Hard | start-Expert | start-Manual
     onStartup: 'resume',
 
-    // more | less | minimum
+    // more | less | least
     auxiliaryFeatures: 'more',
 
     allowUndo: true,
@@ -62,7 +62,7 @@ class Settings {
         'highlightSolvedSameValue',
         'supportMarkingEliminated',
       ]),
-      'minimum': new Set([
+      'least': new Set([
         'supportMarkingEliminated',
       ]),
     }
@@ -96,7 +96,7 @@ class Settings {
             <select id="auxiliary-features">
               <option value="more">More (Easier to Play)</option>
               <option value="less">Less (More Difficult to Play)</option>
-              <option value="minimum">Minimum (Challenging)</option>
+              <option value="least">Least (Challenging)</option>
             </select>
           </div>
           <div class="level-2">
