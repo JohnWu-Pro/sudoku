@@ -84,11 +84,11 @@ class Settings {
             <label for="on-startup">On startup:</label>
             <select id="on-startup">
               <option value="resume">Continue where you left off</option>
-              <option value="start-Easy">Start an Easy Sudoku</option>
-              <option value="start-Medium">Start a Medium Sudoku</option>
-              <option value="start-Hard">Start a Hard Sudoku</option>
-              <option value="start-Expert">Start an Expert Sudoku</option>
-              <option value="start-Manual">Start Manually Input Givens</option>
+              <option value="start-Easy">Start an Easy Level Sudoku</option>
+              <option value="start-Medium">Start a Medium Level Sudoku</option>
+              <option value="start-Hard">Start a Hard Level Sudoku</option>
+              <option value="start-Expert">Start an Expert Level Sudoku</option>
+              <option value="start-Manual">Start Manually Filling in Givens</option>
             </select>
           </div>
           <div class="level-1">
@@ -134,7 +134,7 @@ class Settings {
         </div>
       `
       $E('#auxiliary-features', $div).addEventListener('change', onChangeFeatures)
-      $E('.go-back', $div).addEventListener('click', () => history.back())
+      $E('.go-back', $div).addEventListener('click', onGoBack)
 
       initialized = true
     }
@@ -159,7 +159,7 @@ class Settings {
 
       // Push new location
       const {pathname, search} = window.location
-      window.location = pathname + search + '#settings'
+      history.pushState(null, document.title, pathname + search + '#settings')
 
       // Listen to popstate event
       window.addEventListener('popstate', onPopState)
@@ -168,6 +168,10 @@ class Settings {
     function onPopState() {
       window.removeEventListener('popstate', onPopState)
       close()
+    }
+
+    function onGoBack() {
+      history.back()
     }
 
     function onChangeFeatures(event) {

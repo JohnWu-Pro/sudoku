@@ -517,10 +517,17 @@ button {
   font: bold clamp(18px, 5vmin, 21px) 'New Times Roman';
 }
 .settings-header > span:not(:first-child) {
-  margin-left: clamp(10.8px, 2vmin, 12.6px);
+  margin-left: clamp(28.8px, 8vmin, 33.6px);
 }
 .settings-header .go-back::before {
-  content: '🡠';
+  /* U+1F860 🡠, U+1F868 🡨, U+1F870 🡰 */
+  content: '';
+  display: inline-block;
+  position: absolute;
+  background: border-box 50% 0 / 125% no-repeat url('images/U1F860.left-arrow.png');
+  width: clamp(21.6px, 6vmin, 25.2px);
+  height: clamp(21.6px, 6vmin, 25.2px);
+  cursor: pointer;
 }
 
 .settings-content,
@@ -534,7 +541,7 @@ button {
 }
 
 .settings-content > div {
-  padding: clamp(10.8px, 2vmin, 12.6px) 0;
+  padding: clamp(10.8px, 3vmin, 12.6px) 0;
   border-bottom: 1px solid lightgrey;
   display: inline-flex;
   width: 100%;
@@ -543,8 +550,8 @@ button {
   font-weight: bold;
 }
 .settings-content > div.level-2 {
-  margin-left: clamp(10.8px, 2vmin, 12.6px);
-  width: calc(100% - clamp(10.8px, 2vmin, 12.6px));
+  margin-left: clamp(10.8px, 3vmin, 12.6px);
+  width: calc(100% - clamp(10.8px, 3vmin, 12.6px));
   border-bottom: 1px dotted lightgrey;
 }
 .settings-content > div > * {

@@ -31,8 +31,8 @@ window.Game = window.Game ?? (() => {
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
             <option value="Expert">Expert</option>
-            <!-- <option value="Import">Import Givens</option> -->
-            <option value="Manual">Manually Input Givens</option>
+            <!-- <option value="Import">Import Givens from Clipboard</option> -->
+            <option value="Manual">Manually Filling in Givens</option>
           </select>
         </div>
         <div class="center">
