@@ -1,14 +1,14 @@
 'use strict';
 
-window.App = window.App ?? (() => {
-
-  const currentScript = document.currentScript
+window.App = window.App ?? ((currentScript) => {
 
   function run() {
+    document.title = T('document.title')
+
     $E('div.footer').innerHTML = `
-      <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">Copyright &copy; 2022</a>
-      <a href="mailto: johnwu.pro@gmail.com" target="_blank">John Wu</a>,
-      Licensed under the <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
+      <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')} &copy; 2022</a>
+      <a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,
+      ${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
     `
 
     document.addEventListener("visibilitychange", () => {
@@ -39,7 +39,7 @@ window.App = window.App ?? (() => {
     Game.pause()
   }
 
-  function locale() {
+  function resolveLocale() {
     if(typeof State !== 'undefined') {
       // This is needed bacause of a Chrome defect.
       // The result of window.navigator.language is incorrect when running an installed PWA.
@@ -58,7 +58,7 @@ window.App = window.App ?? (() => {
   }
 
   function resolveDynamicScripts(definedQualifiers, version) {
-    const locale = App.locale()
+    const locale = resolveLocale()
     const lang = locale.substring(0, 2)
 
     const qualifiers = []
@@ -75,6 +75,15 @@ window.App = window.App ?? (() => {
   //
   // Initialize
   //
-  document.addEventListener("DOMContentLoaded", run)
+  document.addEventListener("DOMContentLoaded", () => {
+    loadResources(
+      ...resolveDynamicScripts(Config.definedQualifiers, versionOf(currentScript))
+    ).then(() => {
+      run()
+      console.info("[INFO] Launched Sudoku App.")
+    }).catch(error => {
+      console.error("[ERROR] Error occurred: %o", error)
+    })
+  })
 
-})()
+})(document.currentScript)
