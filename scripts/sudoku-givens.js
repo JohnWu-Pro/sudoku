@@ -119,7 +119,7 @@ window.Givens = window.Givens ?? (() => {
         do {
           if(index >= length) throw Error('Invalid puzzle input:\n' + puzzle)
 
-          const char = puzzle.at(index++)
+          const char = puzzle[index++]
           value = empty.has(char) ? '' : Cell.CANDIDATES.has(char) ? char : undefined
         } while(value === undefined)
         row[colIndex] = value

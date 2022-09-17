@@ -43,7 +43,7 @@ Array.replace = function(target, subs) {
 function camelize(hyphenized) {
   return hyphenized
     .split('-')
-    .map((word, i) => i===0 ? word : word.at(0).toUpperCase() + word.substring(1))
+    .map((word, i) => i===0 ? word : word[0].toUpperCase() + word.substring(1))
     .join('')
 }
 

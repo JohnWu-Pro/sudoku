@@ -4,7 +4,7 @@ window.Grid = window.Grid ?? (() => {
   const LETTERS = 'ABCDEFGHIJKLMOPQ'
 
   const ROWS = Object.freeze(Array(Config.scale).fill(0).map((_, i) => 1+i))
-  const COLUMNS = Object.freeze(Array(Config.scale).fill(0).map((_, i) => LETTERS.at(i)))
+  const COLUMNS = Object.freeze(Array(Config.scale).fill(0).map((_, i) => LETTERS[i]))
 
   const HOUSES = new Map([
     ['rows', new Map()],     // rowId:   [keys in row]
@@ -29,7 +29,7 @@ window.Grid = window.Grid ?? (() => {
             keys.push(keyOf(rowId, colId))
           }
         }
-        boxes.set(keyOf(topRowId, LETTERS.at(leftCol)), keys)
+        boxes.set(keyOf(topRowId, LETTERS[leftCol]), keys)
       }
     }
 
@@ -71,7 +71,7 @@ window.Grid = window.Grid ?? (() => {
   function boxKeyOf(rowId, colId) {
     const leftCol = Math.floor(LETTERS.indexOf(colId) / Config.box) * Config.box
     const topRowId = Math.floor((rowId - 1) / Config.box) * Config.box + 1
-    return keyOf(topRowId, LETTERS.at(leftCol))
+    return keyOf(topRowId, LETTERS[leftCol])
   }
 
   function idsFrom(key) {

@@ -1,7 +1,7 @@
 'use strict';
 
 class Cell {
-  static CANDIDATES = Object.freeze(new Set(Array(Config.scale).fill(0).map((_, i) => '123456789'.at(i))))
+  static CANDIDATES = Object.freeze(new Set(Array(Config.scale).fill(0).map((_, i) => '123456789'[i])))
   static tracer
 
   #key
