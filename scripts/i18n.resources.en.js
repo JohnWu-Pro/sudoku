@@ -17,11 +17,11 @@ values: {
   "game.completion-message.easy": "That was easy!",
   "game.completion-message.medium": "That wasn't easy!",
   "game.completion-message.hard": "That was hard!",
-  "game.completion-message.expert": "You're an expert!",
+  "game.completion-message.expert": "I'm an expert!",
   "game.completion-message.import": "The givens were imported.",
   "game.completion-message.manual": "The givens were manully filled in.",
 
-  "game.congratulations": "%{completion-message}<br>I solved the Sudoku in %{duration}.",
+  "game.congratulations": "%{completion-message}<br>Solved in %{duration}.",
 
   "game.new.placeholder": "New Game ...",
   "game.new.easy": "Easy",
@@ -37,7 +37,6 @@ values: {
   "game.button.mark-cross-hatching": "Mark Cross-Hatching",
   "game.button.erase": "Erase",
 
-  "game.error.invalid-on-startup": "Invalid Settings On startup value '%{onStartup}'.",
   "game.info.input-givens-then-click-done": "Input the givens, then click '%{button}'.",
   "game.info.more-auxiliary-functions": "Tap or click the cell for more auxiliary functions.",
 

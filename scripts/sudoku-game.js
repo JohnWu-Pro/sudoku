@@ -67,7 +67,7 @@ window.Game = window.Game ?? (() => {
       if(matched) {
         start(selected)
       } else {
-        Prompt.error(T('game.error.invalid-on-startup', {onStartup}))
+        console.error(`Invalid Settings.onStartup: ${onStartup}`)
       }
     }
 

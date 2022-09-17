@@ -11,7 +11,7 @@ window.App = window.App ?? ((currentScript) => {
     document.title = T('document.title')
 
     $E('div.footer').innerHTML = `
-      <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')} &copy; 2022</a>
+      <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')}&copy; 2022</a>
       <a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,
       ${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
     `
