@@ -2,6 +2,11 @@
 
 window.App = window.App ?? ((currentScript) => {
 
+  const DEFAULT_FONT_FAMILIES = {
+    en: 'New Times Roman',
+    zh: '宋体'
+  }
+
   function run() {
     document.title = T('document.title')
 
@@ -79,6 +84,11 @@ window.App = window.App ?? ((currentScript) => {
     loadResources(
       ...resolveDynamicScripts(Config.definedQualifiers, versionOf(currentScript))
     ).then(() => {
+      window.T = i18n
+
+      const lang = resolveLocale().substring(0, 2)
+      $E(':root').style.setProperty('--default-font-family', DEFAULT_FONT_FAMILIES[lang])
+
       run()
       console.info("[INFO] Launched Sudoku App.")
     }).catch(error => {

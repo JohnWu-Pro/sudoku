@@ -2,15 +2,6 @@
 
 window.Game = window.Game ?? (() => {
 
-  const DONE_BUTTON_LABEL = 'Givens are Ready'
-  const COMPLETION_MESSAGES = {
-    'easy': "That was easy!",
-    'medium': "That wasn't easy!",
-    'hard': "That was hard!",
-    'expert': "You're an expert!",
-    'manual': "The givens were manully filled in.",
-  }
-
   const state = {
     selected: 'easy',
     timer: {elapsed: 0, status: 'stopped'},
@@ -26,17 +17,17 @@ window.Game = window.Game ?? (() => {
       <div>
         <div class="left">
           <select class="block border">
-            <option value="">New Game ...</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-            <option value="expert">Expert</option>
-            <!-- <option value="Import">Import Givens from Clipboard</option> -->
-            <option value="manual">Manually Filling in Givens</option>
+            <option value="">${T('game.new.placeholder')}</option>
+            <option value="easy">${T('game.new.easy')}</option>
+            <option value="medium">${T('game.new.medium')}</option>
+            <option value="hard">${T('game.new.hard')}</option>
+            <option value="expert">${T('game.new.expert')}</option>
+            <!-- <option value="import">${T('game.new.import')}</option> -->
+            <option value="manual">${T('game.new.manual')}</option>
           </select>
         </div>
         <div class="center">
-          <div class="title">Sudoku</div>
+          <div class="title">${T('game.title')}</div>
           <div class="game-selection hidden"></div>
         </div>
         <div class="right buttons">
@@ -52,11 +43,11 @@ window.Game = window.Game ?? (() => {
     $E('.settings', $header).addEventListener('click', Settings.View.show)
 
     $E('.commands .buttons').innerHTML = `
-      <button class="block border hidden" id="undo"><span class="cmd-text"> Undo</span></button>
-      <button class="block border hidden" id="givens-filled">${DONE_BUTTON_LABEL}</button>
-      <button class="block border hidden" id="eliminate-by-rules">Eliminate by Row, Column, and Box</button>
-      <button class="block border hidden" id="mark-cross-hatching">Mark Cross-Hatching</button>
-      <button class="block border" id="clean"><span class="cmd-text">Erase </span></button>
+      <button class="block border hidden" id="undo"><span class="cmd-text"> ${T('game.button.undo')}</span></button>
+      <button class="block border hidden" id="givens-filled">${T('game.button.givens-filled')}</button>
+      <button class="block border hidden" id="eliminate-by-rules">${T('game.button.eliminate-by-rules')}</button>
+      <button class="block border hidden" id="mark-cross-hatching">${T('game.button.mark-cross-hatching')}</button>
+      <button class="block border" id="clean"><span class="cmd-text">${T('game.button.erase')} </span></button>
     `
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
@@ -76,7 +67,7 @@ window.Game = window.Game ?? (() => {
       if(matched) {
         start(selected)
       } else {
-        Prompt.error(`Invalid Settings.onStartup value '${onStartup}'!`)
+        Prompt.error(T('game.error.invalid-on-startup', {onStartup}))
       }
     }
 
@@ -153,14 +144,14 @@ window.Game = window.Game ?? (() => {
       return Promise.resolve(Givens.EMPTY)
         .then((givens) => Board.load(givens, true)) // to start manual given filling
         .then(() => timer.reset())
-        .then(() => rollingTitle('Filling in Givens'))
-        .then(() => Prompt.info(`Input the givens, then click '${DONE_BUTTON_LABEL}'.`))
+        .then(() => rollingTitle(T('game.selection.filling-in-givens')))
+        .then(() => Prompt.info(T('game.info.input-givens-then-click-done', {button: T('game.button.givens-filled')})))
         .catch((error) => Prompt.error(error))
     } else {
       return Givens.get(selected)
         .then((givens) => Board.load(givens))
         .then(() => timer.start())
-        .then(() => rollingTitle('Level: ' + selected))
+        .then(() => rollingTitle(T('game.selection.level-' + selected)))
         .then(promptUsage)
         .catch((error) => Prompt.error(error))
     }
@@ -187,19 +178,14 @@ window.Game = window.Game ?? (() => {
 
   function slideIn(div) {
     return Promise.resolve($show(div), div.style.top = div.offsetHeight + 'px')
-      // .then(() => delay(33))
-      // .then(() => console.debug("[DEBUG] Sliding in. <<< begins."))
       .then(() => $on(div).perform('slide-up'))
-      // .then(() => console.debug("[DEBUG] Sliding in. <<< <<< <<< ends."))
       .then(() => div.style.top = '')
   }
 
   function slideOut(div) {
     return Promise.resolve()
-      // .then(() => console.debug("[DEBUG] Sliding out >>> begins."))
       .then(() => $on(div).perform('slide-up'))
       .then(() => $hide(div))
-      // .then(() => console.debug("[DEBUG] Sliding out >>> >>> >>> ends."))
   }
 
   function onRestart() {
@@ -212,23 +198,22 @@ window.Game = window.Game ?? (() => {
     Promise.resolve(Givens.FILLED)
       .then((givens) => Board.load(givens))
       .then(() => timer.start())
-      .then(() => rollingTitle('Manual Givens'))
+      .then(() => rollingTitle(T('game.selection.manual-givens')))
       .then(promptUsage)
       .catch((error) => Prompt.error(error))
   }
 
   function onSolved() {
     timer.stop()
-    Prompt.success(`
-      Congratulations!<br>
-      You solved the Sudoku in ${Timer.format(timer.elapsed)}.<br>
-      ${COMPLETION_MESSAGES[state.selected]} Keep going!
-      `)
+    Prompt.success(T('game.congratulations', {
+      'duration': Timer.format(timer.elapsed),
+      'completion-message': T('game.completion-message.' + state.selected)
+    }))
   }
 
   let prompted = 0
   function promptUsage() {
-    if(prompted++ < 3) Prompt.info('Tap or click the cell for more auxiliary options.')
+    if(prompted++ < 3) Prompt.info(T('game.info.more-auxiliary-functions'))
   }
 
   return {

@@ -16,6 +16,7 @@ class Assumption {
     return Assumption.cssClasses.length > 0
   }
   static reset() {
+    Assumption.ACCEPTED.#snapshots = []
     Assumption.cssClasses = [...Assumption.#CSS_CLASSES]
   }
 
@@ -192,8 +193,8 @@ window.Assumptions = window.Assumptions ?? (() => {
 
     div.innerHTML = `
       <select class="block border">${candidates.reduce((html, candidate) => html +
-        `<option value="assume ${cell.key} is ${candidate}">Assume ${cell.key} is ${candidate}</option>`,
-        `<option value="">Assume ${cell.key} is ...</option>`)}
+        `<option value="assume ${cell.key} is ${candidate}">${T('board.assume.cell-is', {cell: cell.key, value: candidate})}</option>`,
+        `<option value="">${T('board.assume.placeholder', {cell: cell.key})}</option>`)}
       </select>
     `
     // attach event handler to start assumption
@@ -226,9 +227,9 @@ window.Assumptions = window.Assumptions ?? (() => {
     const max = assumptions.length - 1
     div.innerHTML = assumptions.reduce((html, assumption, index) => html + `
       <div class="assumption ${assumption.cssClass} border ${index===0 ? 'first' : ''} ${index===max ? 'last' : ''}">
-        <span class="block">Assume ${assumption.key} is ${assumption.value}:</span>
-        <button data-id="${assumption.id}" data-action="accept">Accept</button>
-        <button data-id="${assumption.id}" data-action="reject">Reject</button>
+        <span class="block">${T('board.assume.cell-is', {cell: assumption.key, value: assumption.value})}:</span>
+        <button data-id="${assumption.id}" data-action="accept">${T('board.assumption.button.accept')}</button>
+        <button data-id="${assumption.id}" data-action="reject">${T('board.assumption.button.reject')}</button>
       </div>
       `, '')
 
@@ -262,11 +263,15 @@ window.Assumptions = window.Assumptions ?? (() => {
     render()
 
     if(action === 'accept') {
-      Prompt.success(`Accepted '${assumption.key} is ${assumption.value}'`
-        + (hasPredecessor ? ' and its predecessor(s).' : '.'))
+      Prompt.success(T('board.assumption.accepted' + (hasPredecessor ? '-and-predecessors' : ''), {
+        cell: assumption.key,
+        value: assumption.value
+      }))
     } else {
-      Prompt.success(`Rejected '${assumption.key} is ${assumption.value}'`
-        + (hasSuccessor ? ' and its successor(s).' : '.'))
+      Prompt.success(T('board.assumption.rejected' + (hasSuccessor ? '-and-successors' : ''), {
+        cell: assumption.key,
+        value: assumption.value
+      }))
     }
   }
 
@@ -274,7 +279,7 @@ window.Assumptions = window.Assumptions ?? (() => {
   function warnNoMoreAssumption() {
     if(warned) return
 
-    Prompt.warn('Maximum 3 assumptions are supported!')
+    Prompt.warn(T('board.warn.max-3-assumptions'))
     warned = true
   }
 

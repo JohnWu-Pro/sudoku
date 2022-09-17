@@ -124,7 +124,7 @@ function css() { return `
 }
 
 function content() { return `
-  <button type="button" onclick="InstallPrompt.onClick()"><img src="install/icon.png"><span>Add to Home Screen</span></button>`
+  <button type="button" onclick="InstallPrompt.onClick()"><img src="install/icon.png"><span>${T('install.add-to-home-screen')}</span></button>`
 }
 
 return {onBeforePrompt, onClick, onAfterPrompted}

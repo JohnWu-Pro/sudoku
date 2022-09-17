@@ -40,15 +40,24 @@ if(!('onappinstalled' in window)) {
 //
 // Install-Demo UI and control
 //
-const images = [ undefined,
-  'install/firefox.step-1.en.png',
-  'install/firefox.step-2.en.png',
-]
+const IMAGES = {
+  en: [ undefined,
+    'install/firefox.step-1.en.png',
+    'install/firefox.step-2.en.png',
+  ],
+  zh: [ undefined,
+    'install/firefox.step-1.zh.png',
+    'install/firefox.step-2.zh.png',
+  ]
+}
+var images
 var panel = {}
 var closed = false
 
 function show() {
   // console.debug("[DEBUG] Calling InstallDemo.show() ...")
+  const lang = resolveNavigatorLocale().substring(0, 2)
+  images = IMAGES[lang] ?? IMAGES.en
 
   // Preload install-demo images
   appendElement('link', {rel: "preload", href: images[1], as: "image"}, document.head)

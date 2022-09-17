@@ -63,6 +63,7 @@ window.Board = window.Board ?? (() => {
     window.addEventListener("assumption-started", onAssumptionStarted)
     window.addEventListener("assumption-accepted", onAssumptionAccepted)
     window.addEventListener("assumption-rejected", onAssumptionRejected)
+    window.addEventListener("overlay-closed", onRerender)
 
     return Promise.resolve()
   }
@@ -197,7 +198,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function updateKeyMode() {
-    $toggle($keyModeCtrl, !Settings.supportMarkingEliminated || state.status === 'filling-in-givens')
+    $toggle($keyModeCtrl, !Settings.markEliminated || state.status === 'filling-in-givens')
 
     if(state.status === 'filling-in-givens') return
 
@@ -208,7 +209,7 @@ window.Board = window.Board ?? (() => {
   }
 
   function isEliminating() {
-    return Settings.supportMarkingEliminated && state.keyMode === 'eliminating'
+    return Settings.markEliminated && state.keyMode === 'eliminating'
   }
 
   function onUndo() {
@@ -217,7 +218,7 @@ window.Board = window.Board ?? (() => {
 
     const assumption = Assumptions.peek()
     if(assumption.isEmpty()) {
-      Prompt.info('No more step to undo!')
+      Prompt.info(T('board.info.no-more-undo'))
       return
     }
 
@@ -312,7 +313,11 @@ window.Board = window.Board ?? (() => {
 
     for(const [house, keys] of Grid.houses(cell.key)) {
       if(duplicates(cell, keys)) {
-        Prompt.error(`Cell ${cell.key} value '${cell.value}' is duplicated in its ${house}.`)
+        Prompt.error(T('board.info.cell-duplicated-in-house', {
+          cell: cell.key,
+          value: cell.value,
+          'house-type': T('board.house.' + house)
+        }))
         return false
       }
     }
@@ -351,7 +356,11 @@ window.Board = window.Board ?? (() => {
           const {value, solved} = state.cells.get(key)
           if(!solved) return false
           if(values.has(value)) {
-            Prompt.error(`Cell ${key} value '${value}' is duplicated in ${singular(house)}-${houseId}.`)
+            Prompt.error(T('board.info.cell-duplicated-in-house', {
+              cell: key,
+              value,
+              'house-type': T('board.house.' + singular(house))
+            }))
             return false
           }
           values.add(value)
@@ -460,6 +469,10 @@ window.Board = window.Board ?? (() => {
       state.cells.set(key, Cell.from(cell))
     })
 
+    return onRerender()
+  }
+
+  function onRerender() {
     const {focused} = state
     return render()
       .then(() => { if(focused) onFocus(focused) })

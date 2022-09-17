@@ -16,7 +16,7 @@ class Settings {
     eliminateByRules: true,
     highlightSolvedSameValue: true,
     markCrossHatching: true,
-    supportMarkingEliminated: true,
+    markEliminated: false,
     traceAssumptions: true,
   })
 
@@ -35,7 +35,7 @@ class Settings {
   static get eliminateByRules() { return Settings.#instance.eliminateByRules }
   static get highlightSolvedSameValue() { return Settings.#instance.highlightSolvedSameValue }
   static get markCrossHatching() { return Settings.#instance.markCrossHatching }
-  static get supportMarkingEliminated() { return Settings.#instance.supportMarkingEliminated }
+  static get markEliminated() { return Settings.#instance.markEliminated }
   static get traceAssumptions() { return Settings.#instance.traceAssumptions }
 
   static update(settings) {
@@ -44,26 +44,27 @@ class Settings {
   }
 
   static View = (() => {
+    const ALL_FEATURES = [
+      'allowUndo',
+      'checkCorrectnessByRules',
+      'countSolvedNumbers',
+      'eliminateByRules',
+      'highlightSolvedSameValue',
+      'markCrossHatching',
+      'markEliminated',
+      'traceAssumptions',
+    ]
     const FEATURES = {
-      'more': new Set([
-        'allowUndo',
-        'checkCorrectnessByRules',
-        'countSolvedNumbers',
-        'eliminateByRules',
-        'highlightSolvedSameValue',
-        'markCrossHatching',
-        'supportMarkingEliminated',
-        'traceAssumptions',
-      ]),
+      'more': new Set(ALL_FEATURES),
       'less': new Set([
         'allowUndo',
         'checkCorrectnessByRules',
         'countSolvedNumbers',
         'highlightSolvedSameValue',
-        'supportMarkingEliminated',
+        'markEliminated',
       ]),
       'least': new Set([
-        'supportMarkingEliminated',
+        'markEliminated',
       ]),
     }
     var initialized = false
@@ -77,60 +78,33 @@ class Settings {
       $div.innerHTML = `
         <div class="settings-header">
           <span class="go-back"></span>
-          <span class="title">Settings</span>
+          <span class="title">${T('settings.title')}</span>
         </div>
         <div class="settings-content">
           <div class="level-1">
-            <label for="on-startup">On startup:</label>
+            <label for="on-startup">${T('settings.on-startup')}:</label>
             <select id="on-startup">
-              <option value="resume">Continue where you left off</option>
-              <option value="start-easy">Start an Easy Level Sudoku</option>
-              <option value="start-medium">Start a Medium Level Sudoku</option>
-              <option value="start-hard">Start a Hard Level Sudoku</option>
-              <option value="start-expert">Start an Expert Level Sudoku</option>
-              <option value="start-manual">Start Manually Filling in Givens</option>
+              <option value="resume">${T('settings.on-startup.resume')}</option>
+              <option value="start-easy">${T('settings.on-startup.start-easy')}</option>
+              <option value="start-medium">${T('settings.on-startup.start-medium')}</option>
+              <option value="start-hard">${T('settings.on-startup.start-hard')}</option>
+              <option value="start-expert">${T('settings.on-startup.start-expert')}</option>
+              <option value="start-manual">${T('settings.on-startup.start-manual')}</option>
             </select>
           </div>
           <div class="level-1">
-            <label for="auxiliary-features">Auxiliary features:</label>
+            <label for="auxiliary-features">${T('settings.auxiliary-features')}:</label>
             <select id="auxiliary-features">
-              <option value="more">More (Easier to Play)</option>
-              <option value="less">Less (More Difficult to Play)</option>
-              <option value="least">Least (Challenging)</option>
+              <option value="more">${T('settings.auxiliary-features.more')}</option>
+              <option value="less">${T('settings.auxiliary-features.less')}</option>
+              <option value="least">${T('settings.auxiliary-features.least')}</option>
             </select>
-          </div>
+          </div>` +
+      ALL_FEATURES.map(prop => hyphenize(prop)).reduce((html, key) => html + `
           <div class="level-2">
-            <label for="allow-undo">Allow Undo</label>
-            <input id="allow-undo" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="check-correctness-by-rules">Check Correctness by Rules</label>
-            <input id="check-correctness-by-rules" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="count-solved-numbers">Count Solved Numbers</label>
-            <input id="count-solved-numbers" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="eliminate-by-rules">Eliminate by Row, Column, and Box</label>
-            <input id="eliminate-by-rules" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="highlight-solved-same-value">Highlight Solved Same Value</label>
-            <input id="highlight-solved-same-value" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="mark-cross-hatching">Mark Cross-Hatching</label>
-            <input id="mark-cross-hatching" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="support-marking-eliminated">Support Marking Eliminated</label>
-            <input id="support-marking-eliminated" type="checkbox" class="switch">
-          </div>
-          <div class="level-2">
-            <label for="trace-assumptions">Trace Assumptions</label>
-            <input id="trace-assumptions" type="checkbox" class="switch">
-          </div>
+            <label for="${key}">${T('settings.switch.' + key)}</label>
+            <input id="${key}" type="checkbox" class="switch">
+          </div>`, '') + `
         </div>
       `
       $E('#auxiliary-features', $div).addEventListener('change', onChangeFeatures)
