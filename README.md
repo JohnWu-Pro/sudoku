@@ -10,14 +10,14 @@ This is an [installable online Sudoku web application](https://johnwu-pro.github
 While the initial goal of the application is to replace pencil and eraser while playing Sudoku,
 it's been developed and enhanced with the following features:
 
-#### Built-in
+#### Built-in features
 + Pause (and save state) when leaving or closing the webapp/page;
 + Resume when switching back or re-launching the webapp/page;
 + On startup:
   + Continue where you left off (restore and resume), or
   + Start a new game of the selected level or mode.
 
-#### Configurable Settings
+#### Toggleable features
 + Allow Undo
 + Check Correctness by Rules
 + Count Solved Numbers
