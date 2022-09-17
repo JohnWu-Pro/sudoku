@@ -26,7 +26,7 @@ window.Prompt = window.Prompt ?? (() => {
     .then((div) => div.remove())
   }
 
-  function css() { return singleBlockCommentIn(css) /*
+  function css() { return `
     .app-prompt-panel {
       display: block;
       position: absolute; z-index: 99;
@@ -83,7 +83,7 @@ window.Prompt = window.Prompt ?? (() => {
       border-color: green;
       color: green;
     }
-  */
+    `
   }
 
   //
