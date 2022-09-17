@@ -11,22 +11,59 @@ While the initial goal of the application is to replace pencil and eraser while 
 it's been developed and enhanced with the following features:
 
 ### Built-in
-+ Pause (and save state) when leaving or closing the webapp/page,
-+ Resume when switching back, and
++ Pause (and save state) when leaving or closing the webapp/page;
++ Resume when switching back or re-launching the webapp/page;
 + On startup:
   + Continue where you left off (restore and resume), or
-  + Start a new game of the selected level.
+  + Start a new game of the selected level or mode.
 
-### Configurable Preferences
-NOTE: The configuration view is under construction.
+### Configurable Settings
 + Allow Undo
 + Check Correctness by Rules
 + Count Solved Numbers
 + Eliminate by Row, Column, and Box
 + Highlight Solved Same Value
 + Mark Cross-Hatching
-+ Support Marking Eliminated (TODO)
++ Mark Eliminated
 + Trace Assumptions
 
 # The Online Game
 The game is accessible at https://johnwu-pro.github.io/sudoku/index.html.
+
+# Project Development
+### Setup
+The [http-server](https://github.com/http-party/http-server) is used for local development and manual testing.
+
+To install http-server (globally):
+```
+npm install --global http-server
+```
+
+To setup local directory structure
+```batch
+cd <project-dir>
+mkdir -p ..\http-server.public
+mklink /J ..\http-server.public\sudoku .
+```
+OR
+```bash
+cd <project-dir>
+mkdir -p ../http-server.public
+ln ./ ../http-server.public/sudoku/
+```
+
+### Running locally
+```
+http-server ../http-server.public/ -c30 -p 9088
+
+# then, open http://localhost:9088/sudoku/index.html
+```
+
+### Deploy / Publish
+1. Push the changes to remote (git@github.com:JohnWu-Pro/sudoku.git).
+2. Open https://johnwu-pro.github.io/sudoku/index.html?v=123.
+  * NOTE: Using `?v=<random-number>` to workaround issues caused by page caching.
+
+# References
++ https://www.sudopedia.org/
++ https://qqwing.com/generate.html
