@@ -1,7 +1,7 @@
 'use strict';
 
 class Settings {
-  static startupFallback = 'start-Easy'
+  static startupFallback = 'start-easy'
 
   static DEFAULT = Object.freeze({
     // resume | start-easy | start-medium | start-hard | start-expert | start-manual

@@ -21,7 +21,7 @@ values: {
   "game.completion-message.import": "The givens were imported.",
   "game.completion-message.manual": "The givens were manully filled in.",
 
-  "game.congratulations": "Congratulations!<br>You solved the Sudoku in %{duration}.<br>%{completion-message} Keep going!",
+  "game.congratulations": "%{completion-message}<br>I solved the Sudoku in %{duration}.",
 
   "game.new.placeholder": "New Game ...",
   "game.new.easy": "Easy",
