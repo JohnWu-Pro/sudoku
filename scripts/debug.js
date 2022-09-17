@@ -9,7 +9,7 @@ function show() {
     <hr/>
     <div>standalone mode: ${new URL(location.href).searchParams.get('mode') === 'standalone'}</div>
     <div>navigator.language: ${navigator.language}</div>
-    <div>Resolved Locale: ${App.locale()}</div>
+    <div>Resolved Locale: ${resolveNavigatorLocale()}</div>
   `
 }
 
