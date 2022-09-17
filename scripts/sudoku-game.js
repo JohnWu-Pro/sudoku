@@ -4,15 +4,15 @@ window.Game = window.Game ?? (() => {
 
   const DONE_BUTTON_LABEL = 'Givens are Ready'
   const COMPLETION_MESSAGES = {
-    'Easy': "That was easy!",
-    'Medium': "That wasn't easy!",
-    'Hard': "That was hard!",
-    'Expert': "You're an expert!",
-    'Manual': "The givens were manully filled in.",
+    'easy': "That was easy!",
+    'medium': "That wasn't easy!",
+    'hard': "That was hard!",
+    'expert': "You're an expert!",
+    'manual': "The givens were manully filled in.",
   }
 
   const state = {
-    selected: 'Easy',
+    selected: 'easy',
     timer: {elapsed: 0, status: 'stopped'},
     title: ''
   }
@@ -27,12 +27,12 @@ window.Game = window.Game ?? (() => {
         <div class="left">
           <select class="block border">
             <option value="">New Game ...</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
-            <option value="Expert">Expert</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="expert">Expert</option>
             <!-- <option value="Import">Import Givens from Clipboard</option> -->
-            <option value="Manual">Manually Filling in Givens</option>
+            <option value="manual">Manually Filling in Givens</option>
           </select>
         </div>
         <div class="center">
@@ -72,7 +72,7 @@ window.Game = window.Game ?? (() => {
 
   function startup() {
     function _do_(onStartup) {
-      const [matched, selected] = onStartup?.match(/^start-(Easy|Medium|Hard|Expert|Manual)$/) ?? []
+      const [matched, selected] = onStartup?.match(/^start-(easy|medium|hard|expert|manual)$/) ?? []
       if(matched) {
         start(selected)
       } else {
@@ -147,9 +147,9 @@ window.Game = window.Game ?? (() => {
   function start(selected) {
     state.selected = selected
 
-    $toggle($givensFilled, selected !== 'Manual')
+    $toggle($givensFilled, selected !== 'manual')
 
-    if(selected === 'Manual') {
+    if(selected === 'manual') {
       return Promise.resolve(Givens.EMPTY)
         .then((givens) => Board.load(givens, true)) // to start manual given filling
         .then(() => timer.reset())

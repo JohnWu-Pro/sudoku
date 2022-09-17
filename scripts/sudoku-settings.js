@@ -4,7 +4,7 @@ class Settings {
   static startupFallback = 'start-Easy'
 
   static DEFAULT = Object.freeze({
-    // resume | start-Easy | start-Medium | start-Hard | start-Expert | start-Manual
+    // resume | start-easy | start-medium | start-hard | start-expert | start-manual
     onStartup: 'resume',
 
     // more | less | least
@@ -84,11 +84,11 @@ class Settings {
             <label for="on-startup">On startup:</label>
             <select id="on-startup">
               <option value="resume">Continue where you left off</option>
-              <option value="start-Easy">Start an Easy Level Sudoku</option>
-              <option value="start-Medium">Start a Medium Level Sudoku</option>
-              <option value="start-Hard">Start a Hard Level Sudoku</option>
-              <option value="start-Expert">Start an Expert Level Sudoku</option>
-              <option value="start-Manual">Start Manually Filling in Givens</option>
+              <option value="start-easy">Start an Easy Level Sudoku</option>
+              <option value="start-medium">Start a Medium Level Sudoku</option>
+              <option value="start-hard">Start a Hard Level Sudoku</option>
+              <option value="start-expert">Start an Expert Level Sudoku</option>
+              <option value="start-manual">Start Manually Filling in Givens</option>
             </select>
           </div>
           <div class="level-1">
