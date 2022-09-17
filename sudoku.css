@@ -90,7 +90,7 @@ button {
 }
 
 .header .title {
-  font: bold var(--size-5vmin) var(--main-font-family);
+  font: bold calc(var(--size-1vmin) * 4.5) var(--main-font-family);
 }
 .header .game-selection {
   color: navy;
