@@ -44,6 +44,19 @@ class Settings {
   }
 
   static View = (() => {
+    const STARTUP_OPTIONS = [
+      'resume',
+      'start-easy',
+      'start-medium',
+      'start-hard',
+      'start-expert',
+      'start-manual',
+    ]
+    const AUXILIARY_OPTIONS = [
+      'more',
+      'less',
+      'least',
+    ]
     const ALL_FEATURES = [
       'allowUndo',
       'checkCorrectnessByRules',
@@ -83,21 +96,16 @@ class Settings {
         <div class="settings-content">
           <div class="level-1">
             <label for="on-startup">${T('settings.on-startup')}:</label>
-            <select id="on-startup">
-              <option value="resume">${T('settings.on-startup.resume')}</option>
-              <option value="start-easy">${T('settings.on-startup.start-easy')}</option>
-              <option value="start-medium">${T('settings.on-startup.start-medium')}</option>
-              <option value="start-hard">${T('settings.on-startup.start-hard')}</option>
-              <option value="start-expert">${T('settings.on-startup.start-expert')}</option>
-              <option value="start-manual">${T('settings.on-startup.start-manual')}</option>
+            <select id="on-startup">` +
+      STARTUP_OPTIONS.reduce((html, value) => html + `
+              <option value="${value}">${T('settings.on-startup.' + value)}</option>`, '') + `
             </select>
           </div>
           <div class="level-1">
             <label for="auxiliary-features">${T('settings.auxiliary-features')}:</label>
-            <select id="auxiliary-features">
-              <option value="more">${T('settings.auxiliary-features.more')}</option>
-              <option value="less">${T('settings.auxiliary-features.less')}</option>
-              <option value="least">${T('settings.auxiliary-features.least')}</option>
+            <select id="auxiliary-features">` +
+      AUXILIARY_OPTIONS.reduce((html, value) => html + `
+              <option value="${value}">${T('settings.auxiliary-features.' + value)}</option>`, '') + `
             </select>
           </div>` +
       ALL_FEATURES.map(prop => hyphenize(prop)).reduce((html, key) => html + `
