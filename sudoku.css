@@ -95,6 +95,9 @@ button {
 .header .game-selection {
   color: navy;
   font: normal var(--size-4vmin) var(--main-font-family);
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
 }
 
 .header .buttons {
