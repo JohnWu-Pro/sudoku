@@ -7,9 +7,9 @@ window.Givens = window.Givens ?? (() => {
 
   const Difficulty = {
     Any: 0,
-    Easy: 1,
-    Medium: 2,
-    Hard: 3,
+    Simple: 1,
+    Easy: 2,
+    Intermediate: 3,
     Expert: 4
   };
 

@@ -1,10 +1,10 @@
 'use strict';
 
 class Settings {
-  static startupFallback = 'start-easy'
+  static bootstrap = 'start-simple'
 
   static DEFAULT = Object.freeze({
-    // resume | start-easy | start-medium | start-hard | start-expert | start-manual
+    // resume | start-simple | start-easy | start-intermediate | start-expert | start-manual
     onStartup: 'resume',
 
     // more | less | least
@@ -46,9 +46,9 @@ class Settings {
   static View = (() => {
     const STARTUP_OPTIONS = [
       'resume',
+      'start-simple',
       'start-easy',
-      'start-medium',
-      'start-hard',
+      'start-intermediate',
       'start-expert',
       'start-manual',
     ]

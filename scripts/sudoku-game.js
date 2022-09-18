@@ -18,9 +18,9 @@ window.Game = window.Game ?? (() => {
         <div class="left">
           <select class="block border">
             <option value="">${T('game.new.placeholder')}</option>
+            <option value="simple">${T('game.new.simple')}</option>
             <option value="easy">${T('game.new.easy')}</option>
-            <option value="medium">${T('game.new.medium')}</option>
-            <option value="hard">${T('game.new.hard')}</option>
+            <option value="intermediate">${T('game.new.intermediate')}</option>
             <option value="expert">${T('game.new.expert')}</option>
             <!-- <option value="import">${T('game.new.import')}</option> -->
             <option value="manual">${T('game.new.manual')}</option>
@@ -63,7 +63,7 @@ window.Game = window.Game ?? (() => {
 
   function startup() {
     function _do_(onStartup) {
-      const [matched, selected] = onStartup?.match(/^start-(easy|medium|hard|expert|manual)$/) ?? []
+      const [matched, selected] = onStartup?.match(/^start-(simple|easy|intermediate|expert|manual)$/) ?? []
       if(matched) {
         start(selected)
       } else {
@@ -77,7 +77,7 @@ window.Game = window.Game ?? (() => {
         .then((game) => {
           if(Object.isEmpty(game)) {
             console.info("[INFO] No saved game exists while trying to restore and resume.")
-            _do_(Settings.startupFallback)
+            _do_(Settings.bootstrap)
           } else {
             console.info(`[INFO] Successfully restored the game to its status at ${Timer.format(game.timer.elapsed)}.`)
           }
@@ -85,7 +85,7 @@ window.Game = window.Game ?? (() => {
         .catch((error) => {
           console.error("[ERROR] Error occurred while trying to restore!", error)
           Prompt.error(error)
-          .then(() => _do_(Settings.DEFAULT.onStartup))
+          .then(() => _do_(Settings.bootstrap))
         })
     } else {
       _do_(onStartup)
