@@ -68,7 +68,21 @@ window.Grid = window.Grid ?? (() => {
     return colId + rowId
   }
 
-  function boxKeyOf(rowId, colId) {
+  /**
+   * @param {number} rowId
+   * @param {char} colId
+   * OR
+   * @param {string} key
+   */
+  function boxKeyOf() {
+    let rowId, colId
+    if(arguments.length === 1) {
+      ({rowId, colId} = idsFrom(arguments[0]))
+    } else if(arguments.length === 2) {
+      [rowId, colId] = arguments
+    } else {
+      throw Error(`Invalid arguments: ${arguments}`)
+    }
     const leftCol = Math.floor(LETTERS.indexOf(colId) / Config.box) * Config.box
     const topRowId = Math.floor((rowId - 1) / Config.box) * Config.box + 1
     return keyOf(topRowId, LETTERS[leftCol])

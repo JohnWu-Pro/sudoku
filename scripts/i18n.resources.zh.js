@@ -21,7 +21,7 @@ values: {
   "game.completion-message.import": "已知数是导入的.",
   "game.completion-message.manual": "已知数是手工输入的",
 
-  "game.congratulations": "%{completion-message}<br>%{duration} 搞定.",
+  "game.congratulations": "%{completion-message}<br>耗时 %{duration} 搞定.",
 
   "game.new.placeholder": "开始新的 ...",
   "game.new.easy": "容易",

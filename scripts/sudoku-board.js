@@ -395,17 +395,29 @@ window.Board = window.Board ?? (() => {
     if(!Settings.markCrossHatching) return
     if(!state.focused) return
 
-    const cell = state.cells.get(state.focused)
-    if(!cell.solved) return
+    const {value, solved} = state.cells.get(state.focused)
+    if(!solved) return
 
-    const {value} = cell
-    state.cells.forEach(same => {
-      if(same.value !== value) return
+    const sameValueBoxes = new Set()
+    const sameValueColumns = new Set()
+    const sameValueKeys = new Set()
+    Grid.ROWS.forEach(rowId => {
+      Grid.COLUMNS.filter(colId => !sameValueColumns.has(colId)).forEach(colId => {
+        const key = Grid.keyOf(rowId, colId)
+        const peer = state.cells.get(key)
+        if(peer.value === value) {
+          sameValueKeys.add(key)
+          sameValueColumns.add(colId)
+          sameValueBoxes.add(Grid.boxKeyOf(rowId, colId))
+        }
+      })
+    })
 
-      const houses = Grid.houses(same.key)
+    sameValueKeys.forEach(sameValueKey => {
+      const houses = Grid.houses(sameValueKey)
       houses.delete('box')
       houses.forEach((keys, house) => {
-        keys.forEach(key => {
+        keys.filter(key => !sameValueBoxes.has(Grid.boxKeyOf(key))).forEach(key => {
           const peer = state.cells.get(key)
           if(!peer.solved) {
             $show($E('div.' + house, peer.div()))
