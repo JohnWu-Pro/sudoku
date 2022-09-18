@@ -68,4 +68,4 @@ http-server ../http-server.public/ -c30 -p 9088
 
 # References
 + https://www.sudopedia.org/
-+ https://qqwing.com/generate.html
++ https://qqwing.com/
