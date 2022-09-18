@@ -189,7 +189,7 @@ function content() { return `
   <div class="step-x">
   </div>
   <div class="cmd">
-    <button type="button" onclick="InstallDemo.onClose()">Got it!</button>
+    <button type="button" onclick="InstallDemo.onClose()">${T('install.demo.acknowledge')}</button>
   </div>`
 }
 

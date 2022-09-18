@@ -82,6 +82,7 @@ values: {
   "settings.switch.trace-assumptions": "Trace Assumptions",
 
   "install.add-to-home-screen": "Add to Home Screen",
+  "install.demo.acknowledge": "Got it!",
 
   "footer.copyright": "Copyright",
   "footer.owner": "John Wu",

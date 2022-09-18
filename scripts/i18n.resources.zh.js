@@ -82,6 +82,7 @@ values: {
   "settings.switch.trace-assumptions": "支持并跟踪假定",
 
   "install.add-to-home-screen": "安装到桌面",
+  "install.demo.acknowledge": "已了解!",
 
   "footer.copyright": "版权所有",
   "footer.owner": "吴菊华",
