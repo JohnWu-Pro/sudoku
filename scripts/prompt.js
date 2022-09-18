@@ -18,7 +18,7 @@ window.Prompt = window.Prompt ?? (() => {
       </div>
       `
     return Promise.resolve($E('div', $panel))
-    .then((div) => ($E('.app-prompt-panel').style.setProperty('top', `calc(96% - ${div.offsetHeight}px)`), div))
+    .then((div) => ($panel.style.top = `calc(96% - ${$panel.offsetHeight}px)`, div))
     .then((div) => (div.style.top = `${div.offsetHeight}px`, div))
     .then((div) => $on(div).perform('slide-in'))
     .then((div) => (div.style.top = '', div))
