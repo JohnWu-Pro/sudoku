@@ -18,7 +18,8 @@ window.Prompt = window.Prompt ?? (() => {
       </div>
       `
     return Promise.resolve($E('div', $panel))
-    .then((div) => (div.style.top = div.offsetHeight + 'px', div))
+    .then((div) => ($E('.app-prompt-panel').style.setProperty('top', `calc(96% - ${div.offsetHeight}px)`), div))
+    .then((div) => (div.style.top = `${div.offsetHeight}px`, div))
     .then((div) => $on(div).perform('slide-in'))
     .then((div) => (div.style.top = '', div))
     .then((div) => delay(8000, div))
@@ -39,11 +40,11 @@ window.Prompt = window.Prompt ?? (() => {
       position: relative;
       width: 96%;
       margin: 0 auto;
-      padding: 0 1.5vmin;
+      padding: 0 var(--size-1_5vmin);
       text-align: center;
 
       background: rgba(255,255,255,0.6);
-      font: bold clamp(14.4px, 4vmin, 16.8px) 'New Times Roman';
+      font: bold var(--size-4vmin) var(--main-font-family);
     }
 
     .app-prompt-panel > .message > span {
@@ -51,7 +52,7 @@ window.Prompt = window.Prompt ?? (() => {
       margin: 3px;
       padding: 3px 6px;
       border: 2px solid;
-      border-radius: clamp(3.6px, 1vmin, 4.2px);
+      border-radius: var(--size-1vmin);
     }
 
     .app-prompt-panel > .message.slide-in {
