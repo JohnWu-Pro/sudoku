@@ -294,6 +294,7 @@ button {
 }
 .grid .cell .cross.row {
   left: 6%;
+  top: 45%; /* 50% - (1vmin / 10vmin) / 2 */
   width: 88%;
   height: var(--size-1vmin);
 }
