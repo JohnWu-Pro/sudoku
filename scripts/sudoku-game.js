@@ -49,7 +49,13 @@ window.Game = window.Game ?? (() => {
       <div class="grid"></div>
       <div class="keys"></div>
       <div class="commands">
-        <div class="buttons"></div>
+        <div class="buttons">
+          <button class="block border hidden" id="undo"><span class="cmd-text"> ${T('game.button.undo')}</span></button>
+          <button class="block border hidden" id="givens-filled">${T('game.button.givens-filled')}</button>
+          <button class="block border hidden" id="eliminate-by-rules">${T('game.button.eliminate-by-rules')}</button>
+          <button class="block border hidden" id="mark-cross-hatching">${T('game.button.mark-cross-hatching')}</button>
+          <button class="block border" id="clean"><span class="cmd-text">${T('game.button.erase')} </span></button>
+        </div>
         <div class="assumptions">
           <div class="pending"></div>
           <div class="tentative"></div>
@@ -62,13 +68,6 @@ window.Game = window.Game ?? (() => {
           <a class="option" href="">Cross Hatching</a>
         </div>
       </div> -->
-    `
-    $E('.commands .buttons').innerHTML = `
-      <button class="block border hidden" id="undo"><span class="cmd-text"> ${T('game.button.undo')}</span></button>
-      <button class="block border hidden" id="givens-filled">${T('game.button.givens-filled')}</button>
-      <button class="block border hidden" id="eliminate-by-rules">${T('game.button.eliminate-by-rules')}</button>
-      <button class="block border hidden" id="mark-cross-hatching">${T('game.button.mark-cross-hatching')}</button>
-      <button class="block border" id="clean"><span class="cmd-text">${T('game.button.erase')} </span></button>
     `
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
