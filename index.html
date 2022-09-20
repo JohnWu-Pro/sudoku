@@ -12,9 +12,12 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel=stylesheet href="sudoku.css?20220918" data-cacheable type="text/css">
 
-  <script>const APP_ID = 'sudoku'</script>
+  <script src="scripts/app.js?20220919" data-cacheable type="text/javascript"></script>
+
   <script src="scripts/i18n.min.js?20220910" data-cacheable type="text/javascript"></script>
-  <script src="scripts/global-shared.js?20220917" data-cacheable type="text/javascript"></script>
+  <script src="scripts/qqwing-1.3.4.min.js?20220828" data-cacheable type="text/javascript"></script>
+
+  <script src="scripts/global-shared.js?20220919" data-cacheable type="text/javascript"></script>
   <script src="scripts/state-cache.js?20220820" data-cacheable type="text/javascript"></script>
   <script src="scripts/window.js?20220828" data-cacheable type="text/javascript"></script>
   <script src="scripts/prompt.js?20220919" data-cacheable type="text/javascript"></script>
@@ -22,14 +25,12 @@
   <script src="scripts/config.js?20220915" data-cacheable type="text/javascript"></script>
 
   <script src="scripts/sudoku-settings.js?20220919" data-cacheable type="text/javascript"></script>
-  <script src="scripts/qqwing-1.3.4.min.js?20220828" data-cacheable type="text/javascript"></script>
   <script src="scripts/sudoku-cell.js?20220917" data-cacheable type="text/javascript"></script>
   <script src="scripts/sudoku-grid.js?20220918" data-cacheable type="text/javascript"></script>
   <script src="scripts/sudoku-givens.js?20220918" data-cacheable type="text/javascript"></script>
   <script src="scripts/sudoku-assumptions.js?20220917" data-cacheable type="text/javascript"></script>
   <script src="scripts/sudoku-board.js?20220918" data-cacheable type="text/javascript"></script>
   <script src="scripts/sudoku-game.js?20220918" data-cacheable type="text/javascript"></script>
-  <script src="scripts/app.js?20220919" data-cacheable type="text/javascript"></script>
 
   <script src="scripts/debug.js?20220917" data-cacheable type="text/javascript"></script>
 
@@ -43,30 +44,6 @@
 
 <body>
 
-<div class="header"></div>
-
-<div class="board">
-  <div class="grid"></div>
-  <div class="keys"></div>
-  <div class="commands">
-    <div class="buttons"></div>
-    <div class="assumptions">
-      <div class="pending"></div>
-      <div class="tentative"></div>
-    </div>
-  </div>
-  <div class="references hidden">
-    <span class="label">References ...</span>
-    <div class="options">
-      <a class="option" href="">Basic Rules</a>
-      <a class="option" href="">Cross Hatching</a>
-    </div>
-  </div>
-</div>
-
-<div class="footer"></div>
-
-<div class="overlay hidden"></div>
 </body>
 
 </html>

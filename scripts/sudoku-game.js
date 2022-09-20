@@ -12,7 +12,10 @@ window.Game = window.Game ?? (() => {
   var $gameSelection, $givensFilled
 
   function init() {
-    const $header = $E('div.header')
+    const $body = $E('body')
+    const $footer = $E('div.footer')
+
+    const $header = $body.insertBefore(createElement('div', {className: 'header'}), $footer)
     $header.innerHTML = `
       <div>
         <div class="left">
@@ -42,6 +45,24 @@ window.Game = window.Game ?? (() => {
     $E('.restart', $header).addEventListener('click', onRestart)
     $E('.settings', $header).addEventListener('click', Settings.View.show)
 
+    $body.insertBefore(createElement('div', {className: 'board'}), $footer).innerHTML = `
+      <div class="grid"></div>
+      <div class="keys"></div>
+      <div class="commands">
+        <div class="buttons"></div>
+        <div class="assumptions">
+          <div class="pending"></div>
+          <div class="tentative"></div>
+        </div>
+      </div>
+      <!-- <div class="references hidden">
+        <span class="label">References ...</span>
+        <div class="options">
+          <a class="option" href="">Basic Rules</a>
+          <a class="option" href="">Cross Hatching</a>
+        </div>
+      </div> -->
+    `
     $E('.commands .buttons').innerHTML = `
       <button class="block border hidden" id="undo"><span class="cmd-text"> ${T('game.button.undo')}</span></button>
       <button class="block border hidden" id="givens-filled">${T('game.button.givens-filled')}</button>
@@ -51,6 +72,8 @@ window.Game = window.Game ?? (() => {
     `
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
+
+    appendElement('div', {className: 'overlay hidden'})
 
     timer = new Timer('.header .timer')
 

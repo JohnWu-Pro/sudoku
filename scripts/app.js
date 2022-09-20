@@ -1,5 +1,7 @@
 'use strict';
 
+const APP_ID = 'sudoku'
+
 window.App = window.App ?? ((currentScript) => {
 
   const DEFAULT_FONT_FAMILIES = {
@@ -7,8 +9,22 @@ window.App = window.App ?? ((currentScript) => {
     zh: '宋体'
   }
 
-  function run() {
+  function initI18n() {
+    return loadResources(...resolveDynamicScripts(Config.definedQualifiers, versionOf(currentScript)))
+    .then(() => window.T = i18n)
+  }
+
+  function setDefaultFontFamily() {
+    const lang = resolveLocale().substring(0, 2)
+    $E(':root').style.setProperty('--default-font-family', DEFAULT_FONT_FAMILIES[lang])
+  }
+
+  function launch() {
     document.title = T('document.title')
+
+    $E('body').innerHTML = `
+      <div class="footer"></div>
+    `
 
     $E('div.footer').innerHTML = `
       <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')}&copy; 2022</a>
@@ -32,7 +48,7 @@ window.App = window.App ?? ((currentScript) => {
     const {pathname, search, hash} = window.location
     if(hash) history.replaceState(null, document.title, pathname + search)
 
-    Game.init()
+    return Game.init()
     .then(() => Game.startup())
   }
 
@@ -81,19 +97,11 @@ window.App = window.App ?? ((currentScript) => {
   // Initialize
   //
   document.addEventListener("DOMContentLoaded", () => {
-    loadResources(
-      ...resolveDynamicScripts(Config.definedQualifiers, versionOf(currentScript))
-    ).then(() => {
-      window.T = i18n
-
-      const lang = resolveLocale().substring(0, 2)
-      $E(':root').style.setProperty('--default-font-family', DEFAULT_FONT_FAMILIES[lang])
-
-      run()
-      console.info("[INFO] Launched Sudoku App.")
-    }).catch(error => {
-      console.error("[ERROR] Error occurred: %o", error)
-    })
+    initI18n()
+    .then(setDefaultFontFamily)
+    .then(launch)
+    .then(() => console.info("[INFO] Launched Sudoku App."))
+    .catch(error => console.error("[ERROR] Error occurred: %o", error))
   })
 
 })(document.currentScript)
