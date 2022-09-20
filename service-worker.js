@@ -124,6 +124,7 @@ function resolveStaticCachableResources(indexHtml) {
     CONTEXT_PATH + "/images/sudoku-144x144.png",
     CONTEXT_PATH + "/images/sudoku-192x192.png",
     CONTEXT_PATH + "/images/sudoku-512x512.png",
+    CONTEXT_PATH + "/images/U1F860.left-arrow.png",
     CONTEXT_PATH + "/images/U2B73.down-arrow-to-bar.png",
     CONTEXT_PATH + "/images/U21A7.down-arrow-from-bar.png",
     ...styles.map(path => CONTEXT_PATH + '/' + path),
