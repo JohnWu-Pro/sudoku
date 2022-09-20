@@ -148,7 +148,7 @@ window.Game = window.Game ?? (() => {
         .then(() => Prompt.info(T('game.info.input-givens-then-click-done', {button: T('game.button.givens-filled')})))
         .catch((error) => Prompt.error(error))
     } else {
-      return Givens.get(selected)
+      return Givens.get(capitalize(selected))
         .then((givens) => Board.load(givens))
         .then(() => timer.start())
         .then(() => rollingTitle(T('game.selection.level-' + selected)))

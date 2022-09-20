@@ -40,6 +40,10 @@ Array.replace = function(target, subs) {
   if(!Object.isEmpty(subs)) target.push(...subs)
 }
 
+function capitalize(word) {
+  return word[0].toUpperCase() + word.substring(1)
+}
+
 function camelize(hyphenized) {
   return hyphenized
     .split('-')
