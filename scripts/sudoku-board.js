@@ -302,6 +302,10 @@ window.Board = window.Board ?? (() => {
       if(solved) counts[Number(value)]++
     })
 
+    setNumberCounts(counts)
+  }
+
+  function setNumberCounts(counts) {
     for(let index=1; index<=Config.scale; index++) {
       $numberCounts[index].innerHTML = counts[index]
     }
@@ -485,6 +489,10 @@ window.Board = window.Board ?? (() => {
   }
 
   function onRerender() {
+    if(!Settings.countSolvedNumbers) {
+      setNumberCounts(Array(Config.scale + 1).fill(''))
+    }
+
     const {focused} = state
     return render()
       .then(() => { if(focused) onFocus(focused) })
