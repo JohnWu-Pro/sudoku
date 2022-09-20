@@ -38,7 +38,7 @@ window.Givens = window.Givens ?? (() => {
    * Each row itself is an array, each element represents a cell in that row.
    * The cell value can be '1', '2', ..., '9', or empty ('').
    *
-   * @param {enum} level Any, Easy, Medium, Hard, Expert
+   * @param {enum} level Any, Simple, Easy, Intermediate, Expert
    * @param {enum} symmetry None, Rotate90, Rotate180, Mirror, Flip, Random
    * @return {array} the givens, wrapped in a Promise
    */

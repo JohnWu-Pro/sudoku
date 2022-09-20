@@ -119,7 +119,7 @@ function resolveStaticCachableResources(indexHtml) {
     scripts.push(...match) // Append captured resource paths
   }
 
-  return [ // Expects origin related paths
+  return [ // Expects origin relative paths
     CONTEXT_PATH + "/fonts/digital-7.mono.ttf",
     CONTEXT_PATH + "/images/sudoku-144x144.png",
     CONTEXT_PATH + "/images/sudoku-192x192.png",
