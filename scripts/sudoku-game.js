@@ -12,10 +12,7 @@ window.Game = window.Game ?? (() => {
   var $gameSelection, $givensFilled
 
   function init() {
-    const $body = $E('body')
-    const $footer = $E('div.footer')
-
-    const $header = $body.insertBefore(createElement('div', {className: 'header'}), $footer)
+    const $header = appendElement('div', {className: 'header'})
     $header.innerHTML = `
       <div>
         <div class="left">
@@ -45,7 +42,7 @@ window.Game = window.Game ?? (() => {
     $E('.restart', $header).addEventListener('click', onRestart)
     $E('.settings', $header).addEventListener('click', Settings.View.show)
 
-    $body.insertBefore(createElement('div', {className: 'board'}), $footer).innerHTML = `
+    appendElement('div', {className: 'board'}).innerHTML = `
       <div class="grid"></div>
       <div class="keys"></div>
       <div class="commands">
@@ -71,8 +68,6 @@ window.Game = window.Game ?? (() => {
     `
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
-
-    appendElement('div', {className: 'overlay hidden'})
 
     timer = new Timer('.header .timer')
 

@@ -22,16 +22,6 @@ window.App = window.App ?? ((currentScript) => {
   function launch() {
     document.title = T('document.title')
 
-    $E('body').innerHTML = `
-      <div class="footer"></div>
-    `
-
-    $E('div.footer').innerHTML = `
-      <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')}&copy; 2022</a>
-      <a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,
-      ${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
-    `
-
     document.addEventListener("visibilitychange", () => {
       if(document.visibilityState === 'visible') {
         onActivate()
@@ -50,6 +40,12 @@ window.App = window.App ?? ((currentScript) => {
 
     return Game.init()
     .then(() => Game.startup())
+    .then(() => appendElement('div', {className: 'footer'}).innerHTML = `
+        <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')}&copy; 2022</a>
+        <a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,
+        ${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
+      `)
+    .then(() => appendElement('div', {className: 'overlay hidden'}))
   }
 
   function onActivate() {
