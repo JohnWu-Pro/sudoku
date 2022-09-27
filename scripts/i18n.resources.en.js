@@ -54,7 +54,8 @@ values: {
   "board.house.box": "box",
 
   "board.info.no-more-undo": "No more step to undo!",
-  "board.info.cell-duplicated-in-house": "Cell %{cell} value '%{value}' is duplicated in its %{house-type}.",
+  "board.error.cell-duplicated-in-house": "Cell %{cell} value '%{value}' is duplicated in its %{house-type}.",
+  "board.error.no-candidate": "No candidate found.",
   "board.warn.max-3-assumptions": "Maximum 3 assumptions are supported!",
 
   "settings.title": "Settings",

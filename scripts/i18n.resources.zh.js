@@ -54,7 +54,8 @@ values: {
   "board.house.box": "宫",
 
   "board.info.no-more-undo": "无法再回退了!",
-  "board.info.cell-duplicated-in-house": "单元格 %{cell} 的值 '%{value}' 在其所在 %{house-type} 内有重复.",
+  "board.error.cell-duplicated-in-house": "单元格 %{cell} 的值 '%{value}' 在其所在 %{house-type} 内有重复.",
+  "board.error.no-candidate": "找不到候选数.",
   "board.warn.max-3-assumptions": "最多支持3层假定!",
 
   "settings.title": "设置",

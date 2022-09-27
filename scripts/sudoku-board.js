@@ -317,11 +317,12 @@ window.Board = window.Board ?? (() => {
 
     for(const [house, keys] of Grid.houses(cell.key)) {
       if(duplicates(cell, keys)) {
-        Prompt.error(T('board.info.cell-duplicated-in-house', {
+        Prompt.error(T('board.error.cell-duplicated-in-house', {
           cell: cell.key,
           value: cell.value,
           'house-type': T('board.house.' + house)
         }))
+        window.navigator.vibrate([200,100,200])
         return false
       }
     }
@@ -360,11 +361,12 @@ window.Board = window.Board ?? (() => {
           const {value, solved} = state.cells.get(key)
           if(!solved) return false
           if(values.has(value)) {
-            Prompt.error(T('board.info.cell-duplicated-in-house', {
+            Prompt.error(T('board.error.cell-duplicated-in-house', {
               cell: key,
               value,
               'house-type': T('board.house.' + singular(house))
             }))
+            window.navigator.vibrate([200,100,200])
             return false
           }
           values.add(value)
@@ -388,6 +390,10 @@ window.Board = window.Board ?? (() => {
       const cell = state.cells.get(key)
       if(cell.solved) candidates.delete(cell.value)
     })
+    if(candidates.size === 0) {
+      Prompt.error(T('board.error.no-candidate'))
+      window.navigator.vibrate([200,100,200])
+    }
 
     const cell = state.cells.get(state.focused)
     cell.value = [...candidates]
