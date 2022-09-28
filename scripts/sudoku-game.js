@@ -9,7 +9,7 @@ window.Game = window.Game ?? (() => {
   }
 
   var timer
-  var $gameSelection, $givensFilled
+  var $gameSelection, $givensFilled, $success
 
   function init() {
     const $header = appendElement('div', {className: 'header'})
@@ -68,6 +68,8 @@ window.Game = window.Game ?? (() => {
     `
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
+
+    $success = appendElement('audio', {src: 'audios/success.mp3', preload: 'auto'})
 
     timer = new Timer('.header .timer')
 
@@ -222,6 +224,7 @@ window.Game = window.Game ?? (() => {
 
   function onSolved() {
     timer.stop()
+    $success.play()
     Prompt.success(T('game.congratulations', {
       'duration': Timer.format(timer.elapsed),
       'completion-message': T('game.completion-message.' + state.selected)
