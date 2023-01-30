@@ -3,33 +3,33 @@
   "short_name": "Sudoku",
   "description": "Installable free online Sudoku web application",
   "categories": ["game", "sudoku"],
-  "id": "/sudoku/index.html",
-  "start_url": "/sudoku/index.html?mode=standalone",
+  "id": "/sudoku/en/index.html",
+  "start_url": "/sudoku/en/index.html?mode=standalone",
   "scope": "/sudoku/",
   "related_applications": [{
     "platform": "webapp",
-    "url": "https://ejfun.natapp4.cc/sudoku/manifest.json"
+    "url": "https://ejfun.natapp4.cc/sudoku/en/manifest.json"
   },{
     "platform": "webapp",
-    "url": "https://johnwu-pro.github.io/sudoku/manifest.json"
+    "url": "https://johnwu-pro.github.io/sudoku/en/manifest.json"
   }],
   "display": "standalone",
   "background_color": "#f8f8ff",
   "theme_color": "#f8fff8",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "images/sudoku-144x144.png",
+      "src": "../images/sudoku-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "maskable"
     },{
-      "src": "images/sudoku-192x192.png",
+      "src": "../images/sudoku-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },{
-      "src": "images/sudoku-512x512.png",
+      "src": "../images/sudoku-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

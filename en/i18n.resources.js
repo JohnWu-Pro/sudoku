@@ -1,6 +1,6 @@
 'use strict';
 
-((i18n) => { i18n.translator.add({
+((i18n) => { window.T = i18n, i18n.translator.add({
 
 values: {
   "document.title": "Sudoku",
@@ -87,6 +87,7 @@ values: {
 
   "footer.copyright": "Copyright",
   "footer.owner": "John Wu",
+  "footer.license": "License",
   "footer.licensed-under": "Licensed under the",
 }
 

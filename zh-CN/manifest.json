@@ -1,0 +1,38 @@
+{
+  "name": "数独",
+  "short_name": "数独",
+  "description": "可安装在线数独",
+  "categories": ["游戏", "数独"],
+  "id": "/sudoku/zh-CN/index.html",
+  "start_url": "/sudoku/zh-CN/index.html?mode=standalone",
+  "scope": "/sudoku/",
+  "related_applications": [{
+    "platform": "webapp",
+    "url": "https://ejfun.natapp4.cc/sudoku/zh-CN/manifest.json"
+  },{
+    "platform": "webapp",
+    "url": "https://johnwu-pro.github.io/sudoku/zh-CN/manifest.json"
+  }],
+  "display": "standalone",
+  "background_color": "#f8f8ff",
+  "theme_color": "#f8fff8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "../images/sudoku-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable"
+    },{
+      "src": "../images/sudoku-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },{
+      "src": "../images/sudoku-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

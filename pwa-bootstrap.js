@@ -29,8 +29,7 @@ if('onappinstalled' in window) {
 
     if(typeof State !== 'undefined') {
       State.set({
-        'installationTime': Date.now(),
-        'installationTimeLocale': resolveNavigatorLocale()
+        'installationTime': Date.now()
       })
     }
 
@@ -62,7 +61,7 @@ if(KNOWN_INTALLED) {
 }
 
 if(shouldPolyfillIntallPrompt()) {
-  loadResources(HREF_BASE + '/install/polyfill.js?' + versionOf(currentScript))
+  loadResources(HREF_BASE + '/../install/polyfill.js?' + versionOf(currentScript))
 }
 
 //
@@ -110,7 +109,9 @@ function shouldPolyfillIntallPrompt() {
 // Register service worker
 //
 if(navigator.serviceWorker) {
-  navigator.serviceWorker.register(HREF_BASE + '/service-worker.js')
+  const servieWorkerUrl = `${APP_BASE}/service-worker.js?locale=${LOCALE}`
+  // console.debug("[DEBUG] Going to regiester the service worker at %s ...", servieWorkerUrl)
+  navigator.serviceWorker.register(servieWorkerUrl)
 } else {
   console.info("[INFO] navigator.serviceWorker is not supported.")
 }

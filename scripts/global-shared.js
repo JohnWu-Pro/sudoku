@@ -7,6 +7,14 @@
 const HREF_BASE = hrefBase(location)
 const CONTEXT_PATH = contextPath(location)
 
+const {APP_BASE, LOCALE} = ((base) => {
+  const LOCALE = Config.supportedLocales.find((locale) => base.endsWith('/' + locale)) ?? ''
+  return {
+    APP_BASE: LOCALE ? base.substring(0, base.length - (LOCALE.length+1)) : base,
+    LOCALE
+  }
+})(HREF_BASE)
+
 function delay(millis, value) {
   return new Promise(resolve => setTimeout(() => resolve(value), millis))
 }

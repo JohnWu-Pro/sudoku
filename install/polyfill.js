@@ -2,12 +2,13 @@
 
 ((window) => {
 
-const IN_STANDALONE_MODE = new URL(location.href).searchParams.get('mode') === 'standalone'
+const DISPLAY_VALUES = ['fullscreen', 'standalone', 'minimal-ui', 'browser']
+const IN_INSTALLED_MODE = DISPLAY_VALUES.includes(new URL(location.href).searchParams.get('mode'))
 
 if(!('onbeforeinstallprompt' in window)) {
   if(KNOWN_INTALLED) {
     // Do nothing
-  } else if(IN_STANDALONE_MODE) {
+  } else if(IN_INSTALLED_MODE) {
     // Do nothing
   } else {
     const choice = {outcome: 'UNKNOWN'}
@@ -16,7 +17,7 @@ if(!('onbeforeinstallprompt' in window)) {
       preventDefault: () => {},
       prompt: () => Promise.resolve(
         InstallDemo.show()
-        .then(() => choice.outcome = "accepted")
+            .then(() => choice.outcome = "dismissed")
       ),
       userChoice: Promise.resolve(choice)
     })
@@ -29,7 +30,7 @@ if(!('onbeforeinstallprompt' in window)) {
 if(!('onappinstalled' in window)) {
   if(KNOWN_INTALLED) {
     // Do nothing
-  } else if(IN_STANDALONE_MODE) {
+  } else if(IN_INSTALLED_MODE) {
     console.info("[INFO] Going to trigger 'applaunched' event ...")
     delay(1).then(() => window.dispatchEvent(new CustomEvent('applaunched')))
   } else {
@@ -40,28 +41,19 @@ if(!('onappinstalled' in window)) {
 //
 // Install-Demo UI and control
 //
-const IMAGES = {
-  en: [ undefined,
-    'install/firefox.step-1.en.png',
-    'install/firefox.step-2.en.png',
-  ],
-  zh: [ undefined,
-    'install/firefox.step-1.zh.png',
-    'install/firefox.step-2.zh.png',
-  ]
-}
-var images
+const IMAGES = [ undefined,
+  'install/firefox.step-1.png',
+  'install/firefox.step-2.png',
+]
 var panel = {}
 var closed = false
 
 function show() {
   // console.debug("[DEBUG] Calling InstallDemo.show() ...")
-  const lang = resolveNavigatorLocale().substring(0, 2)
-  images = IMAGES[lang] ?? IMAGES.en
 
   // Preload install-demo images
-  appendElement('link', {rel: "preload", href: images[1], as: "image"}, document.head)
-  appendElement('link', {rel: "preload", href: images[2], as: "image"}, document.head)
+  appendElement('link', {rel: "preload", href: IMAGES[1], as: "image"}, document.head)
+  appendElement('link', {rel: "preload", href: IMAGES[2], as: "image"}, document.head)
 
   // Load style and div
   appendElement('style', {type: "text/css", id: "install-demo"}, document.head).innerHTML = css()
@@ -92,8 +84,8 @@ function onClose() {
   closed = true
   $E('div.install-demo-panel').remove()
   $E('style#install-demo', document.head).remove()
-  $E(`link[href="${images[1]}"]`, document.head).remove()
-  $E(`link[href="${images[2]}"]`, document.head).remove()
+  $E(`link[href="${IMAGES[1]}"]`, document.head).remove()
+  $E(`link[href="${IMAGES[2]}"]`, document.head).remove()
 }
 
 function css() { return `
@@ -194,7 +186,7 @@ function content() { return `
 }
 
 function step1() { return `
-  <img src="${images[1]}">
+  <img src="${IMAGES[1]}">
   <div class="step-1 annotation">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50%" cy="50%" rx="16" ry="24" />
@@ -203,7 +195,7 @@ function step1() { return `
 }
 
 function step2() { return `
-  <img src="${images[2]}">
+  <img src="${IMAGES[2]}">
   <div class="step-2 annotation">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50%" cy="50%" rx="16" ry="32" />

@@ -69,7 +69,7 @@ window.Game = window.Game ?? (() => {
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)
 
-    $success = appendElement('audio', {src: 'audios/success.mp3', preload: 'auto'})
+    $success = appendElement('audio', {src: '../audios/success.mp3', preload: 'auto'})
 
     timer = new Timer('.header .timer')
 

@@ -1,6 +1,6 @@
 'use strict';
 
-((i18n) => { i18n.translator.add({
+((i18n) => { window.T = i18n, i18n.translator.add({
 
 values: {
   "document.title": "数独",
@@ -73,7 +73,7 @@ values: {
   "settings.auxiliary-features.less": "较少辅助 (比较难玩)",
   "settings.auxiliary-features.least": "极少辅助 (非常有挑战性)",
 
-  "settings.switch.allow-undo": "允许回退",
+  "settings.switch.allow-undo": "允许撤消",
   "settings.switch.check-correctness-by-rules": "依据规则查验正确性",
   "settings.switch.count-solved-numbers": "计数已确定的数",
   "settings.switch.eliminate-by-rules": "依据 行/列/宫 排除",
@@ -87,6 +87,7 @@ values: {
 
   "footer.copyright": "版权所有",
   "footer.owner": "吴菊华",
+  "footer.license": "版权许可",
   "footer.licensed-under": "适用版权许可",
 }
 

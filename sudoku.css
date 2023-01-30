@@ -5,7 +5,8 @@
 }
 
 :root {
-  --main-font-family: var(--default-font-family, 'New Times Roman');
+  --default-font-family: unset;
+  --main-font-family: var(--default-font-family, 'system-ui');
   --digit-font-family: 'Arial';
 
   --size-1vmin: clamp(3.6px, 1vmin, 4.2px);
@@ -40,6 +41,10 @@ button {
 
 .hidden {
   display: none !important;
+}
+
+.no-wrap {
+  white-space: nowrap;
 }
 
 .header {
@@ -526,7 +531,7 @@ button {
   text-align: center;
   font: var(--size-3vmin) var(--main-font-family);
   color: #d0d0d0;
-  top: 96%;
+  top: 96dvh;
 }
 
 .overlay {

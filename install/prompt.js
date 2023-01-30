@@ -9,7 +9,7 @@ function onBeforePrompt(event) {
   event.preventDefault()
   promptEvent = event
 
-  show()
+  InstallPromptStats.triggerNowOrSchedule(show)
 }
 
 function onClick() {
@@ -28,8 +28,9 @@ function onClick() {
   event.prompt()
     .then(() => event.userChoice)
     .then(choice => {
-      // either "accepted" or "dismissed"
-      console.info("[INFO] Install prompt user choice: %s", choice.outcome)
+      const outcome = choice.outcome // 'accepted' or 'dismissed'
+      console.info("[INFO] Install prompt user choice: %s", outcome)
+      window.dispatchEvent(new CustomEvent('install-prompt-responded', {detail: {outcome}}))
     })
     .then(onAfterPrompted)
 }
@@ -42,7 +43,7 @@ function show() {
   // console.debug("[DEBUG] Calling InstallPrompt.show() ...")
 
   // Preload install icon
-  appendElement('link', {rel: "preload", href: "install/icon.png", as: "image"}, document.head)
+  appendElement('link', {rel: "preload", href: "../install/icon.png", as: "image"}, document.head)
 
   // Load style and div
   appendElement('style', {type: "text/css", id: "install-prompt"}, document.head).innerHTML = css()
@@ -50,7 +51,7 @@ function show() {
   $panel = appendElement('div', {className: "install-prompt-panel"})
   $panel.innerHTML = `
     <button type="button">
-      <img src="install/icon.png">
+      <img src="../install/icon.png">
       <span>${T('install.add-to-home-screen')}</span>
     </button>
     `
@@ -76,7 +77,7 @@ function hide() {
   .then(() => {
     $E('div.install-prompt-panel').remove()
     $E('style#install-prompt', document.head).remove()
-    $E('link[href="install/icon.png"]', document.head).remove()
+    $E('link[href="../install/icon.png"]', document.head).remove()
   })
 
   $button = null
@@ -86,7 +87,7 @@ function hide() {
 function css() { return `
   .install-prompt-panel {
     z-index: 999; position: absolute;
-    margin: var(--size-0_5vmin) 0;
+    margin: 0.5vmin 0;
     width: 64vw;
     left: 36vw; top: 93.6%;
     text-align: right;
@@ -96,10 +97,10 @@ function css() { return `
   .install-prompt-panel > button {
     position: relative;
     border: 1px outset #eaeaea;
-    border-radius: var(--size-6vmin) 0 0 var(--size-6vmin);
-    padding: var(--size-1_5vmin) var(--size-3vmin) var(--size-1_5vmin) calc(var(--size-1vmin) * 4.5);
+    border-radius: 6vmin 0 0 6vmin;
+    padding: 1.5vmin 3vmin 1.5vmin 4.5vmin;
     display: inline-block;
-    font: normal calc(var(--size-1vmin) * 4.5) var(--main-font-family);
+    font: normal 4.5vmin var(--main-font-family);
     text-align: center;
     cursor: pointer;
     background: #f0f0ff;
@@ -119,18 +120,67 @@ function css() { return `
 
   .install-prompt-panel > button > img {
     position: relative;
-    top: calc(var(--size-1vmin) * 0.6);
-    height: var(--size-6vmin);
-    width: var(--size-6vmin);
+    top: 0.6vmin;
+    height: 6vmin;
+    width: 6vmin;
   }
 
   .install-prompt-panel > button > span {
     position: relative;
-    top: calc(var(--size-1vmin) * -1);
-    padding: 0 var(--size-1vmin);
+    top: -1vmin;
+    padding: 0 1vmin;
   }`
 }
 
 return {onBeforePrompt, onAfterPrompted}
 
+})()
+
+window.InstallPromptStats = window.InstallPromptStats ?? (() => {
+  const RETRY_INTERVAL_MINUTES = [3, 15, 60, 1440, 1440*3]
+  const DEFAULT = Object.freeze({
+    nextPromptTime: null,
+    promptedCount: 0
+  })
+  const KEY = location.origin + location.pathname + '#InstallPromptStats'
+
+  function onAccepted() {
+    localStorage.removeItem(KEY)
+  }
+
+  function onDismissed() {
+    const stats = load()
+    let index = stats.promptedCount++
+    if(index >= RETRY_INTERVAL_MINUTES.length) index = RETRY_INTERVAL_MINUTES.length-1
+    stats.nextPromptTime = Date.now() + RETRY_INTERVAL_MINUTES[index] * 60000
+    save(stats)
+  }
+
+  function triggerNowOrSchedule(prompt) {
+    const currentTimestamp = Date.now()
+    const stats = load()
+    if(stats.nextPromptTime <= currentTimestamp) {
+      prompt()
+    } else {
+      delay(stats.nextPromptTime - currentTimestamp).then(prompt)
+    }
+  }
+
+  function load() {
+    const stats = localStorage.getItem(KEY)
+    return stats ? JSON.parse(stats) : {...DEFAULT}
+  }
+
+  function save(stats) {
+    localStorage.setItem(KEY, JSON.stringify(stats))
+  }
+
+  window.addEventListener("install-prompt-responded", (event) => {
+    if(event.detail.outcome === 'accepted')
+      onAccepted()
+    else
+      onDismissed()
+  })
+
+  return {triggerNowOrSchedule}
 })()

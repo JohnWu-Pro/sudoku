@@ -2,22 +2,9 @@
 
 const APP_ID = 'sudoku'
 
-window.App = window.App ?? ((currentScript) => {
+const APP_VERSION = '1.1.0-RC1'
 
-  const DEFAULT_FONT_FAMILIES = {
-    en: 'New Times Roman',
-    zh: '宋体'
-  }
-
-  function initI18n() {
-    return loadResources(...resolveDynamicScripts(Config.definedQualifiers, versionOf(currentScript)))
-    .then(() => window.T = i18n)
-  }
-
-  function setDefaultFontFamily() {
-    const lang = resolveLocale().substring(0, 2)
-    $E(':root').style.setProperty('--default-font-family', DEFAULT_FONT_FAMILIES[lang])
-  }
+window.App = window.App ?? (() => {
 
   function launch() {
     document.title = T('document.title')
@@ -39,13 +26,9 @@ window.App = window.App ?? ((currentScript) => {
     if(hash) history.replaceState(null, document.title, pathname + search)
 
     return Game.init()
-    .then(() => Game.startup())
-    .then(() => appendElement('div', {className: 'footer'}).innerHTML = `
-        <a href="javascript:openDoc('LICENSE.txt', 'License')" title="License">${T('footer.copyright')}&copy; 2022</a>
-        <a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,
-        ${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.
-      `)
-    .then(() => appendElement('div', {className: 'overlay hidden'}))
+      .then(() => Game.startup())
+      .then(() => appendFooter())
+      .then(() => appendElement('div', {className: 'overlay hidden'}))
   }
 
   function onActivate() {
@@ -56,48 +39,23 @@ window.App = window.App ?? ((currentScript) => {
     Game.pause()
   }
 
-  function resolveLocale() {
-    if(typeof State !== 'undefined') {
-      // This is needed bacause of a Chrome defect.
-      // The result of window.navigator.language is incorrect when running an installed PWA.
-      const locale = State.get('installationTimeLocale')
-      if(locale) {
-        // console.trace("[TRACE] Returning cached installationTimeLocale: %s", locale)
-        return locale
-      } else {
-        // console.debug("[DEBUG] No cached installationTimeLocale is available yet.")
-      }
-    }
-
-    const locale = resolveNavigatorLocale()
-    // console.trace("[TRACE] Returning resolved navigator locale: %s", locale)
-    return locale
-  }
-
-  function resolveDynamicScripts(definedQualifiers, version) {
-    const locale = resolveLocale()
-    const lang = locale.substring(0, 2)
-
-    const qualifiers = []
-    for(const qualifier of [lang, locale]) {
-      if(definedQualifiers.includes(qualifier)) qualifiers.push(qualifier)
-    }
-    // console.debug("[DEBUG] Resolved qualifiers: %o", qualifiers)
-
-    const scripts = qualifiers.map(qualifier => `${HREF_BASE}/scripts/i18n.resources.${qualifier}.js?${version}`)
-    // console.debug("[DEBUG] Resolved dynamic scripts: %o", scripts)
-    return scripts
+  function appendFooter() {
+    // TODO
+    appendElement('div', {className: 'footer'}).innerHTML = `
+      <span class="no-wrap"><a href="javascript:openMarkdown('${T('footer.license')}', '${CONTEXT_PATH}/LICENSE.md')">${T('footer.copyright')} &copy; 2022-${(new Date().getFullYear())}</a></span>
+      <span class="no-wrap"><a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,</span>
+      <span class="no-wrap">${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.</span>
+    `
   }
 
   //
   // Initialize
   //
   document.addEventListener("DOMContentLoaded", () => {
-    initI18n()
-    .then(setDefaultFontFamily)
-    .then(launch)
-    .then(() => console.info("[INFO] Launched Sudoku App."))
-    .catch(error => console.error("[ERROR] Error occurred: %o", error))
+    Promise.resolve()
+      .then(launch)
+      .then(() => console.info("[INFO] Launched Sudoku App."))
+      .catch(error => console.error("[ERROR] Error occurred: %o", error))
   })
 
-})(document.currentScript)
+})()
