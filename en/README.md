@@ -28,4 +28,4 @@ it's been developed and enhanced with the following features:
 + Trace Assumptions
 
 # The Online Game
-The game is accessible at https://johnwu-pro.github.io/sudoku/index.html.
+#### is accessible at https://johnwu-pro.github.io/sudoku/index.html.

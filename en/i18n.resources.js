@@ -38,7 +38,7 @@ values: {
   "game.button.erase": "Erase",
 
   "game.info.input-givens-then-click-done": "Input the givens, then click '%{button}'.",
-  "game.info.more-auxiliary-functions": "Tap or click the cell for more auxiliary functions.",
+  "game.info.more-auxiliary-functions": "Tap the cell for more auxiliary functions.",
 
   "board.assume.placeholder": "Assume %{cell} is ...",
   "board.assume.cell-is": "Assume %{cell} is %{value}",
