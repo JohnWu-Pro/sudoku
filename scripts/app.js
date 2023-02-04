@@ -2,12 +2,12 @@
 
 const APP_ID = 'sudoku'
 
-const APP_VERSION = '1.1.0-RC1'
+const APP_VERSION = '1.1.0-M1'
 
 window.App = window.App ?? (() => {
 
   function launch() {
-    document.title = T('document.title')
+    document.title = T('app.name')
 
     document.addEventListener("visibilitychange", () => {
       if(document.visibilityState === 'visible') {

@@ -3,7 +3,8 @@
 ((i18n) => { window.T = i18n, i18n.translator.add({
 
 values: {
-  "document.title": "Sudoku",
+  "app.name": "Sudoku",
+  "app.upgrade": "Upgrade to",
 
   "game.title": "Sudoku",
   "game.selection.filling-in-givens": "Filling in Givens",

@@ -80,6 +80,7 @@ class Settings {
         'markEliminated',
       ]),
     }
+    var activatedVersion
     var initialized = false
     var $overlay, $div
 
@@ -114,9 +115,27 @@ class Settings {
             <input id="${key}" type="checkbox" class="switch">
           </div>`, '') + `
         </div>
+        <div class="settings-footer">
+          <div class="app no-wrap">
+            <a href="javascript:openMarkdown('${T('app.name')}', '${CONTEXT_PATH}/README.md')">${T('app.name')}</a>
+            <span>${APP_VERSION}</span>
+            ${renderUpgrade()}
+          </div>
+        </div>
       `
       $E('#auxiliary-features', $div).addEventListener('change', onChangeFeatures)
       $E('.go-back', $div).addEventListener('click', onGoBack)
+
+      function renderUpgrade() {
+        return !(activatedVersion > APP_VERSION) ? ''
+            : `<button id="upgrade">${T('app.upgrade')} ${activatedVersion}</button>`
+      }
+      $E('.app #upgrade')?.addEventListener('click', () => window.location.reload())
+
+      navigator.serviceWorker?.addEventListener('message', (event) => {
+        // console.debug("[DEBUG] Received Service Worker message: %s", JSON.stringify(event.data))
+        if(event.data.type === 'SW_ACTIVATED') activatedVersion = event.data.version
+      })
 
       initialized = true
     }

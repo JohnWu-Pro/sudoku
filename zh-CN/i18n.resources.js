@@ -3,7 +3,8 @@
 ((i18n) => { window.T = i18n, i18n.translator.add({
 
 values: {
-  "document.title": "数独",
+  "app.name": "数独",
+  "app.upgrade": "刷新并升级到",
 
   "game.title": "数独",
   "game.selection.filling-in-givens": "填写已知数",

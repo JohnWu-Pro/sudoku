@@ -27,7 +27,7 @@
 
 a, a:hover, a:visited {
   color: #cccccc;
-  text-decoration: none;
+  text-decoration: underline dotted;
 }
 
 body {
@@ -258,7 +258,7 @@ button {
 }
 
 .grid .cell .value {
-  font: bold var(--size-6vmin) var(--main-font-family);
+  font: normal var(--size-6vmin) var(--digit-font-family);
   position: relative;
   top: 50%;
   margin: auto;
@@ -271,7 +271,7 @@ button {
 }
 
 .grid .cell .value.pending {
-  font: normal var(--size-4vmin) var(--main-font-family);
+  font: normal var(--size-4vmin) var(--digit-font-family);
   color: grey;
   position: relative;
   top: 28%;
@@ -285,7 +285,7 @@ button {
   content: '-';
 }
 .grid .cell .eliminated {
-  font: normal calc(var(--size-1vmin) * 3.2) var(--main-font-family);
+  font: normal calc(var(--size-1vmin) * 3.2) var(--digit-font-family);
   color: #999999;
   position: relative;
   top: 10%;
@@ -567,7 +567,8 @@ button {
 }
 
 .settings-content,
-.settings-content select {
+.settings-content select,
+.settings-footer {
   background: white;
   font: normal var(--size-4vmin) var(--main-font-family);
   text-align: right;
@@ -632,4 +633,17 @@ button {
 }
 .switch:checked:after {
   transform: translateX(calc(var(--switch-size) * 0.8));
+}
+
+div.app {
+  color: #cccccc;
+  text-align: center;
+}
+div.app > #upgrade {
+  border: 1px outset darkgray;
+  border-radius: 1vmin;
+  background-color: var(--button-color);
+  color: green;
+  padding: 0.5vmin 1vmin;
+  margin-bottom: 0.5vmin;
 }
