@@ -7,20 +7,22 @@ values: {
   "app.upgrade": "刷新并升级到",
 
   "game.title": "数独",
-  "game.selection.filling-in-givens": "填写已知数",
+  "game.selection.filling-in-givens": "填写初盘",
   "game.selection.level-simple": "级别: 初级",
   "game.selection.level-easy": "级别: 容易",
   "game.selection.level-intermediate": "级别: 中级",
   "game.selection.level-expert": "级别: 专家级",
-  "game.selection.imported-givens": "导入已知数",
-  "game.selection.manual-givens": "手工输入已知数",
+  "game.selection.level-shared": "级别: 分享的",
+  "game.selection.imported-givens": "导入初盘",
+  "game.selection.manual-givens": "手工输入初盘",
 
   "game.completion-message.simple": "太初级了!",
   "game.completion-message.easy": "简单!",
   "game.completion-message.intermediate": "也不难!",
   "game.completion-message.expert": "我是专家!",
-  "game.completion-message.import": "已知数是导入的.",
-  "game.completion-message.manual": "已知数是手工输入的",
+  "game.completion-message.shared": "初盘是分享的.",
+  "game.completion-message.import": "初盘是导入的.",
+  "game.completion-message.manual": "初盘是手工输入的",
 
   "game.congratulations": "%{completion-message}<br>耗时 %{duration} 搞定.",
 
@@ -34,11 +36,11 @@ values: {
 
   "game.button.undo": "回退",
   "game.button.eliminate-by-rules": "依据 行/列/宫 排除",
-  "game.button.givens-filled": "已知数输入完毕",
+  "game.button.givens-filled": "初盘输入完毕",
   "game.button.mark-cross-hatching": "标注交叉排除影线",
   "game.button.erase": "擦除",
 
-  "game.info.input-givens-then-click-done": "输入已知数, 然后点击 '%{button}'.",
+  "game.info.input-givens-then-click-done": "输入初盘, 然后点击 '%{button}'.",
   "game.info.more-auxiliary-functions": "点击单元格可见更多辅助功能.",
 
   "board.assume.placeholder": "假定 %{cell} 是 ...",
@@ -67,7 +69,7 @@ values: {
   "settings.on-startup.start-easy": "开始一个简单数独",
   "settings.on-startup.start-intermediate": "开始一个中级数独",
   "settings.on-startup.start-expert": "开始一个专家级数独",
-  "settings.on-startup.start-manual": "开始手工输入已知数",
+  "settings.on-startup.start-manual": "开始手工输入初盘",
 
   "settings.auxiliary-features": "辅助功能",
   "settings.auxiliary-features.more": "较多辅助 (更容易玩)",
@@ -82,6 +84,9 @@ values: {
   "settings.switch.mark-cross-hatching": "标注交叉排除影线",
   "settings.switch.mark-eliminated": "标注已排除的",
   "settings.switch.trace-assumptions": "支持并跟踪假定",
+
+  "settings.share": "分享",
+  "settings.share.including-current-givens": "包含当前数独初盘",
 
   "install.add-to-home-screen": "安装到桌面",
   "install.demo.acknowledge": "已了解!",

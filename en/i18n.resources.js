@@ -12,6 +12,7 @@ values: {
   "game.selection.level-easy": "Level: Easy",
   "game.selection.level-intermediate": "Level: Intermediate",
   "game.selection.level-expert": "Level: Expert",
+  "game.selection.level-shared": "Level: Shared",
   "game.selection.imported-givens": "Imported Givens",
   "game.selection.manual-givens": "Manual Givens",
 
@@ -19,6 +20,7 @@ values: {
   "game.completion-message.easy": "That was easy!",
   "game.completion-message.intermediate": "That wasn't difficult!",
   "game.completion-message.expert": "I'm an expert!",
+  "game.completion-message.shared": "The givens were from shared.",
   "game.completion-message.import": "The givens were imported.",
   "game.completion-message.manual": "The givens were manully filled in.",
 
@@ -82,6 +84,9 @@ values: {
   "settings.switch.mark-cross-hatching": "Mark Cross Hatching",
   "settings.switch.mark-eliminated": "Mark Eliminated",
   "settings.switch.trace-assumptions": "Trace Assumptions",
+
+  "settings.share": "Share",
+  "settings.share.including-current-givens": "Including Current Givens",
 
   "install.add-to-home-screen": "Add to Home Screen",
   "install.demo.acknowledge": "Got it!",

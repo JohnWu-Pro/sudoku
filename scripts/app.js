@@ -52,7 +52,7 @@ window.App = window.App ?? (() => {
   // Initialize
   //
   document.addEventListener("DOMContentLoaded", () => {
-    Promise.resolve()
+    delay(1) // Yield to other DOMContentLoaded handlers
       .then(launch)
       .then(() => console.info("[INFO] Launched Sudoku App."))
       .catch(error => console.error("[ERROR] Error occurred: %o", error))

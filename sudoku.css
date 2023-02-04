@@ -567,8 +567,7 @@ button {
 }
 
 .settings-content,
-.settings-content select,
-.settings-footer {
+.settings-content select {
   background: white;
   font: normal var(--size-4vmin) var(--main-font-family);
   text-align: right;
@@ -590,6 +589,9 @@ button {
   margin-left: var(--size-3vmin);
   width: calc(100% - var(--size-3vmin));
   border-bottom: 1px dotted lightgrey;
+}
+.settings-content > div.level-2:last-child {
+  border-bottom: none;
 }
 .settings-content > div > * {
   display: inline-block;
@@ -635,11 +637,24 @@ button {
   transform: translateX(calc(var(--switch-size) * 0.8));
 }
 
-div.app {
+.settings-footer {
+  font: normal var(--size-4vmin) var(--main-font-family);
+  padding: var(--size-3vmin) 0;
+  border-top: 1px solid lightgrey;
+  width: 100%;
+}
+.settings-footer div.label > span {
+  font-weight: bold;
+}
+.settings-footer div.qrcode {
+  margin-top: 1vmin;
+  text-align: center;
+}
+.settings-footer > div.app {
   color: #cccccc;
   text-align: center;
 }
-div.app > #upgrade {
+.settings-footer > div.app > #upgrade {
   border: 1px outset darkgray;
   border-radius: 1vmin;
   background-color: var(--button-color);

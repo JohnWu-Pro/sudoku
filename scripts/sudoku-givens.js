@@ -130,10 +130,18 @@ window.Givens = window.Givens ?? (() => {
     return result
   }
 
+  function format(givens) {
+    // console.debug("[DEBUG] Calling format(%o) ...", givens)
+    return givens.map((row) => 
+      row.map((cell) => (cell==='' || cell==='0') ? '.' : cell).join('')
+    ).join('')
+  }
+
   return {
     EMPTY,
     FILLED,
     parse,
+    format,
     get
   }
 })()

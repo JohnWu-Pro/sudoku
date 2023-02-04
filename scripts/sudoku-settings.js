@@ -116,6 +116,15 @@ class Settings {
           </div>`, '') + `
         </div>
         <div class="settings-footer">
+          <div class="share">
+            <div class="label">
+              <span>${T('settings.share')}:</span>
+              <input type="checkbox" checked id="including-current-givens" name="including-current-givens"><label for="including-current-givens">${T('settings.share.including-current-givens')}</label>
+            </div>
+            <div class="input">
+              <div class="qrcode"></div>
+            </div>
+          </div>
           <div class="app no-wrap">
             <a href="javascript:openMarkdown('${T('app.name')}', '${CONTEXT_PATH}/README.md')">${T('app.name')}</a>
             <span>${APP_VERSION}</span>
@@ -125,6 +134,39 @@ class Settings {
       `
       $E('#auxiliary-features', $div).addEventListener('change', onChangeFeatures)
       $E('.go-back', $div).addEventListener('click', onGoBack)
+
+      const includingGivens = $E('.share input[name="including-current-givens"]', $div)
+      const container = $E('div.qrcode', $div)
+
+      function renderQrcode() {
+        const url = new URL(location.href)
+        url.search = ''
+        url.hash = ''
+        url.searchParams.set('v', new Date().toISOString().replace(/^(\d{4})-(\d{2})-(\d{2}).{10}(\d{3}).+$/, '$1$2$3$4'))
+        if(includingGivens.checked) {
+          const givens = Givens.format(Board.snapshot().givens)
+
+          url.searchParams.set('givens', givens)
+        }
+        const text = url.href
+        // console.debug("QR code text(length: %o): %s", text.length, text)
+
+        container.innerHTML = ''
+        new QRCode(container, {
+          text,
+          width: 144,
+          height: 144,
+          quietZone: 8,
+          quietZoneColor: '#40C040',
+          logo: HREF_BASE + '/../images/icon-64x64.png',
+          logoWidth: 64,
+          logoHeight: 64,
+          logoBackgroundTransparent: true,
+        })
+      }
+      Promise.resolve().then(renderQrcode)
+
+      includingGivens.addEventListener('change', renderQrcode)
 
       function renderUpgrade() {
         return !(activatedVersion > APP_VERSION) ? ''
@@ -144,7 +186,7 @@ class Settings {
       init()
 
       const features = FEATURES[Settings.auxiliaryFeatures]
-      $A('select[id], input[id]', $div).forEach(input => {
+      $A('select[id], input[id]', $E('.settings-content', $div)).forEach(input => {
         const prop = camelize(input.id)
         if(input.checked === undefined) {
           input.value = Settings[prop]
@@ -187,7 +229,7 @@ class Settings {
       const settings = {}
 
       const features = FEATURES[$E('select#auxiliary-features').value]
-      $A('select[id], input[id]', $div).forEach(input => {
+      $A('select[id], input[id]', $E('.settings-content', $div)).forEach(input => {
         const prop = camelize(input.id)
         if(input.checked === undefined) {
           settings[prop] = input.value

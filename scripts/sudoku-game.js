@@ -84,9 +84,18 @@ window.Game = window.Game ?? (() => {
     function _do_(onStartup) {
       const [matched, selected] = onStartup?.match(/^start-(simple|easy|intermediate|expert|manual)$/) ?? []
       if(matched) {
-        start(selected)
+        start({selected})
       } else {
         console.error(`Invalid Settings.onStartup: ${onStartup}`)
+      }
+    }
+
+    const givens = new URL(location.href).searchParams.get('givens')
+    if(givens) {
+      try {
+        return start({selected: 'shared', givensResolver: () => Givens.parse(givens)})
+      } catch(error) {
+        console.error("[ERROR] Error occurred while parsing the provided Givens!", error)
       }
     }
 
@@ -149,17 +158,17 @@ window.Game = window.Game ?? (() => {
     const selected = event.target.value
     if(! selected) return
 
-    start(selected)
+    start({selected})
 
     event.target.value = ''
   }
 
-  function start(selected) {
-    state.selected = selected
+  function start(game) {
+    state.selected = game.selected
 
-    $toggle($givensFilled, selected !== 'manual')
+    $toggle($givensFilled, game.selected !== 'manual')
 
-    if(selected === 'manual') {
+    if(game.selected === 'manual') {
       return Promise.resolve(Givens.EMPTY)
         .then((givens) => Board.load(givens, true)) // to start manual given filling
         .then(() => timer.reset())
@@ -167,10 +176,10 @@ window.Game = window.Game ?? (() => {
         .then(() => Prompt.info(T('game.info.input-givens-then-click-done', {button: T('game.button.givens-filled')})))
         .catch((error) => Prompt.error(error))
     } else {
-      return Givens.get(capitalize(selected))
+      return Promise.resolve((game.givensResolver ?? (() => Givens.get(capitalize(game.selected))))())
         .then((givens) => Board.load(givens))
         .then(() => timer.start())
-        .then(() => rollingTitle(T('game.selection.level-' + selected)))
+        .then(() => rollingTitle(T('game.selection.level-' + game.selected)))
         .then(promptUsage)
         .catch((error) => Prompt.error(error))
     }
