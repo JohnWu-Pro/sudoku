@@ -185,16 +185,10 @@ class Settings {
     function show() {
       init()
 
-      const features = FEATURES[Settings.auxiliaryFeatures]
       $A('select[id], input[id]', $E('.settings-content', $div)).forEach(input => {
-        const prop = camelize(input.id)
-        if(input.checked === undefined) {
-          input.value = Settings[prop]
-        } else {
-          input.checked = Settings[prop]
-          $toggle(input.parentElement, !features.has(prop))
-        }
+        input[input.checked === undefined ? 'value' : 'checked'] = Settings[camelize(input.id)]
       })
+      onChangeFeatures({target: {value: Settings.auxiliaryFeatures}})
 
       $show($div)
       $show($overlay)
@@ -219,10 +213,14 @@ class Settings {
 
     function onChangeFeatures(event) {
       const features = FEATURES[event.target.value]
-      $A('input[id]', $div).forEach(input => {
+      var last = null
+      $A('input[id]', $E('.settings-content', $div)).forEach(input => {
+        input.parentElement.classList.remove('last')
         const prop = camelize(input.id)
         $toggle(input.parentElement, !features.has(prop))
+        if(features.has(prop)) last = input
       })
+      last.parentElement.classList.add('last')
     }
 
     function close() {

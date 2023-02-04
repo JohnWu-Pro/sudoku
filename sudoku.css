@@ -590,7 +590,7 @@ button {
   width: calc(100% - var(--size-3vmin));
   border-bottom: 1px dotted lightgrey;
 }
-.settings-content > div.level-2:last-child {
+.settings-content > div.level-2.last {
   border-bottom: none;
 }
 .settings-content > div > * {
