@@ -88,7 +88,7 @@ function onClose() {
   $E(`link[href="${IMAGES[2]}"]`, document.head).remove()
 }
 
-function css() { return `
+function css() { return /*css*/`
   .install-demo-panel {
     z-index: 100; position: absolute;
     width: 84%;
@@ -177,7 +177,7 @@ function css() { return `
   }`
 }
 
-function content() { return `
+function content() { return /*html*/`
   <div class="step-x">
   </div>
   <div class="cmd">
@@ -185,7 +185,7 @@ function content() { return `
   </div>`
 }
 
-function step1() { return `
+function step1() { return /*html*/`
   <img src="${IMAGES[1]}">
   <div class="step-1 annotation">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -194,7 +194,7 @@ function step1() { return `
   </div>`
 }
 
-function step2() { return `
+function step2() { return /*html*/`
   <img src="${IMAGES[2]}">
   <div class="step-2 annotation">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">

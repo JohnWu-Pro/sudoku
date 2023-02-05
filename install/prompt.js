@@ -49,7 +49,7 @@ function show() {
   appendElement('style', {type: "text/css", id: "install-prompt"}, document.head).innerHTML = css()
 
   $panel = appendElement('div', {className: "install-prompt-panel"})
-  $panel.innerHTML = `
+  $panel.innerHTML = /*html*/`
     <button type="button">
       <img src="../install/icon.png">
       <span>${T('install.add-to-home-screen')}</span>
@@ -84,7 +84,7 @@ function hide() {
   $panel = null
 }
 
-function css() { return `
+function css() { return /*css*/`
   .install-prompt-panel {
     z-index: 999; position: absolute;
     margin: 0.5vmin 0;
