@@ -577,7 +577,7 @@ button {
 }
 
 .settings-content > div {
-  padding: var(--size-3vmin) 0;
+  padding: var(--size-2vmin) 0;
   border-bottom: 1px solid lightgrey;
   display: inline-flex;
   width: 100%;
@@ -652,6 +652,7 @@ button {
 }
 .settings-footer > div.app {
   color: #cccccc;
+  font: var(--size-3vmin) var(--main-font-family);
   text-align: center;
 }
 .settings-footer > div.app > #upgrade {
