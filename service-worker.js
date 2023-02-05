@@ -144,7 +144,7 @@ async function cacheStaticResources() {
 }
 
 function isCacheable(response) {
-  return 200 <= response?.status && response.status <= 205 && response.headers.has('Content-Type')
+  return 200 <= response?.status && response.status <= 206 && response.headers.has('Content-Type')
 }
 
 function resolveStaticCachableResources(indexHtml) {
