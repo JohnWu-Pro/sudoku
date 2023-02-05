@@ -191,10 +191,10 @@ window.Assumptions = window.Assumptions ?? (() => {
     const candidates = [...cell.candidates]
     if(candidates.length === 0) candidates.push(...Cell.CANDIDATES)
 
-    div.innerHTML = `
+    div.innerHTML = /*html*/`
       <select class="block border">${candidates.reduce((html, candidate) => html +
-        `<option value="assume ${cell.key} is ${candidate}">${T('board.assume.cell-is', {cell: cell.key, value: candidate})}</option>`,
-        `<option value="">${T('board.assume.placeholder', {cell: cell.key})}</option>`)}
+        /*html*/`<option value="assume ${cell.key} is ${candidate}">${T('board.assume.cell-is', {cell: cell.key, value: candidate})}</option>`,
+        /*html*/`<option value="">${T('board.assume.placeholder', {cell: cell.key})}</option>`)}
       </select>
     `
     // attach event handler to start assumption
@@ -225,7 +225,7 @@ window.Assumptions = window.Assumptions ?? (() => {
     const div = $E('div.assumptions > div.pending')
 
     const max = assumptions.length - 1
-    div.innerHTML = assumptions.reduce((html, assumption, index) => html + `
+    div.innerHTML = assumptions.reduce((html, assumption, index) => html + /*html*/`
       <div class="assumption ${assumption.cssClass} border ${index===0 ? 'first' : ''} ${index===max ? 'last' : ''}">
         <span class="block">${T('board.assume.cell-is', {cell: assumption.key, value: assumption.value})}:</span>
         <button data-id="${assumption.id}" data-action="accept">${T('board.assumption.button.accept')}</button>

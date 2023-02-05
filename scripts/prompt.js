@@ -5,19 +5,19 @@ window.Prompt = window.Prompt ?? (() => {
   var $panel = null
 
   function init() {
-    appendElement('style', {type: "text/css", id: "app-prompt-panel"}, document.head).innerHTML = css()
+    appendElement('style', {type: "text/css", id: "app-prompt-panel"}, document.head).textContent = css()
 
     $panel = appendElement('div', {className: "app-prompt-panel"})
     $panel.innerHTML = ''
   }
 
   function message(type, html) {
-    $panel.innerHTML = `
+    $panel.innerHTML = /*html*/`
       <div class="message">
         <span class="${type}">${html}</span>
       </div>
-      `
-    $panel.style.top = `calc(96% - ${$panel.offsetHeight}px)`
+    `
+    $panel.style.top = `calc(96dvh - ${$panel.offsetHeight}px)`
     return Promise.resolve($E('div', $panel))
     .then((div) => (div.style.top = `${div.offsetHeight}px`, div))
     .then((div) => $on(div).perform('slide-in'))
@@ -27,7 +27,7 @@ window.Prompt = window.Prompt ?? (() => {
     .then((div) => div.remove())
   }
 
-  function css() { return `
+  function css() { return /*css*/`
     .app-prompt-panel {
       display: block;
       position: absolute; z-index: 99;
@@ -84,7 +84,7 @@ window.Prompt = window.Prompt ?? (() => {
       border-color: green;
       color: green;
     }
-    `
+    `.replaceAll(/    /g, '')
   }
 
   //

@@ -15,13 +15,13 @@ window.Board = window.Board ?? (() => {
   function init() {
     const $grid = $E('div.grid')
 
-    $grid.innerHTML = Grid.ROWS.reduce((rows, rowId) => rows + `
+    $grid.innerHTML = Grid.ROWS.reduce((rows, rowId) => rows + /*html*/`
       <div class="row row-${rowId}">${Grid.COLUMNS.reduce((cols, colId) => cols +
-        `<div class="col col-${colId} cell cell-${Grid.keyOf(rowId, colId)}"></div>`, '')}
+        /*html*/`<div class="col col-${colId} cell cell-${Grid.keyOf(rowId, colId)}"></div>`, '')}
         <div class="col y-axis coord"><div class="value">${rowId}</div></div>
-      </div>`, '') + `
+      </div>`, '') + /*html*/`
       <div class="row x-axis">${Grid.COLUMNS.reduce((cols, colId) => cols +
-        `<div class="col col-${colId} coord"><div class="value">${colId}</div></div>`, '')}
+        /*html*/`<div class="col col-${colId} coord"><div class="value">${colId}</div></div>`, '')}
       </div>`
 
     Grid.keys().forEach(key => {
@@ -30,12 +30,12 @@ window.Board = window.Board ?? (() => {
 
     const numbers = Array(...Cell.CANDIDATES)
     $keys = $E('div.keys')
-    $keys.innerHTML = numbers.reduce((html, number) => html + `
+    $keys.innerHTML = numbers.reduce((html, number) => html + /*html*/`
       <div class="key key-${number}">
         <div class="value">${number}</div>
         <div class="count"></div>
       </div>
-      `, '') + `
+      `, '') + /*html*/`
       <div class="key key-mode-ctrl">
         <div class="value from-mode">0</div>
         <div class="symbol">⤷</div>

@@ -40,7 +40,7 @@ window.App = window.App ?? (() => {
   }
 
   function appendFooter() {
-    appendElement('div', {className: 'footer'}).innerHTML = `
+    appendElement('div', {className: 'footer'}).innerHTML = /*html*/`
       <span class="no-wrap"><a href="javascript:openMarkdown('${T('footer.license')}', '${CONTEXT_PATH}/LICENSE.md')">${T('footer.copyright')} &copy; 2022-${(new Date().getFullYear())}</a></span>
       <span class="no-wrap"><a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,</span>
       <span class="no-wrap">${T('footer.licensed-under')} <a href="https://mozilla.org/MPL/2.0/" target="_blank">MPL-2.0</a>.</span>

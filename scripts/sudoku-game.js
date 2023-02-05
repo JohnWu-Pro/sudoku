@@ -13,7 +13,7 @@ window.Game = window.Game ?? (() => {
 
   function init() {
     const $header = appendElement('div', {className: 'header'})
-    $header.innerHTML = `
+    $header.innerHTML = /*html*/`
       <div>
         <div class="left">
           <select class="block border">
@@ -42,7 +42,7 @@ window.Game = window.Game ?? (() => {
     $E('.restart', $header).addEventListener('click', onRestart)
     $E('.settings', $header).addEventListener('click', Settings.View.show)
 
-    appendElement('div', {className: 'board'}).innerHTML = `
+    appendElement('div', {className: 'board'}).innerHTML = /*html*/`
       <div class="grid"></div>
       <div class="keys"></div>
       <div class="commands">
@@ -58,13 +58,6 @@ window.Game = window.Game ?? (() => {
           <div class="tentative"></div>
         </div>
       </div>
-      <!-- <div class="references hidden">
-        <span class="label">References ...</span>
-        <div class="options">
-          <a class="option" href="">Basic Rules</a>
-          <a class="option" href="">Cross Hatching</a>
-        </div>
-      </div> -->
     `
     $givensFilled = $E('button#givens-filled')
     $givensFilled.addEventListener('click', onGivensFilled)

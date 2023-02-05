@@ -89,7 +89,7 @@ class Settings {
 
       $overlay = $E('div.overlay')
       $div = appendElement('div', {className: 'settings-view hidden'}, $overlay)
-      $div.innerHTML = `
+      $div.innerHTML = /*html*/`
         <div class="settings-header">
           <span class="go-back"></span>
           <span class="title">${T('settings.title')}</span>
@@ -98,22 +98,22 @@ class Settings {
           <div class="level-1">
             <label for="on-startup">${T('settings.on-startup')}:</label>
             <select id="on-startup">` +
-      STARTUP_OPTIONS.reduce((html, value) => html + `
-              <option value="${value}">${T('settings.on-startup.' + value)}</option>`, '') + `
+      STARTUP_OPTIONS.reduce((html, value) => html + /*html*/`
+              <option value="${value}">${T('settings.on-startup.' + value)}</option>`, '') + /*html*/`
             </select>
           </div>
           <div class="level-1">
             <label for="auxiliary-features">${T('settings.auxiliary-features')}:</label>
             <select id="auxiliary-features">` +
-      AUXILIARY_OPTIONS.reduce((html, value) => html + `
-              <option value="${value}">${T('settings.auxiliary-features.' + value)}</option>`, '') + `
+      AUXILIARY_OPTIONS.reduce((html, value) => html + /*html*/`
+              <option value="${value}">${T('settings.auxiliary-features.' + value)}</option>`, '') + /*html*/`
             </select>
           </div>` +
-      ALL_FEATURES.map(prop => hyphenize(prop)).reduce((html, key) => html + `
+      ALL_FEATURES.map(prop => hyphenize(prop)).reduce((html, key) => html + /*html*/`
           <div class="level-2">
             <label for="${key}">${T('settings.switch.' + key)}</label>
             <input id="${key}" type="checkbox" class="switch">
-          </div>`, '') + `
+          </div>`, '') + /*html*/`
         </div>
         <div class="settings-footer">
           <div class="share">

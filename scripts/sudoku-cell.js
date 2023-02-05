@@ -68,7 +68,7 @@ class Cell {
     const eliminated = this.solved ? '' : this.#eliminated.length <= 4 ? this.#eliminated : '...'
     const decoration = this.#value === '' && this.#eliminated === '' ? '' : this.#cssClass
 
-    this.div().innerHTML = `
+    this.div().innerHTML = /*html*/`
       <div class="value ${this.#status} ${decoration}">${value}</div>
       <div class="eliminated">${eliminated}</div>
       <div class="cross row hidden"></div>
