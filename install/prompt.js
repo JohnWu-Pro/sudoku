@@ -46,7 +46,7 @@ function show() {
   appendElement('link', {rel: "preload", href: "../install/icon.png", as: "image"}, document.head)
 
   // Load style and div
-  appendElement('style', {type: "text/css", id: "install-prompt"}, document.head).innerHTML = css()
+  appendElement('style', {type: "text/css", id: "install-prompt"}, document.head).textContent = css()
 
   $panel = appendElement('div', {className: "install-prompt-panel"})
   $panel.innerHTML = /*html*/`

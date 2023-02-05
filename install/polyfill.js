@@ -56,7 +56,7 @@ function show() {
   appendElement('link', {rel: "preload", href: IMAGES[2], as: "image"}, document.head)
 
   // Load style and div
-  appendElement('style', {type: "text/css", id: "install-demo"}, document.head).innerHTML = css()
+  appendElement('style', {type: "text/css", id: "install-demo"}, document.head).textContent = css()
 
   panel = appendElement('div', {className: "install-demo-panel hidden"})
   panel.innerHTML = content()
