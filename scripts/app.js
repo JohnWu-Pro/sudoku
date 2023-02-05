@@ -40,7 +40,6 @@ window.App = window.App ?? (() => {
   }
 
   function appendFooter() {
-    // TODO
     appendElement('div', {className: 'footer'}).innerHTML = `
       <span class="no-wrap"><a href="javascript:openMarkdown('${T('footer.license')}', '${CONTEXT_PATH}/LICENSE.md')">${T('footer.copyright')} &copy; 2022-${(new Date().getFullYear())}</a></span>
       <span class="no-wrap"><a href="mailto: johnwu.pro@gmail.com" target="_blank">${T('footer.owner')}</a>,</span>
