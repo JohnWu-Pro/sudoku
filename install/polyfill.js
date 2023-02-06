@@ -169,7 +169,7 @@ function css() { return /*css*/`
     border-radius: 6px;
     padding: 6px 18px;
     display: inline-block;
-    font: normal 18px 'New Times Roman';
+    font: normal 18px var(--main-font-family, 'system-ui');
     text-align: center;
     cursor: pointer;
     background: #f0f0ff;

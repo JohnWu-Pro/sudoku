@@ -2,6 +2,8 @@
 
 window.InstallPrompt = window.InstallPrompt ?? (() => {
 
+const ICON = '../install/icon.png'
+
 var $panel, $button
 var promptEvent = null
 
@@ -43,7 +45,7 @@ function show() {
   // console.debug("[DEBUG] Calling InstallPrompt.show() ...")
 
   // Preload install icon
-  appendElement('link', {rel: "preload", href: "../install/icon.png", as: "image"}, document.head)
+  appendElement('link', {rel: "preload", href: ICON, as: "image"}, document.head)
 
   // Load style and div
   appendElement('style', {type: "text/css", id: "install-prompt"}, document.head).textContent = css()
@@ -51,22 +53,22 @@ function show() {
   $panel = appendElement('div', {className: "install-prompt-panel"})
   $panel.innerHTML = /*html*/`
     <button type="button">
-      <img src="../install/icon.png">
+      <img src="${ICON}">
       <span>${T('install.add-to-home-screen')}</span>
     </button>
-    `
+  `
 
   $button = $E('button', $panel)
   $button.addEventListener('click', onClick)
 
   // Slide in
   return Promise.resolve()
-  .then(() => $panel.style.top = `calc(99.6% - ${$panel.offsetHeight}px)`)
-  .then(() => $button.style.left = `${$button.offsetWidth}px`)
-  .then(() => $on($button).perform('slide-in'))
-  .then(() => $button.style.left = '')
-  .then(() => delay(180000))
-  .then(() => { hide(); onAfterPrompted(); })
+    .then(() => $panel.style.top = `calc(99.6% - ${$panel.offsetHeight}px)`)
+    .then(() => $button.style.left = `${$button.offsetWidth}px`)
+    .then(() => $on($button).perform('slide-in'))
+    .then(() => $button.style.left = '')
+    .then(() => delay(180000))
+    .then(() => { hide(); onAfterPrompted(); })
 }
 
 function hide() {
@@ -77,7 +79,7 @@ function hide() {
   .then(() => {
     $E('div.install-prompt-panel').remove()
     $E('style#install-prompt', document.head).remove()
-    $E('link[href="../install/icon.png"]', document.head).remove()
+    $E(`link[href="${ICON}"]`, document.head).remove()
   })
 
   $button = null
@@ -100,7 +102,7 @@ function css() { return /*css*/`
     border-radius: 6vmin 0 0 6vmin;
     padding: 1.5vmin 3vmin 1.5vmin 4.5vmin;
     display: inline-block;
-    font: normal 4.5vmin var(--main-font-family);
+    font: normal 4.5vmin var(--main-font-family, 'system-ui');
     text-align: center;
     cursor: pointer;
     background: #f0f0ff;
