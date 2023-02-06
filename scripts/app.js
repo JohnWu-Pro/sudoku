@@ -2,7 +2,7 @@
 
 const APP_ID = 'sudoku'
 
-const APP_VERSION = '1.1.0-RC3'
+const APP_VERSION = '1.1.0'
 
 window.App = window.App ?? (() => {
 
