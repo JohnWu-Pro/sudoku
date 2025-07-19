@@ -149,11 +149,12 @@ window.Board = window.Board ?? (() => {
     if(state.focused) {
       state.cells.get(state.focused).focus(false)
     }
+    const refocus = state.focused === key
     state.focused = key
 
     const cell = state.cells.get(key)
     cell.focus(true)
-    highlightSameValue(cell)
+    highlightSameValue(cell, refocus)
     highlightCandidates(cell)
 
     if(state.status === 'filling-in-givens') return
@@ -258,11 +259,12 @@ window.Board = window.Board ?? (() => {
     $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
   }
 
-  function highlightSameValue(cell) {
+  function highlightSameValue(cell, refocus) {
     if(!Settings.highlightSolvedSameValue) return
 
     if(cell.solved || cell.value !== '') clearSameValue()
     if(!cell.solved) return
+    if(refocus) return
 
     const {value} = cell
     state.cells.forEach(same => {
