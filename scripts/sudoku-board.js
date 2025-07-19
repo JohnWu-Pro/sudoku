@@ -150,17 +150,17 @@ window.Board = window.Board ?? (() => {
       state.cells.get(state.focused).focus(false)
     }
     const refocus = state.focused === key
-    state.focused = key
+    state.focused = refocus ? null : key
 
-    const cell = state.cells.get(key)
-    cell.focus(true)
-    highlightSameValue(cell, refocus)
+    const cell = refocus ? undefined : state.cells.get(key)
+    cell?.focus(true)
+    highlightSameValue(cell)
     highlightCandidates(cell)
 
     if(state.status === 'filling-in-givens') return
 
     clearCrossHatching(cell)
-    updateCommands(cell.solved)
+    updateCommands(cell?.solved)
     Assumptions.renderOptionsFor(cell)
   }
 
@@ -259,12 +259,11 @@ window.Board = window.Board ?? (() => {
     $A('div.grid div.cell.same').forEach(div => div.classList.remove('same'))
   }
 
-  function highlightSameValue(cell, refocus) {
+  function highlightSameValue(cell) {
     if(!Settings.highlightSolvedSameValue) return
 
-    if(cell.solved || cell.value !== '') clearSameValue()
-    if(!cell.solved) return
-    if(refocus) return
+    if(!cell || cell.solved || cell.value !== '') clearSameValue()
+    if(!cell || !cell.solved) return
 
     const {value} = cell
     state.cells.forEach(same => {

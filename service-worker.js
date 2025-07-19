@@ -21,7 +21,7 @@
 // NOTE: Update the SW_VERSION would trigger the Service Worker being updated, and
 // consequently, refresh the static-cachable-resources
 //
-const SW_VERSION = '1.1.2' // Should be kept in sync with the APP_VERSION
+const SW_VERSION = '1.1.3' // Should be kept in sync with the APP_VERSION
 
 const APP_ID = 'sudoku'
 
